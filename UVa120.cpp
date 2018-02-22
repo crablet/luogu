@@ -10,7 +10,7 @@ constexpr int MaxN = 30 + 5;
 int n;  // 整个序列的长度
 std::array<int, MaxN> a{ 0 };   // 序列的数组
 
-                                // 翻转a[0...p]
+// 翻转a[0...p]
 void Flip(int p)
 {
     for (int i = 0; i < p - i; ++i)
