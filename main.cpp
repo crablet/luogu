@@ -1,4 +1,854 @@
 //#include <iostream>
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    int n, m;
+//    std::cin >> n >> m;
+//    int a[100000], b[100000];
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        a[i] = Read();
+//    }
+//    for (int i = 1; i <= m; ++i)
+//    {
+//        b[i] = Read();
+//    }
+//
+//    int top1 = 1, top2 = 1;
+//    int cnt1 = a[1], cnt2 = b[1];
+//    int cnt = 0;
+//    while (1)
+//    {
+//        if (cnt1 == cnt2)
+//        {
+//            ++cnt;
+//            if (top1 == n || top2 == m)
+//            {
+//                break;
+//            }
+//
+//            cnt1 = a[++top1];
+//            cnt2 = b[++top2];
+//        }
+//        else if (cnt1 < cnt2)
+//        {
+//            cnt1 += a[++top1];
+//        }
+//        else
+//        {
+//            cnt2 += b[++top2];
+//        }
+//    }
+//
+//    std::cout << cnt << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//int main()
+//{
+//    int a, b, c;
+//    std::cin >> a >> b >> c;
+//    int Temp = std::abs(a - b);
+//    if (Temp <= c)
+//    {
+//        std::cout << 2 * std::max(a, b) + (c - Temp) / 2 * 2 << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << 2 * std::min(a, b) + c * 2 << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int f(int n)
+//{
+//    if (n == 1)
+//    {
+//        return 1;
+//    }
+//    else
+//    {
+//        return f(n / 2) + 1;
+//    }
+//}
+//
+//int main()
+//{
+//    int n;
+//    while (std::cin >> n)
+//    {
+//        std::cout << f(n) << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//
+//std::array<std::string, 34> mahjong
+//{ 
+//    "1T", "2T", "3T", "4T", "5T", "6T", "7T", "8T", "9T",
+//    "1S", "2S", "3S", "4S", "5S", "6S", "7S", "8S", "9S",
+//    "1W", "2W", "3W", "4W", "5W", "6W", "7W", "8W", "9W",
+//    "DONG", "NAN", "XI", "BEI", 
+//    "ZHONG", "FA", "BAI"
+//};
+//
+//int Convert(const std::string &s)
+//{
+//    for (int i = 0; i < 34; ++i)
+//    {
+//        if (mahjong[i] == s)
+//        {
+//            return i;
+//        }
+//    }
+//
+//    return -1;
+//}
+//
+//std::array<int, 34> c{ 0 };
+//bool Search(int Dep)
+//{
+//    for (int i = 0; i < 34; ++i)
+//    {
+//        if (c[i] >= 3)
+//        {
+//            if (Dep == 3)
+//            {
+//                return true;
+//            }
+//
+//            c[i] -= 3;
+//            if (Search(Dep + 1))
+//            {
+//                return true;
+//            }
+//            c[i] += 3;
+//        }
+//    }
+//
+//    for (int i = 0; i <= 24; ++i)
+//    {
+//        if (i % 9 <= 6 && c[i] >= 1 && c[i + 1] >= 1 && c[i + 2] >= 1)
+//        {
+//            if (Dep == 3)
+//            {
+//                return true;
+//            }
+//
+//            --c[i];
+//            --c[i + 1];
+//            --c[i + 2];
+//            if (Search(Dep + 1))
+//            {
+//                return true;
+//            }
+//            ++c[i];
+//            ++c[i + 1];
+//            ++c[i + 2];
+//        }
+//    }
+//
+//    return false;
+//}
+//
+//bool Check()
+//{
+//    for (int i = 0; i < 34; ++i)
+//    {
+//        if (c[i] >= 2)
+//        {
+//            c[i] -= 2;
+//            if (Search(0))
+//            {
+//                return true;
+//            }
+//            c[i] += 2;
+//        }
+//    }
+//
+//    return false;
+//}
+//
+//int main()
+//{
+//    int NO = 0;
+//    std::string s;
+//    while (std::cin >> s && s[0] != '0')
+//    {
+//        std::cout << "Case " << ++NO << ":";
+//
+//        std::array<int, 15> mj{ 0 };
+//        mj[0] = Convert(s);
+//        for (int i = 1; i < 13; ++i)
+//        {
+//            std::cin >> s;
+//            mj[i] = Convert(s);
+//        }
+//
+//        bool OK = false;
+//        for (int i = 0; i < 34; ++i)
+//        {
+//            std::fill(c.begin(), c.end(), 0);
+//            for (int j = 0; j < 13; ++j)
+//            {
+//                ++c[mj[j]];
+//            }
+//
+//            if (c[i] < 4)
+//            {
+//                ++c[i];
+//                if (Check())
+//                {
+//                    OK = true;
+//                    std::cout << " " << mahjong[i];
+//                }
+//                --c[i];
+//            }
+//        }
+//
+//        if (!OK)
+//        {
+//            std::cout << " Not ready";
+//        }
+//        std::putchar('\n');
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr int MaxN = 200000;
+//
+//int n, m, cnt = 0;
+//
+//struct edge
+//{
+//    int t, Next;
+//};
+//std::array<edge, MaxN + 5> Edge;
+//
+//std::array<int, MaxN> Head{ 0 }, Col{ 0 };
+//std::array<bool, MaxN> Used{ false };
+//std::array<int, 2> Sum{ 0 };
+//
+//void Add(int a, int b)
+//{
+//    ++cnt;
+//    Edge[cnt].t = b;
+//    Edge[cnt].Next = Head[a];
+//    Head[a] = cnt;
+//}
+//
+//bool DFS(int Node, int Color)
+//{
+//    if (Used[Node])
+//    {
+//        if (Col[Node] == Color)
+//        {
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    Used[Node] = true;
+//    Col[Node] = Color;
+//    ++Sum[Color];
+//
+//    bool OK = true;
+//    for (int i = Head[Node]; i && OK; i = Edge[i].Next)
+//    {
+//        OK = OK && DFS(Edge[i].t, !Color);
+//    }
+//
+//    return OK;
+//}
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    n = Read();
+//    m = Read();
+//    for (int i = 0; i < m; ++i)
+//    {
+//        int a, b;
+//        a = Read();
+//        b = Read();
+//        Add(a, b);
+//        Add(b, a);
+//    }
+//
+//    int Ans = 0;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        if (!Used[i])
+//        {
+//            Sum[0] = Sum[1] = 0;
+//            if (!DFS(i, 0))
+//            {
+//                std::puts("Impossible");
+//                goto Outside;
+//            }
+//
+//            Ans += std::min(Sum[0], Sum[1]);
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//Outside:
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//std::array<int, 200000 + 5> p{ 0 }, d{ 0 };
+//
+//int Find(int x)
+//{
+//    if (p[x] == x)
+//    {
+//        return x;
+//    }
+//    else
+//    {
+//        auto Last = p[x];
+//        p[x] = Find(p[x]);
+//        d[x] += d[Last];
+//
+//        return p[x];
+//    }
+//}
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        p[i] = i;
+//    }
+//
+//    int Ans = 1 << 28;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        int t;
+//        t = Read();
+//        auto x = Find(i);
+//        auto y = Find(t);
+//        if (x != y)
+//        {
+//            p[x] = y;
+//            d[i] = d[t] + 1;
+//        }
+//        else
+//        {
+//            Ans = std::min(Ans, d[i] + d[t] + 1);
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cstring>
+//#include <string>
+//#include <vector>
+//#include <algorithm>
+//
+//constexpr int MaxN = 4;
+//int n, Ans, Dice[MaxN][6];
+//
+//int Dice24[24][6] = 
+//{
+//{ 2, 1, 5, 0, 4, 3 },
+//{ 2, 0, 1, 4, 5, 3 },
+//{ 2, 4, 0, 5, 1, 3 },
+//{ 2, 5, 4, 1, 0, 3 },
+//{ 4, 2, 5, 0, 3, 1 },
+//{ 5, 2, 1, 4, 3, 0 },
+//{ 1, 2, 0, 5, 3, 4 },
+//{ 0, 2, 4, 1, 3, 5 },
+//{ 0, 1, 2, 3, 4, 5 },
+//{ 4, 0, 2, 3, 5, 1 },
+//{ 5, 4, 2, 3, 1, 0 },
+//{ 1, 5, 2, 3, 0, 4 },
+//{ 5, 1, 3, 2, 4, 0 },
+//{ 1, 0, 3, 2, 5, 4 },
+//{ 0, 4, 3, 2, 1, 5 },
+//{ 4, 5, 3, 2, 0, 1 },
+//{ 1, 3, 5, 0, 2, 4 },
+//{ 0, 3, 1, 4, 2, 5 },
+//{ 4, 3, 0, 5, 2, 1 },
+//{ 5, 3, 4, 1, 2, 0 },
+//{ 3, 4, 5, 0, 1, 2 },
+//{ 3, 5, 1, 4, 0, 2 },
+//{ 3, 1, 0, 5, 4, 2 },
+//{ 3, 0, 4, 1, 5, 2 },
+//};
+//
+//std::vector<std::string> Names;
+//int ID(const std::string &Name)
+//{
+//    for (std::size_t i = 0; i < Names.size(); ++i)
+//    {
+//        if (Names[i] == Name)
+//        {
+//            return i;
+//        }
+//    }
+//
+//    Names.push_back(Name);
+//    return Names.size() - 1;
+//}
+//
+//int r[MaxN], Color[MaxN][6];
+//
+//void Check()
+//{
+//    for (int i = 0; i < n; ++i)
+//    {
+//        for (int j = 0; j < 6; ++j)
+//        {
+//            Color[i][Dice24[r[i]][j]] = Dice[i][j];
+//        }
+//    }
+//
+//    int Tot = 0;
+//    for (int j = 0; j < 6; ++j)
+//    {
+//        int cnt[MaxN * 6];
+//        std::memset(cnt, 0, sizeof(cnt));
+//        int MaxFace = 0;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            MaxFace = std::max(MaxFace, ++cnt[Color[i][j]]);
+//        }
+//
+//        Tot += n - MaxFace;
+//    }
+//
+//    Ans = std::min(Ans, Tot);
+//}
+//
+//void DFS(int d)
+//{
+//    if (d == n)
+//    {
+//        Check();
+//    }
+//    else
+//    {
+//        for (int i = 0; i < 24; ++i)
+//        {
+//            r[d] = i;
+//            DFS(d + 1);
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    while (std::cin >> n && n)
+//    {
+//        Names.clear();
+//        std::string Name;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            for (int j = 0; j < 6; ++j)
+//            {
+//                std::cin >> Name;
+//                Dice[i][j] = ID(Name);
+//            }
+//        }
+//
+//        Ans = n * 6;
+//        r[0] = 0;
+//        DFS(1);
+//        std::cout << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cstring>
+//
+//int Left[] = { 4, 0, 2, 3, 5, 1 };
+//int Up[] = { 2, 1, 5, 0, 4, 3 };
+//
+//void Rot(int *T, int *p)
+//{
+//    int q[6];
+//    std::memcpy(q, p, sizeof(q));
+//    for (int i = 0; i < 6; ++i)
+//    {
+//        p[i] = T[q[i]];
+//    }
+//}
+//
+//void EnumeratePermutations()
+//{
+//    int p0[] = { 0, 1, 2, 3, 4, 5 };
+//    std::printf("int dice[24][6] = {\n");
+//    for (int i = 0; i < 6; ++i)
+//    {
+//        int p[6];
+//        std::memcpy(p, p0, sizeof(p0));
+//        if (i == 0)
+//        {
+//            Rot(Up, p);
+//        }
+//        if (i == 1)
+//        {
+//            Rot(Left, p);
+//            Rot(Up, p);
+//        }
+//        if (i == 3)
+//        {
+//            Rot(Up, p);
+//            Rot(Up, p);
+//        }
+//        if (i == 4)
+//        {
+//            Rot(Left, p);
+//            Rot(Left, p);
+//            Rot(Left, p);
+//            Rot(Up, p);
+//        }
+//        if (i == 5)
+//        {
+//            Rot(Left, p);
+//            Rot(Left, p);
+//            Rot(Up, p);
+//        }
+//
+//        for (int j = 0; j < 4; ++j)
+//        {
+//            std::printf("{ %d, %d, %d, %d, %d, %d }, \n", p[0], p[1], p[2], p[3], p[4], p[5]);
+//            Rot(Left, p);
+//        }
+//    }
+//
+//    std::puts("};");
+//}
+//
+//int main()
+//{
+//    EnumeratePermutations();
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <cstring>
+//
+//using ll = __int128;
+//
+//ll f[100][100] = { 0 };
+//ll Num[100] = { 0 }, p[100] = { 0 };
+//
+//int n, m;
+//
+//ll DP(int L, int R)
+//{
+//    if (f[L][R])
+//    {
+//        return f[L][R];
+//    }
+//
+//    if (R > L)
+//    {
+//        return f[L][R] = std::max(Num[L] * p[m - R + L] + DP(L + 1, R),
+//                           Num[R] * p[m - R + L] + DP(L, R - 1));
+//    }
+//    else
+//    {
+//        return f[L][R] = Num[L] * p[m];
+//    }
+//}
+//
+//void Print(ll x)
+//{
+//    if (!x)
+//    {
+//        return;
+//    }
+//    else if (x)
+//    {
+//        Print(x / 10);
+//    }
+//
+//    std::putchar(x % 10 + '0');
+//}
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    n = Read();
+//    m = Read();
+//
+//    p[0] = 1;
+//    for (int i = 1; i <= m; ++i)
+//    {
+//        p[i] = 2 * p[i - 1];
+//    }
+//
+//    ll Ans = 0;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        std::memset(f, 0, sizeof(f));
+//        for (int j = 1; j <= m; ++j)
+//        {
+//            Num[j] = Read();
+//        }
+//
+//        Ans += DP(1, m);
+//    }
+//
+//    if (Ans == 0)
+//    {
+//        std::cout << 0 << std::endl;
+//    }
+//    else
+//    {
+//        Print(Ans);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 20;
+//constexpr int INF = 999999999;
+//
+//int n;
+//std::array<std::array<int, MaxN>, MaxN> A{ 0 }, B{ 0 };
+//
+//int Check(int s)
+//{
+//    for (auto &rr : B)
+//    {
+//        for (auto &r : rr)
+//        {
+//            r = 0;
+//        }
+//    }
+//
+//    for (int c = 0; c < n; ++c)
+//    {
+//        if (s & (1 << c))
+//        {
+//            B[0][c] = 1;
+//        }
+//        else if (A[0][c] == 1)
+//        {
+//            return INF;
+//        }
+//    }
+//
+//    for (int r = 1; r < n; ++r)
+//    {
+//        for (int c = 0; c < n; ++c)
+//        {
+//            int Sum = 0;
+//            if (r > 1)
+//            {
+//                Sum += B[r - 2][c];
+//            }
+//            if (c > 0)
+//            {
+//                Sum += B[r - 1][c - 1];
+//            }
+//            if (c < n - 1)
+//            {
+//                Sum += B[r - 1][c + 1];
+//            }
+//
+//            B[r][c] = Sum % 2;
+//            if (A[r][c] == 1 && B[r][c] == 0)
+//            {
+//                return INF;
+//            }
+//        }
+//    }
+//
+//    int cnt = 0;
+//    for (int r = 0; r < n; ++r)
+//    {
+//        for (int c = 0; c < n; ++c)
+//        {
+//            if (A[r][c] != B[r][c])
+//            {
+//                ++cnt;
+//            }
+//        }
+//    }
+//
+//    return cnt;
+//}
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    int T;
+//    T = Read();
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        n = Read();
+//        for (int r = 0; r < n; ++r)
+//        {
+//            for (int c = 0; c < n; ++c)
+//            {
+//                A[r][c] = Read();
+//            }
+//        }
+//
+//        int Ans = INF;
+//        for (int s = 0; s < (1 << n); ++s)
+//        {
+//            Ans = std::min(Ans, Check(s));
+//        }
+//        if (Ans == INF)
+//        {
+//            Ans = -1;
+//        }
+//
+//        std::cout << "Case " << NO << ": " << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
 //#include <array>
 //#include <algorithm>
 //#include <vector>
