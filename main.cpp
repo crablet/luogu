@@ -1,3 +1,169 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
+#include <array>
+
+int cnt;
+std::unordered_map<std::string, int> id;
+int ID(const std::string &s)
+{
+    if (!id.count(s))
+    {
+        id[s] = cnt++;
+    }
+
+    return id[s];
+}
+
+constexpr int MaxN = 1000 + 5;
+
+class Component
+{
+public:
+    int Price;
+    int Quality;
+
+    Component() = default;
+    Component(int Price, int Quality) :
+        Price(Price), Quality(Quality)
+    {
+    }
+};
+
+int b;
+std::array<std::vector<Component>, MaxN> Comp;
+bool OK(int q)
+{
+    int Sum = 0;
+    for (int i = 0; i < cnt; ++i)
+    {
+        int Cheapest = b + 1;
+        for (const auto &r : Comp[i])
+        {
+            if (r.Quality >= q)
+            {
+                Cheapest = std::min(Cheapest, r.Price);
+            }
+        }
+
+        if (Cheapest == b + 1)
+        {
+            return false;
+        }
+
+        Sum += Cheapest;
+        if (Sum > b)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int main()
+{
+    int T;
+    std::cin >> T;
+    while (T--)
+    {
+        int n;
+        std::cin >> n >> b;
+        for (int i = 0; i < n; ++i)
+        {
+            Comp[i].clear();
+        }
+        cnt = 0;
+        id.clear();
+
+        int MaxQ = 0;
+        std::string Type, Name;
+        for (int i = 0; i < n; ++i)
+        {
+            int p, q;
+            std::cin >> Type >> Name >> p >> q;
+            MaxQ = std::max(MaxQ, q);
+            Comp[ID(Type)].emplace_back(p, q);
+        }
+
+        int L = 0, R = MaxQ;
+        while (L < R)
+        {
+            int M = L + (R - L + 1) / 2;
+            if (OK(M))
+            {
+                L = M;
+            }
+            else
+            {
+                R = M - 1;
+            }
+        }
+
+        std::cout << L << std::endl;
+    }
+
+    return 0;
+}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//template <typename T>
+//ll f(const T &P, int i, int Final)
+//{
+//    if (i == 0)
+//    {
+//        return 0;
+//    }
+//    else if (P[i] == Final)
+//    {
+//        return f(P, i - 1, Final);
+//    }
+//    else
+//    {
+//        return f(P, i - 1, 6 - P[i] - Final) + (1LL << (i - 1));
+//    }
+//}
+//
+//int main()
+//{
+//    constexpr int MaxN = 60 + 5;
+//    int n;
+//    std::array<int, MaxN> Start{ 0 }, Finish{ 0 };
+//    int NO = 0;
+//    while (std::cin >> n && n)
+//    {
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            std::cin >> Start[i];
+//        }
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            std::cin >> Finish[i];
+//        }
+//
+//        int k = n;
+//        while (k >= 1 && Start[k] == Finish[k])
+//        {
+//            --k;
+//        }
+//
+//        ll Ans = 0;
+//        if (k >= 1)
+//        {
+//            int Other = 6 - Start[k] - Finish[k];
+//            Ans = f(Start, k - 1, Other) + f(Finish, k - 1, Other) + 1;
+//        }
+//    
+//        std::cout << "Case " << ++NO << ": " << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
 //#include <iostream>
 //
 //int Read()
