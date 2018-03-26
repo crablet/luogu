@@ -1,4 +1,2263 @@
 //#include <iostream>
+//#include <string>
+//#include <array>
+//#include <unordered_map>
+//
+//constexpr int MaxN = 24;
+//
+//int BitCount(int x)
+//{
+//    return x == 0 ? 0 : BitCount(x >> 1) + (x & 1);
+//}
+//
+//int main()
+//{
+//    int n;
+//    while (std::cin >> n && n)
+//    {
+//        std::array<int, MaxN> A{ 0 };
+//        std::string s;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> s;
+//            for (const auto &c : s)
+//            {
+//                A[i] ^= (1 << (c - 'A'));
+//            }
+//        }
+//
+//        std::unordered_map<int, int> Table;
+//        int n1 = n / 2, n2 = n - n1;
+//        for (int i = 0; i < (1 << n1); ++i)
+//        {
+//            int x = 0;
+//            for (int j = 0; j < n1; ++j)
+//            {
+//                if (i & (1 << j))
+//                {
+//                    x ^= A[j];
+//                }
+//            }
+//
+//            if (!Table.count(x) || BitCount(Table[x]) < BitCount(i))
+//            {
+//                Table[x] = i;
+//            }
+//        }
+//
+//        int Ans = 0;
+//        for (int i = 0; i < (1 << n2); ++i)
+//        {
+//            int x = 0;
+//            for (int j = 0; j < n2; ++j)
+//            {
+//                if (i & (1 << j))
+//                {
+//                    x ^= A[n1 + j];
+//                }
+//            }
+//
+//            if (Table.count(x) && BitCount(Ans) < BitCount(Table[x]) + BitCount(i))
+//            {
+//                Ans = (i << n1) ^ Table[x];
+//            }
+//        }
+//
+//        std::cout << BitCount(Ans) << std::endl;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            if (Ans & (1 << i))
+//            {
+//                std::cout << i + 1 << ' ';
+//            }
+//        }
+//        std::putchar('\n');
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//int main()
+//{
+//    std::array<int, 30000 + 5> W{ 0 }, V{ 0 }, F{ 0 };
+//    
+//    int N, m;
+//    std::cin >> N >> m;
+//    for (int i = 0; i < m; ++i)
+//    {
+//        std::cin >> W[i] >> V[i];
+//        V[i] *= W[i];
+//    }
+//
+//    for (int i = 0; i < m; ++i)
+//    {
+//        for (int j = N; j >= W[i]; --j)
+//        {
+//            F[j] = std::max(F[j], F[j - W[i]] + V[i]);
+//        }
+//    }
+//
+//    std::cout << F[N] << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int a[1000000] = { 0 };
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int Max = -99999999;
+//        int n;
+//        std::cin >> n;
+//
+//        if (n == 1)
+//        {
+//            int t;
+//            std::cin >> t;
+//            std::cout << 1 << std::endl;
+//            continue;
+//        }
+//
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> a[i];
+//            if (a[i] > Max)
+//            {
+//                Max = a[i];
+//            }
+//        }
+//
+//        int t = 1;
+//        while (Max /= 2)
+//        {
+//            ++t;
+//        }
+//
+//        int Sum = 1;
+//        for (int i = 0; i < t; ++i)
+//        {
+//            int Zero = 0;
+//            int One = 0;
+//            for (int j = 0; j < n; ++j)
+//            {
+//                if ((a[j] & (1 << i)) == 0)
+//                {
+//                    ++Zero;
+//                }
+//                else
+//                {
+//                    ++One;
+//                }
+//
+//                if (One >= 1)
+//                {
+//                    Sum *= 2;
+//                    break;
+//                }
+//            }
+//        }
+//
+//        std::cout << Sum - n << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <cctype>
+//
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+////std::array<ll, 100000> Arr{ 0 }, Brr{ 0 };
+//ll Arr[100000], Brr[100000];
+//
+//struct Node
+//{
+//    ll Val, LazyTag;
+//};
+//
+//int N, Q;
+//
+//int k;
+//
+////std::array<Node, 400000> SegTree1, SegTree2;
+//Node SegTree1[400000], SegTree2[400000];
+//
+//constexpr int lson(int x) { return x << 1; }
+//constexpr int rson(int x) { return x << 1 | 1; }
+//
+//template <typename T>
+//void Build2(int Root, const T &Arr, int Start, int End)
+//{
+//    SegTree2[Root].LazyTag = 0;
+//
+//    if (Start == End)
+//    {
+//        SegTree2[Root].Val = Arr[Start];
+//    }
+//    else
+//    {
+//        int Mid = (Start + End) >> 1;
+//        Build2(lson(Root), Arr, Start, Mid);
+//        Build2(rson(Root), Arr, Mid + 1, End);
+//        SegTree2[Root].Val = SegTree2[lson(Root)].Val + SegTree2[rson(Root)].Val;
+//    }
+//}
+//
+//void PushDown2(int Root, int Start, int End)
+//{
+//    if (SegTree2[Root].LazyTag != 0)
+//    {
+//        SegTree2[lson(Root)].LazyTag += SegTree2[Root].LazyTag;
+//        SegTree2[rson(Root)].LazyTag += SegTree2[Root].LazyTag;
+//
+//        int Mid = (Start + End) >> 1;
+//        SegTree2[lson(Root)].Val += SegTree2[Root].LazyTag * (Mid - Start + 1);
+//        SegTree2[rson(Root)].Val += SegTree2[Root].LazyTag * (End - Mid);
+//
+//        SegTree2[Root].LazyTag = 0;
+//    }
+//}
+//
+//ll Query2(int Root, int NStart, int NEnd, int QStart, int QEnd)
+//{
+//    if (QStart > NEnd || QEnd < NStart)
+//    {
+//        return 0;
+//    }
+//    else if (QStart <= NStart && QEnd >= NEnd)
+//    {
+//        return SegTree2[Root].Val;
+//    }
+//
+//    PushDown2(Root, NStart, NEnd);
+//
+//    int Mid = (NStart + NEnd) >> 1;
+//    return Query2(lson(Root), NStart, Mid, QStart, QEnd)
+//        + Query2(rson(Root), Mid + 1, NEnd, QStart, QEnd);
+//}
+//
+//void Update2(int Root, int NStart, int Nend, int UStart, int UEnd, int AddVal)
+//{
+//    if (UStart > Nend || UEnd < NStart)
+//    {
+//        return;
+//    }
+//    else if (UStart <= NStart && UEnd >= Nend)
+//    {
+//        SegTree2[Root].LazyTag += AddVal;
+//        SegTree2[Root].Val += AddVal * (Nend - NStart + 1);
+//        return;
+//    }
+//
+//    PushDown2(Root, NStart, Nend);
+//
+//    int Mid = (NStart + Nend) >> 1;
+//
+//    Update2(lson(Root), NStart, Mid, UStart, UEnd, AddVal);
+//    Update2(rson(Root), Mid + 1, Nend, UStart, UEnd, AddVal);
+//
+//    SegTree2[Root].Val = SegTree2[lson(Root)].Val + SegTree2[rson(Root)].Val;
+//}
+//
+//template <typename T>
+//void Build1(int Root, const T &Arr, int Start, int End)
+//{
+//    SegTree1[Root].LazyTag = 0;
+//
+//    if (Start == End)
+//    {
+//        SegTree1[Root].Val = Arr[Start];
+//    }
+//    else
+//    {
+//        int Mid = (Start + End) >> 1;
+//        Build1(lson(Root), Arr, Start, Mid);
+//        Build1(rson(Root), Arr, Mid + 1, End);
+//        SegTree1[Root].Val = SegTree1[lson(Root)].Val + SegTree1[rson(Root)].Val;
+//    }
+//}
+//
+//void PushDown1(int Root, int Start, int End)
+//{
+//    if (SegTree1[Root].LazyTag != 0)
+//    {
+//        SegTree1[lson(Root)].LazyTag += SegTree1[Root].LazyTag;
+//        SegTree1[rson(Root)].LazyTag += SegTree1[Root].LazyTag;
+//
+//        int Mid = (Start + End) >> 1;
+//        SegTree1[lson(Root)].Val += SegTree1[Root].LazyTag * (Mid - Start + 1);
+//        SegTree1[rson(Root)].Val += SegTree1[Root].LazyTag * (End - Mid);
+//
+//        SegTree1[Root].LazyTag = 0;
+//    }
+//}
+//
+//ll Query1(int Root, int NStart, int NEnd, int QStart, int QEnd)
+//{
+//    if (QStart > NEnd || QEnd < NStart)
+//    {
+//        return 0;
+//    }
+//    else if (QStart <= NStart && QEnd >= NEnd)
+//    {
+//        return SegTree1[Root].Val;
+//    }
+//
+//    PushDown1(Root, NStart, NEnd);
+//
+//    int Mid = (NStart + NEnd) >> 1;
+//    return Query1(lson(Root), NStart, Mid, QStart, QEnd)
+//        + Query1(rson(Root), Mid + 1, NEnd, QStart, QEnd);
+//}
+//
+//void Update1(int Root, int NStart, int Nend, int UStart, int UEnd, int AddVal)
+//{
+//    if (UStart > Nend || UEnd < NStart)
+//    {
+//        return;
+//    }
+//    else if (UStart <= NStart && UEnd >= Nend)
+//    {
+//        SegTree1[Root].LazyTag += AddVal;
+//        SegTree1[Root].Val += AddVal * (Nend - NStart + 1);
+//        return;
+//    }
+//
+//    PushDown1(Root, NStart, Nend);
+//
+//    int Mid = (NStart + Nend) >> 1;
+//
+//    Update1(lson(Root), NStart, Mid, UStart, UEnd, AddVal);
+//    Update1(rson(Root), Mid + 1, Nend, UStart, UEnd, AddVal);
+//
+//    SegTree1[Root].Val = SegTree1[lson(Root)].Val + SegTree1[rson(Root)].Val;
+//}
+//
+//int Read()
+//{
+//    int n = 0;//, k = 1;
+//    char ch = std::getchar();
+//    while (!std::isdigit(ch))
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (std::isdigit(ch))
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;// * k;
+//}
+//
+//int main()
+//{
+//    N = Read();
+//    Q = Read();
+//
+//    for (register int i = 1; i <= N; ++i)
+//    {
+//        Arr[i] = Read();
+//    }
+//
+//    Build1(1, Arr, 1, N);
+//    Build2(1, Brr, 1, N);
+//
+//    while (Q--)
+//    {
+//        register int Command;
+//        Command = Read();
+//        if (Command == 3)
+//        {
+//            register int l, r;
+//            l = Read();
+//            r = Read();
+//            std::cout << Query2(1, 1, N, l, r) << std::endl;
+//        }
+//        else if (Command == 1)
+//        {
+//            register int l, r, x;
+//            l = Read();
+//            r = Read();
+//            x = Read();
+//            Update1(1, 1, N, l, r, x);
+//        }
+//        else if (Command == 2)
+//        {
+//            register int l, r, b;
+//            l = Read();
+//            r = Read();
+//            k = Read();
+//            b = Read();
+//            //ll times = Query1(1, 1, N, l, r);
+//            for (register int i = l; i <= r; ++i)
+//            {
+//                Update2(1, 1, N, i, i, k * Query1(1, 1, N, i, i) + b);
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//ll Arr[400000] = { 0 }, Brr[400000] = { 0 };
+////std::array<ll, 100000> Arr{ 0 }, Brr{ 0 };
+//
+//struct Node
+//{
+//    ll Val, LazyTag;
+//};
+//
+//int N, Q;
+//
+//int k;
+//
+//Node SegTree1[400000], SegTree2[400000];
+////std::array<Node, 400000> SegTree1, SegTree2;
+//
+//template <typename T>
+//void Build2(int Root, const T &Arr, int Start, int End)
+//{
+//    SegTree2[Root].LazyTag = 0;
+//
+//    if (Start == End)
+//    {
+//        SegTree2[Root].Val = Arr[Start];
+//    }
+//    else
+//    {
+//        int Mid = (Start + End) / 2;
+//        Build2(Root * 2, Arr, Start, Mid);
+//        Build2(Root * 2 + 1, Arr, Mid + 1, End);
+//        SegTree2[Root].Val = SegTree2[Root * 2].Val + SegTree2[Root * 2 + 1].Val;
+//    }
+//}
+//
+//void PushDown2(int Root, int Start, int End)
+//{
+//    if (SegTree2[Root].LazyTag != 0)
+//    {
+//        SegTree2[Root * 2].LazyTag += SegTree2[Root].LazyTag;
+//        SegTree2[Root * 2 + 1].LazyTag += SegTree2[Root].LazyTag;
+//
+//        int Mid = (Start + End) / 2;
+//        SegTree2[Root * 2].Val += SegTree2[Root].LazyTag * (Mid - Start + 1);
+//        SegTree2[Root * 2 + 1].Val += SegTree2[Root].LazyTag * (End - Mid);
+//
+//        SegTree2[Root].LazyTag = 0;
+//    }
+//}
+//
+//ll Query2(int Root, int NStart, int NEnd, int QStart, int QEnd)
+//{
+//    if (QStart > NEnd || QEnd < NStart)
+//    {
+//        return 0;
+//    }
+//    else if (QStart <= NStart && QEnd >= NEnd)
+//    {
+//        return SegTree2[Root].Val;
+//    }
+//
+//    PushDown2(Root, NStart, NEnd);
+//
+//    int Mid = (NStart + NEnd) / 2;
+//    return Query2(Root * 2, NStart, Mid, QStart, QEnd)
+//        + Query2(Root * 2 + 1, Mid + 1, NEnd, QStart, QEnd);
+//}
+//
+//void Update2(int Root, int NStart, int Nend, int UStart, int UEnd, int AddVal)
+//{
+//    if (UStart > Nend || UEnd < NStart)
+//    {
+//        return;
+//    }
+//    else if (UStart <= NStart && UEnd >= Nend)
+//    {
+//        SegTree2[Root].LazyTag += AddVal;
+//        SegTree2[Root].Val += AddVal * (Nend - NStart + 1);
+//        return;
+//    }
+//
+//    PushDown2(Root, NStart, Nend);
+//
+//    int Mid = (NStart + Nend) / 2;
+//
+//    Update2(Root * 2, NStart, Mid, UStart, UEnd, AddVal);
+//    Update2(Root * 2 + 1, Mid + 1, Nend, UStart, UEnd, AddVal);
+//
+//    SegTree2[Root].Val = SegTree2[Root * 2].Val + SegTree2[Root * 2 + 1].Val;
+//}
+//
+//
+//template <typename T>
+//void Build1(int Root, const T &Arr, int Start, int End)
+//{
+//    SegTree1[Root].LazyTag = 0;
+//
+//    if (Start == End)
+//    {
+//        SegTree1[Root].Val = Arr[Start];
+//    }
+//    else
+//    {
+//        int Mid = (Start + End) / 2;
+//        Build1(Root * 2, Arr, Start, Mid);
+//        Build1(Root * 2 + 1, Arr, Mid + 1, End);
+//        SegTree1[Root].Val = SegTree1[Root * 2].Val + SegTree1[Root * 2 + 1].Val;
+//    }
+//}
+//
+//void PushDown1(int Root, int Start, int End)
+//{
+//    if (SegTree1[Root].LazyTag != 0)
+//    {
+//        SegTree1[Root * 2].LazyTag += SegTree1[Root].LazyTag;
+//        SegTree1[Root * 2 + 1].LazyTag += SegTree1[Root].LazyTag;
+//
+//        int Mid = (Start + End) / 2;
+//        SegTree1[Root * 2].Val += SegTree1[Root].LazyTag * (Mid - Start + 1);
+//        SegTree1[Root * 2 + 1].Val += SegTree1[Root].LazyTag * (End - Mid);
+//
+//        SegTree1[Root].LazyTag = 0;
+//    }
+//}
+//
+//ll Query1(int Root, int NStart, int NEnd, int QStart, int QEnd)
+//{
+//    if (QStart > NEnd || QEnd < NStart)
+//    {
+//        return 0;
+//    }
+//    else if (QStart <= NStart && QEnd >= NEnd)
+//    {
+//        return SegTree1[Root].Val;
+//    }
+//
+//    PushDown1(Root, NStart, NEnd);
+//
+//    int Mid = (NStart + NEnd) / 2;
+//    return Query1(Root * 2, NStart, Mid, QStart, QEnd)
+//        + Query1(Root * 2 + 1, Mid + 1, NEnd, QStart, QEnd);
+//}
+//
+//void Update1(int Root, int NStart, int Nend, int UStart, int UEnd, int AddVal)
+//{
+//    if (UStart > Nend || UEnd < NStart)
+//    {
+//        return;
+//    }
+//    else if (UStart <= NStart && UEnd >= Nend)
+//    {
+//        SegTree1[Root].LazyTag += AddVal;
+//        SegTree1[Root].Val += AddVal * (Nend - NStart + 1);
+//        return;
+//    }
+//
+//    PushDown1(Root, NStart, Nend);
+//
+//    int Mid = (NStart + Nend) / 2;
+//
+//    Update1(Root * 2, NStart, Mid, UStart, UEnd, AddVal);
+//    Update1(Root * 2 + 1, Mid + 1, Nend, UStart, UEnd, AddVal);
+//
+//    SegTree1[Root].Val = SegTree1[Root * 2].Val + SegTree1[Root * 2 + 1].Val;
+//}
+//
+//int Read()
+//{
+//    int n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    N = Read();
+//    Q = Read();
+//
+//    for (int i = 1; i <= N; ++i)
+//    {
+//        Arr[i] = Read();
+//    }
+//
+//    Build1(1, Arr, 1, N);
+//    Build2(1, Brr, 1, N);
+//
+//    while (Q--)
+//    {
+//        int Command;
+//        Command = Read();
+//        if (Command == 3)
+//        {
+//            int l, r;
+//            l = Read();
+//            r = Read();
+//            std::cout << Query2(1, 1, N, l, r) << std::endl;
+//        }
+//        else if (Command == 1)
+//        {
+//            int l, r, x;
+//            l = Read();
+//            r = Read();
+//            x = Read();
+//            Update1(1, 1, N, l, r, x);
+//        }
+//        else if (Command == 2)
+//        {
+//            int l, r, b;
+//            l = Read();
+//            r = Read();
+//            k = Read();
+//            b = Read();
+//            for (int i = l; i <= r; ++i)
+//            {
+//                Update2(1, 1, N, i, i, k * Query1(1, 1, N, i, i) + b);
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//std::string Str;
+//
+//int n;
+//
+//int main()
+//{
+//    std::cin >> Str;
+//    std::cin >> n;
+//    while (n--)
+//    {
+//        std::string reg;
+//        std::cin >> reg;
+//        
+//        int Tol = 0;
+//        for (std::size_t i = 0; i < reg.size(); ++i)
+//        {
+//            if (reg[i] == '?')
+//            {
+//                ++Tol;
+//            }
+//        }
+//
+//        for (int t = 1; t < (1 << Tol); ++t)
+//        {
+//            for (int j = 0; j < Tol; ++j)
+//            {
+//                std::string Reg;
+//                if (t & (1 << j))
+//                {
+//                    int q = 0;
+//                    for (std::size_t i = 0; i < reg.size() - 1; ++i)
+//                    {
+//                        if (reg[i] != '?' && reg[i + 1] != '?')
+//                        {
+//                            Reg.push_back(reg[i]);
+//                        }
+//                        else if (reg[i + 1] == '?' && (q + 1) == (t && (1 << j)))
+//                        {
+//                            ++q;
+//                            Reg.push_back(reg[i]);
+//                            ++i;
+//                        }
+//                        else if (reg[i + 1] == '?' && (q + 1) != (t && (1 << j)))
+//                        {
+//                            ++q;
+//                            ++i;
+//                        }
+//                    }
+//                }
+//
+//                std::cout << Reg << std::endl;
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//ll Arr[400000] = { 0 }, Brr[400000] = { 0 };
+////std::array<ll, 100000> Arr{ 0 }, Brr{ 0 };
+//
+//struct Node
+//{
+//    ll Val, LazyTag;
+//};
+//
+//int N, Q;
+//
+//int k;
+//
+//Node SegTree1[400000], SegTree2[400000];
+////std::array<Node, 400000> SegTree1, SegTree2;
+//
+//template <typename T>
+//void Build2(int Root, const T &Arr, int Start, int End)
+//{
+//    SegTree2[Root].LazyTag = 0;
+//
+//    if (Start == End)
+//    {
+//        SegTree2[Root].Val = Arr[Start];
+//    }
+//    else
+//    {
+//        int Mid = (Start + End) / 2;
+//        Build2(Root * 2, Arr, Start, Mid);
+//        Build2(Root * 2 + 1, Arr, Mid + 1, End);
+//        SegTree2[Root].Val = SegTree2[Root * 2].Val + SegTree2[Root * 2 + 1].Val;
+//    }
+//}
+//
+//void PushDown2(int Root, int Start, int End)
+//{
+//    if (SegTree2[Root].LazyTag != 0)
+//    {
+//        SegTree2[Root * 2].LazyTag += SegTree2[Root].LazyTag;
+//        SegTree2[Root * 2 + 1].LazyTag += SegTree2[Root].LazyTag;
+//
+//        int Mid = (Start + End) / 2;
+//        SegTree2[Root * 2].Val += SegTree2[Root].LazyTag * (Mid - Start + 1);
+//        SegTree2[Root * 2 + 1].Val += SegTree2[Root].LazyTag * (End - Mid);
+//
+//        SegTree2[Root].LazyTag = 0;
+//    }
+//}
+//
+//ll Query2(int Root, int NStart, int NEnd, int QStart, int QEnd)
+//{
+//    if (QStart > NEnd || QEnd < NStart)
+//    {
+//        return 0;
+//    }
+//    else if (QStart <= NStart && QEnd >= NEnd)
+//    {
+//        return SegTree2[Root].Val;
+//    }
+//
+//    PushDown2(Root, NStart, NEnd);
+//
+//    int Mid = (NStart + NEnd) / 2;
+//    return Query2(Root * 2, NStart, Mid, QStart, QEnd)
+//        + Query2(Root * 2 + 1, Mid + 1, NEnd, QStart, QEnd);
+//}
+//
+//void Update2(int Root, int NStart, int Nend, int UStart, int UEnd, int AddVal)
+//{
+//    if (UStart > Nend || UEnd < NStart)
+//    {
+//        return;
+//    }
+//    else if (UStart <= NStart && UEnd >= Nend)
+//    {
+//        SegTree2[Root].LazyTag += AddVal;
+//        SegTree2[Root].Val += AddVal * (Nend - NStart + 1);
+//        return;
+//    }
+//
+//    PushDown2(Root, NStart, Nend);
+//
+//    int Mid = (NStart + Nend) / 2;
+//
+//    Update2(Root * 2, NStart, Mid, UStart, UEnd, AddVal);
+//    Update2(Root * 2 + 1, Mid + 1, Nend, UStart, UEnd, AddVal);
+//
+//    SegTree2[Root].Val = SegTree2[Root * 2].Val + SegTree2[Root * 2 + 1].Val;
+//}
+//
+//
+//template <typename T>
+//void Build1(int Root, const T &Arr, int Start, int End)
+//{
+//    SegTree1[Root].LazyTag = 0;
+//
+//    if (Start == End)
+//    {
+//        SegTree1[Root].Val = Arr[Start];
+//    }
+//    else
+//    {
+//        int Mid = (Start + End) / 2;
+//        Build1(Root * 2, Arr, Start, Mid);
+//        Build1(Root * 2 + 1, Arr, Mid + 1, End);
+//        SegTree1[Root].Val = SegTree1[Root * 2].Val + SegTree1[Root * 2 + 1].Val;
+//    }
+//}
+//
+//void PushDown1(int Root, int Start, int End)
+//{
+//    if (SegTree1[Root].LazyTag != 0)
+//    {
+//        SegTree1[Root * 2].LazyTag += SegTree1[Root].LazyTag;
+//        SegTree1[Root * 2 + 1].LazyTag += SegTree1[Root].LazyTag;
+//
+//        int Mid = (Start + End) / 2;
+//        SegTree1[Root * 2].Val += SegTree1[Root].LazyTag * (Mid - Start + 1);
+//        SegTree1[Root * 2 + 1].Val += SegTree1[Root].LazyTag * (End - Mid);
+//
+//        SegTree1[Root].LazyTag = 0;
+//    }
+//}
+//
+//ll Query1(int Root, int NStart, int NEnd, int QStart, int QEnd)
+//{
+//    if (QStart > NEnd || QEnd < NStart)
+//    {
+//        return 0;
+//    }
+//    else if (QStart <= NStart && QEnd >= NEnd)
+//    {
+//        return SegTree1[Root].Val;
+//    }
+//
+//    PushDown1(Root, NStart, NEnd);
+//
+//    int Mid = (NStart + NEnd) / 2;
+//    return Query1(Root * 2, NStart, Mid, QStart, QEnd)
+//        + Query1(Root * 2 + 1, Mid + 1, NEnd, QStart, QEnd);
+//}
+//
+//void Update1(int Root, int NStart, int Nend, int UStart, int UEnd, int AddVal)
+//{
+//    if (UStart > Nend || UEnd < NStart)
+//    {
+//        return;
+//    }
+//    else if (UStart <= NStart && UEnd >= Nend)
+//    {
+//        SegTree1[Root].LazyTag += AddVal;
+//        SegTree1[Root].Val += AddVal * (Nend - NStart + 1);
+//        return;
+//    }
+//
+//    PushDown1(Root, NStart, Nend);
+//
+//    int Mid = (NStart + Nend) / 2;
+//
+//    Update1(Root * 2, NStart, Mid, UStart, UEnd, AddVal);
+//    Update1(Root * 2 + 1, Mid + 1, Nend, UStart, UEnd, AddVal);
+//
+//    SegTree1[Root].Val = SegTree1[Root * 2].Val + SegTree1[Root * 2 + 1].Val;
+//}
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    N = Read();
+//    Q = Read();
+//
+//    for (int i = 1; i <= N; ++i)
+//    {
+//        Arr[i] = Read();
+//    }
+//
+//    Build1(1, Arr, 1, N);
+//    Build2(1, Brr, 1, N);
+//
+//    while (Q--)
+//    {
+//        int Command;
+//        Command = Read();
+//        if (Command == 3)
+//        {
+//            int l, r;
+//            l = Read();
+//            r = Read();
+//            std::cout << Query2(1, 1, N, l, r) << std::endl;
+//        }
+//        else if (Command == 1)
+//        {
+//            int l, r, x;
+//            l = Read();
+//            r = Read();
+//            x = Read();
+//            Update1(1, 1, N, l, r, x);
+//        }
+//        else if (Command == 2)
+//        {
+//            int l, r, b;
+//            l = Read();
+//            r = Read();
+//            k = Read();
+//            b = Read();
+//            for (int i = l; i <= r; ++i)
+//            {
+//                Update2(1, 1, N, i, i, k * Query1(1, 1, N, i, i) + b);
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <string>
+//
+//constexpr int MaxN = 1000 + 5;
+//
+//std::array<std::string, MaxN> Map;
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    int H, W;
+//    H = Read();
+//    W = Read();
+//    for (int i = 0; i < H; ++i)
+//    {
+//        std::cin >> Map[i];
+//    }
+//
+//    int T;
+//    T = Read();
+//    while (T--)
+//    {
+//        int l1, r1, l2, r2, l3, r3, l4, r4;
+//        l1 = Read();
+//        r1 = Read();
+//        l2 = Read();
+//        r2 = Read();
+//        l3 = Read();
+//        r3 = Read();
+//        l4 = Read();
+//        r4 = Read();
+//        //std::cin >> l1 >> r1 >> l2 >> r2 >> l3 >> r3 >> l4 >> r4;
+//        //--l1;
+//        //--l2;
+//        //--r1;
+//        //--r2;
+//        //--l3;
+//        //--l4;
+//        //--r3;
+//        //--r4;
+//        
+//        int Ans = 0;
+//        for (int x1 = l1; x1 <= l2; ++x1)
+//        {
+//            for (int x2 = r1; x2 <= r2; ++x2)
+//            {
+//                if (Map[x1][x2] != Map[x1 + l3 - l1][x2 + r3 - r1])
+//                {
+//                    ++Ans;
+//                }
+//            }
+//        }
+//
+//        if (Ans == 0)
+//        {
+//            std::puts("Perfect");
+//        }
+//        else if (Ans == 1)
+//        {
+//            std::puts("One difference");
+//        }
+//        else
+//        {
+//            std::puts("Wrong");
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <unordered_set>
+//#include <array>
+//
+//std::array<int, 100> Arr{ 0 };
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int n;
+//        std::cin >> n;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> Arr[i];
+//        }
+//
+//        std::unordered_set<int> s;
+//        s.insert(0);
+//        for (int i = 0; i < n - 1; ++i)
+//        {
+//            for (int j = i + 1; j < n; ++j)
+//            {
+//                s.insert(Arr[i] ^ Arr[j]);
+//            }
+//        }
+//
+//        std::cout << s.size() - n << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//using namespace std;
+//
+//constexpr int Mod = 1000000007;
+//int stirling(int, int);
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//    cout << stirling(n + 3, n - 1) % Mod << endl;
+//    return 0;
+//}
+//int stirling(int i, int j)
+//{
+//    if ((j == i) || (j == 1))
+//    {
+//        return 1;
+//    }
+//    else if (j == 2)
+//    {
+//        return (int)(pow(2, (i - 1) * 1.0) - 1) % Mod;
+//    }
+//    else
+//    {
+//        return (stirling(i - 1, j - 1) % Mod + j * stirling(i - 1, j) % Mod);
+//    }
+//}
+//#include <iostream>
+//#include <cmath>
+//using namespace std;
+//int main()
+//{
+//    cout << "请输入两个整数n和k: ";
+//    int n, k;
+//    cin >> n >> k;
+//    int array[100][100];
+//    int i, j;
+//    for (i = 0, j = 0; i < 100; i++, j++)
+//    {
+//        array[i][j] = 1;
+//    }
+//    for (j = 0; j < 100; j++)
+//    {
+//        array[0][j] = 1;
+//    }
+//
+//
+//    for (i = 1; i < 100; i++)
+//    {
+//        for (j = i + 1; j < 100; j++)
+//        {
+//            array[i][j] = (i + 1) * array[i][j - 1] + array[i - 1][j - 1];
+//        }
+//    }
+//    cout << "这组数将会有 " << array[k - 1][n - 1] << " 种划分方式" << endl;
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//
+//int main()
+//{
+//    std::string Str;
+//    std::cin >> Str;
+//
+//    int Len = 0;
+//    std::array<int, 28> Arr{ 0 };
+//    for (int i = 0; i < 26; ++i)
+//    {
+//        std::cin >> Arr[i];
+//        Len += Arr[i];
+//    }
+//
+//    if (Len == 0 || Len > Str.size())
+//    {
+//        std::puts("No");
+//        return 0;
+//    }
+//
+//    for (std::size_t i = 0; i <= Str.size() - Len; ++i)
+//    {
+//        std::array<int, 28> Brr{ 0 };
+//        for (int j = i; j < i + Len; ++j)
+//        {
+//            ++Brr[Str[j] - 'a'];
+//        }
+//
+//        if (Arr == Brr)
+//        {
+//            std::puts("Yes");
+//            return 0;
+//        }
+//    }
+//
+//    std::puts("No");
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        std::string Num;
+//        std::cin >> Num;
+//        if (Num.size() < 10)
+//        {
+//            std::cout << Num << std::endl;
+//        }
+//        else if (Num >= 10 && Num <= 99)
+//        {
+//            std::cout << Num + Num / 10 + Num % 10 << std::endl;
+//        }
+//        else if (Num >= 100 && Num <= 999)
+//        {
+//            int n = 3, Last = 0;
+//            for (int i = 0; i < (1 << n); ++i)
+//            {
+//                for (int j = 0; j < n; ++j)
+//                {
+//
+//                }
+//            }
+//        }
+//    }
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//
+//int main()
+//{
+//    std::string Str;
+//    std::cin >> Str;
+//
+//    int Len = 0;
+//    std::array<int, 28> Arr{ 0 };
+//    for (int i = 0; i < 26; ++i)
+//    {
+//        std::cin >> Arr[i];
+//        Len += Arr[i];
+//    }
+//
+//    for (std::size_t i = 0; i < Str.size() - Len; ++i)
+//    {
+//        std::array<int, 28> Brr{ 0 };
+//        for (int j = i; j < i + Len; ++j)
+//        {
+//            ++Brr[Str[j] - 'a'];
+//        }
+//
+//        if (Arr == Brr)
+//        {
+//            std::puts("Yes");
+//            return 0;
+//        }
+//    }
+//
+//    std::puts("No");
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//
+//constexpr int MaxN = 100000 + 5;
+//
+//std::array<std::array<char, 28>, MaxN> Arr{ 0 }, Brr{ 0 };
+//
+//int main()
+//{
+//    std::string Str;
+//    for (std::size_t i = 0; i < Str.size(); ++i)
+//    {
+//        ++Arr[Str[i]][i + 1];
+//    }
+//    for (std::size_t i = 0; i < Str.size(); ++i)
+//    {
+//        Brr[Str[i]][i + 1] = Brr[Str[i]][i] + Arr[Str[i]][i + 1];
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int n;
+//        std::cin >> n;
+//        std::printf("%d\n", (int)std::ceil(std::log2(n)));
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//constexpr int Mod = 1000000007;
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//
+//    int Sum = 0;
+//    for (int x1 = 1; x1 <= n; ++x1)
+//    {
+//        for (int x2 = x1; x2 <= n; ++x2)
+//        {
+//            for (int x3 = x2; x3 <= n; ++x3)
+//            {
+//                for (int x4 = x3; x4 <= n; ++x4)
+//                {
+//                    Sum = (n - x1)(n - x2)(n - x3)(n - x4);
+//                }
+//            }
+//        }
+//    }
+//
+//    std::cout << Sum << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//#include <climits>
+//
+//std::array<int, 1 << 17> Data{ 0 };
+//
+//int n = 10000;
+//
+//int Mod;
+//
+//void Init(int n_)
+//{
+//    n = 1;
+//    while (n < n_)
+//    {
+//        n *= 2;
+//    }
+//
+//    for (int i = 0; i < 2 * n - 1; ++i)
+//    {
+//        Data[i] = INT_MAX;
+//    }
+//}
+//
+//void Update(int k, int a)
+//{
+//    k += n - 1;
+//    Data[k] = a % Mod;
+//    while (k > 0)
+//    {
+//        k = (k - 1) / 2;
+//        Data[k] = std::min(Data[k * 2 + 1], Data[k * 2 + 2]) % Mod;
+//    }
+//}
+//
+//int Query(int a, int b, int k, int l, int r)
+//{
+//    if (r <= a || b <= l)
+//    {
+//        return INT_MAX;
+//    }
+//
+//    if (a <= l && r <= b)
+//    {
+//        return Data[k] % Mod;
+//    }
+//    else
+//    {
+//        return std::min(Query(a, b, k * 2 + 1, l, (l + r) / 2),
+//                        Query(a, b, k * 2 + 2, (l + r) / 2, r)) % Mod;
+//    }
+//}
+//
+//int main()
+//{
+//    int M;
+//    std::cin >> M >> Mod;
+//
+//    int Len = 0;
+//    int Last = 0;
+//    while (M--)
+//    {
+//        char c;
+//        int Num;
+//        std::cin >> c >> Num;
+//        if (c == 'A')
+//        {
+//            Update(++Len, (Num + Last) % Mod);
+//        }
+//        else
+//        {
+//            Last = Query(Len - Num, Len, 0, 0, n);
+//            std::cout << Last << std::endl;
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr int MaxN = 400000 + 5;
+//
+//using ll = long long;
+//
+//ll Read()
+//{
+//    ll n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//struct tree
+//{
+//public:
+//    ll Val, LazyTagAdd, LazyTagMul;
+//};
+//
+//std::array<tree, MaxN> Tree;
+//std::array<ll, MaxN> Arr{ 0 };
+//
+//ll Mod;
+//
+//void Build(ll Root, ll l, ll r)
+//{
+//    Tree[Root].LazyTagAdd = 0;
+//    Tree[Root].LazyTagMul = 1;
+//
+//    if (l == r)
+//    {
+//        Tree[Root].Val = Arr[l];
+//    }
+//    else
+//    {
+//        auto Mid = (l + r) / 2;
+//        Build(Root * 2, l, Mid);
+//        Build(Root * 2 + 1, Mid + 1, r);
+//        Tree[Root].Val = Tree[Root * 2].Val + Tree[Root * 2 + 1].Val;
+//    }
+//
+//    Tree[Root].Val %= Mod;
+//}
+//
+//void PushDown(ll Root, ll l, ll r)
+//{
+//    auto Mid = (l + r) / 2;
+//
+//    Tree[Root * 2].Val = (Tree[Root * 2].Val * Tree[Root].LazyTagMul
+//        + Tree[Root].LazyTagAdd * (Mid - l + 1)) % Mod;
+//    Tree[Root * 2 + 1].Val = (Tree[Root * 2 + 1].Val * Tree[Root].LazyTagMul
+//        + Tree[Root].LazyTagAdd * (r - Mid)) % Mod;
+//
+//    Tree[Root * 2].LazyTagMul = (Tree[Root * 2].LazyTagMul * Tree[Root].LazyTagMul) % Mod;
+//    Tree[Root * 2 + 1].LazyTagMul = (Tree[Root * 2 + 1].LazyTagMul * Tree[Root].LazyTagMul) % Mod;
+//    Tree[Root * 2].LazyTagAdd = (Tree[Root * 2].LazyTagAdd * Tree[Root].LazyTagMul + Tree[Root].LazyTagAdd) % Mod;
+//    Tree[Root * 2 + 1].LazyTagAdd = (Tree[Root * 2 + 1].LazyTagAdd * Tree[Root].LazyTagMul + Tree[Root].LazyTagAdd) % Mod;
+//
+//    Tree[Root].LazyTagAdd = 0;
+//    Tree[Root].LazyTagMul = 1;
+//}
+//
+//void UpdateMul(ll Root, ll l, ll r, ll rl, ll rr, ll k)
+//{
+//    if (l > rr || rl > r)
+//    {
+//        return;
+//    }
+//
+//    if (rl <= l && rr >= r)
+//    {
+//        Tree[Root].Val = (Tree[Root].Val * k) % Mod;
+//        Tree[Root].LazyTagMul = (Tree[Root].LazyTagMul * k) % Mod;
+//        Tree[Root].LazyTagAdd = (Tree[Root].LazyTagAdd * k) % Mod;
+//
+//        return;
+//    }
+//
+//    PushDown(Root, l, r);
+//    auto Mid = (l + r) / 2;
+//    UpdateMul(Root * 2, l, Mid, rl, rr, k);
+//    UpdateMul(Root * 2 + 1, Mid + 1, r, rl, rr, k);
+//    Tree[Root].Val = (Tree[Root * 2].Val + Tree[Root * 2 + 1].Val) % Mod;
+//}
+//
+//void UpdateAdd(ll Root, ll l, ll r, ll rl, ll rr, ll k)
+//{
+//    if (rr < l || rl > r)
+//    {
+//        return;
+//    }
+//
+//    if (rl <= l && rr >= r)
+//    {
+//        Tree[Root].LazyTagAdd = (Tree[Root].LazyTagAdd + k) % Mod;
+//        Tree[Root].Val = (Tree[Root].Val + k * (r - l + 1)) % Mod;
+//
+//        return;
+//    }
+//
+//    PushDown(Root, l, r);
+//    auto Mid = (l + r) / 2;
+//    UpdateAdd(Root * 2, l, Mid, rl, rr, k);
+//    UpdateAdd(Root * 2 + 1, Mid + 1, r, rl, rr, k);
+//    Tree[Root].Val = (Tree[Root * 2].Val + Tree[Root * 2 + 1].Val) % Mod;
+//}
+//
+//ll Query(ll Root, ll l, ll r, ll rl, ll rr)
+//{
+//    if (rr < l || rl > r)
+//    {
+//        return 0;
+//    }
+//
+//    if (rl <= l && r <= rr)
+//    {
+//        return Tree[Root].Val;
+//    }
+//
+//    PushDown(Root, l, r);
+//    auto Mid = (l + r) / 2;
+//    return (Query(Root * 2, l, Mid, rl, rr) + Query(Root * 2 + 1, Mid + 1, r, rl, rr)) % Mod;
+//}
+//
+//int main()
+//{
+//    ll N;
+//    std::cin >> N >> Mod;
+//    for (ll i = 1; i <= N; ++i)
+//    {
+//        std::cin >> Arr[i];
+//    }
+//    Build(1, 1, N);
+//
+//    ll M;
+//    std::cin >> M;
+//    while (M--)
+//    {
+//        ll Command;
+//        std::cin >> Command;
+//        ll l, r, k;
+//        if (Command == 1)
+//        {
+//            std::cin >> l >> r >> k;
+//            UpdateMul(1, 1, N, l, r, k);
+//        }
+//        else if (Command == 2)
+//        {
+//            std::cin >> l >> r >> k;
+//            UpdateAdd(1, 1, N, l, r, k);
+//        }
+//        else
+//        {
+//            std::cin >> l >> r;
+//            std::cout << Query(1, 1, N, l, r) << std::endl;
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr int MaxN = 400000 + 5;
+//
+//using ll = long long;
+//
+//ll Read()
+//{
+//    ll n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//struct tree
+//{
+//public:
+//    ll Val, LazyTagAdd, LazyTagMul;
+//};
+//
+//std::array<tree, MaxN> Tree;
+//std::array<ll, MaxN> Arr{ 0 };
+//
+//ll Mod;
+//
+//void Build(ll Root, ll l, ll r)
+//{
+//    Tree[Root].LazyTagAdd = 0;
+//    Tree[Root].LazyTagMul = 1;
+//
+//    if (l == r)
+//    {
+//        Tree[Root].Val = Arr[l];
+//    }
+//    else
+//    {
+//        auto Mid = (l + r) / 2;
+//        Build(Root * 2, l, Mid);
+//        Build(Root * 2 + 1, Mid + 1, r);
+//        Tree[Root].Val = Tree[Root * 2].Val + Tree[Root * 2 + 1].Val;
+//    }
+//
+//    Tree[Root].Val %= Mod;
+//}
+//
+//void PushDown(ll Root, ll l, ll r)
+//{
+//    auto Mid = (l + r) / 2;
+//
+//    Tree[Root * 2].Val = (Tree[Root * 2].Val * Tree[Root].LazyTagMul
+//                        + Tree[Root].LazyTagAdd * (Mid - l + 1)) % Mod;
+//    Tree[Root * 2 + 1].Val = (Tree[Root * 2 + 1].Val * Tree[Root].LazyTagMul
+//                            + Tree[Root].LazyTagAdd * (r - Mid)) % Mod;
+//
+//    Tree[Root * 2].LazyTagMul = (Tree[Root * 2].LazyTagMul * Tree[Root].LazyTagMul) % Mod;
+//    Tree[Root * 2 + 1].LazyTagMul = (Tree[Root * 2 + 1].LazyTagMul * Tree[Root].LazyTagMul) % Mod;
+//    Tree[Root * 2].LazyTagAdd = (Tree[Root * 2].LazyTagAdd * Tree[Root].LazyTagMul + Tree[Root].LazyTagAdd) % Mod;
+//    Tree[Root * 2 + 1].LazyTagAdd = (Tree[Root * 2 + 1].LazyTagAdd * Tree[Root].LazyTagMul + Tree[Root].LazyTagAdd) % Mod;
+//
+//    Tree[Root].LazyTagAdd = 0;
+//    Tree[Root].LazyTagMul = 1;
+//}
+//
+//void UpdateMul(ll Root, ll l, ll r, ll rl, ll rr, ll k)
+//{
+//    if (l > rr || rl > r)
+//    {
+//        return;
+//    }
+//
+//    if (rl <= l && rr >= r)
+//    {
+//        Tree[Root].Val = (Tree[Root].Val * k) % Mod;
+//        Tree[Root].LazyTagMul = (Tree[Root].LazyTagMul * k) % Mod;
+//        Tree[Root].LazyTagAdd = (Tree[Root].LazyTagAdd * k) % Mod;
+//
+//        return;
+//    }
+//
+//    PushDown(Root, l, r);
+//    auto Mid = (l + r) / 2;
+//    UpdateMul(Root * 2, l, Mid, rl, rr, k);
+//    UpdateMul(Root * 2 + 1, Mid + 1, r, rl, rr, k);
+//    Tree[Root].Val = (Tree[Root * 2].Val + Tree[Root * 2 + 1].Val) % Mod;
+//}
+//
+//void UpdateAdd(ll Root, ll l, ll r, ll rl, ll rr, ll k)
+//{
+//    if (rr < l || rl > r)
+//    {
+//        return;
+//    }
+//
+//    if (rl <= l && rr >= r)
+//    {
+//        Tree[Root].LazyTagAdd = (Tree[Root].LazyTagAdd + k) % Mod;
+//        Tree[Root].Val = (Tree[Root].Val + k * (r - l + 1)) % Mod;
+//
+//        return;
+//    }
+//
+//    PushDown(Root, l, r);
+//    auto Mid = (l + r) / 2;
+//    UpdateAdd(Root * 2, l, Mid, rl, rr, k);
+//    UpdateAdd(Root * 2 + 1, Mid + 1, r, rl, rr, k);
+//    Tree[Root].Val = (Tree[Root * 2].Val + Tree[Root * 2 + 1].Val) % Mod;
+//}
+//
+//ll Query(ll Root, ll l, ll r, ll rl, ll rr)
+//{
+//    if (rr < l || rl > r)
+//    {
+//        return 0;
+//    }
+//
+//    if (rl <= l && r <= rr)
+//    {
+//        return Tree[Root].Val;
+//    }
+//
+//    PushDown(Root, l, r);
+//    auto Mid = (l + r) / 2;
+//    return (Query(Root * 2, l, Mid, rl, rr) + Query(Root * 2 + 1, Mid + 1, r, rl, rr)) % Mod;
+//}
+//
+//int main()
+//{
+//    ll N, M;
+//    std::cin >> N >> M >> Mod;
+//    for (ll i = 1; i <= N; ++i)
+//    {
+//        std::cin >> Arr[i];
+//    }
+//
+//    Build(1, 1, N);
+//    while (M--)
+//    {
+//        ll Command;
+//        std::cin >> Command;
+//        ll l, r, k;
+//        if (Command == 1)
+//        {
+//            std::cin >> l >> r >> k;
+//            UpdateMul(1, 1, N, l, r, k);
+//        }
+//        else if (Command == 2)
+//        {
+//            std::cin >> l >> r >> k;
+//            UpdateAdd(1, 1, N, l, r, k);
+//        }
+//        else
+//        {
+//            std::cin >> l >> r;
+//            std::cout << Query(1, 1, N, l, r) << std::endl;
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    std::string Str;
+//    std::cin >> Str;
+//    Str.back() = '5';
+//    std::cout << Str << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//using ll = long long;
+//
+//ll n, Next;
+//
+//bool Check(ll t)
+//{
+//    ll s = 0;
+//    Next = t;
+//    ll T = t;
+//    while (T > 0)
+//    {
+//        s = s * n + T % n;
+//        T /= n;
+//    }
+//
+//    Next += s;
+//
+//    return s == t;
+//}
+//
+//int Turn(char c)
+//{
+//    if (c >= '0' && c <= '9')
+//    {
+//        return c - '0';
+//    }
+//    else
+//    {
+//        return c - 'A' + 10;
+//    }
+//}
+//
+//int main()
+//{
+//    std::string Str;
+//    std::cin >> n >> Str;
+//
+//    ll s = 0;
+//    for (std::size_t i = 0; i < Str.size(); ++i)
+//    {
+//        s = s * n + Turn(Str[i]);
+//    }
+//    int Step = 0;
+//    while (Step < 30)
+//    {
+//        if (Check(s))
+//        {
+//            std::cout << "STEP=" << Step << std::endl;
+//            return 0;
+//        }
+//        else
+//        {
+//            s = Next;
+//            ++Step;
+//        }
+//    }
+//
+//    std::puts("Impossible!");
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cstring>
+//#include <algorithm>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 30;
+//const ll INF = 1LL << 60;
+//
+//ll S[MaxN][MaxN][MaxN];
+//
+//void Expand(int i, int &b0, int &b1, int &b2)
+//{
+//    b0 = i & 1;
+//    i >>= 1;
+//    b1 = i & 1;
+//    i >>= 1;
+//    b2 = i & 1;
+//}
+//
+//int Sign(int b0, int b1, int b2)
+//{
+//    return (b0 + b1 + b2) % 2 == 1 ? 1 : -1;
+//}
+//
+//ll Sum(int x1, int x2, int y1, int y2, int z1, int z2)
+//{
+//    auto dx = x2 - x1 + 1, dy = y2 - y1 + 1, dz = z2 - z1 + 1;
+//    ll s = 0;
+//    for (int i = 0; i < (1 << 3); ++i)
+//    {
+//        int b0, b1, b2;
+//        Expand(i, b0, b1, b2);
+//        s -= S[x2 - b0 * dx][y2 - b1 * dy][z2 - b2 * dz] * Sign(b0, b1, b2);
+//    }
+//
+//    return s;
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int a, b, c;
+//        std::cin >> a >> b >> c;
+//
+//        std::memset(S, 0, sizeof(S));
+//        for (int x = 1; x <= a; ++x)
+//        {
+//            for (int y = 1; y <= b; ++y)
+//            {
+//                for (int z = 1; z <= c; ++z)
+//                {
+//                    std::cin >> S[x][y][z];
+//                }
+//            }
+//        }
+//
+//        int b0, b1, b2;
+//        for (int x = 1; x <= a; ++x)
+//        {
+//            for (int y = 1; y <= b; ++y)
+//            {
+//                for (int z = 1; z <= c; ++z)
+//                {
+//                    for (int i = 1; i < (1 << 3); ++i)
+//                    {
+//                        Expand(i, b0, b1, b2);
+//                        S[x][y][z] += S[x - b0][y - b1][z - b2] * Sign(b0, b1, b2);
+//                    }
+//                }
+//            }
+//        }
+//
+//        ll Ans = -INF;
+//        for (int x1 = 1; x1 <= a; ++x1)
+//        {
+//            for (int x2 = x1; x2 <= a; ++x2)
+//            {
+//                for (int y1 = 1; y1 <= b; ++y1)
+//                {
+//                    for (int y2 = y1; y2 <= b; ++y2)
+//                    {
+//                        ll M = 0;
+//                        for (int z = 1; z <= c; ++z)
+//                        {
+//                            auto s = Sum(x1, x2, y1, y2, 1, z);
+//                            Ans = std::max(Ans, s - M);
+//                            M = std::min(M, s);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        std::cout << Ans << std::endl;
+//        if (T)
+//        {
+//            std::putchar('\n');
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//struct Point
+//{
+//    int x, y;
+//
+//    Point() = default;
+//    Point(int x, int y) :
+//        x(x), y(y)
+//    {
+//    }
+//};
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//    
+//    std::vector<Point> P;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int x, y;
+//        std::cin >> x >> y;
+//        if (x > y)
+//        {
+//            std::swap(x, y);
+//        }
+//
+//        P.emplace_back(x, y);
+//    }
+//
+//    std::sort(P.begin(), P.end(), [](const Point &a, const Point &b)
+//    {
+//        return a.y < b.y;
+//    });
+//
+//    int Ans = 1;
+//    int Last = P[0].y;
+//    for (int i = 1; i < n; ++i)
+//    {
+//        if (P[i].x >= Last)
+//        {
+//            ++Ans;
+//            Last = P[i].y;
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//struct Contest
+//{
+//    int x, y;
+//
+//    Contest() = default;
+//    Contest(int x, int y) :
+//        x(x), y(y)
+//    {
+//    }
+//};
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    int n;
+//    n = Read();
+//
+//    std::vector<Contest> C;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int x, y;
+//        x = Read();
+//        y = Read();
+//        C.emplace_back(x, y);
+//    }
+//
+//    std::sort(C.begin(), C.end(), [](const Contest &a, const Contest &b)
+//    {
+//        return a.y < b.y;
+//    });
+//
+//    int Last = C[0].y;
+//    int Ans = 1;
+//    for (int i = 1; i < n; ++i)
+//    {
+//        if (C[i].x >= Last)
+//        {
+//            ++Ans;
+//            Last = C[i].y;
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 100 + 10;
+//
+//struct Point
+//{
+//    int x, y;
+//
+//    bool operator<(const Point &rhs) const noexcept
+//    {
+//        return x < rhs.x;
+//    }
+//};
+//
+//std::array<Point, MaxN> P;
+//std::array<int, MaxN> y{ 0 }, On{ 0 }, On2{ 0 }, Left{ 0 };
+//
+//int n, m;
+//
+//int Solve()
+//{
+//    std::sort(P.begin(), P.begin() + n);
+//    std::sort(y.begin(), y.begin() + n);
+//    m = std::unique(y.begin(), y.begin() + n) - y.begin();
+//    if (m <= 2)
+//    {
+//        return n;
+//    }
+//
+//    int Ans = 0;
+//    for (int a = 0; a < m; ++a)
+//    {
+//        for (int b = a + 1; b < m; ++b)
+//        {
+//            auto Ymin = y[a], Ymax = y[b];
+//            int k = 0;
+//            for (int i = 0; i < n; ++i)
+//            {
+//                if (i == 0 || P[i].x != P[i - 1].x)
+//                {
+//                    ++k;
+//                    On[k] = On2[k] = 0;
+//                    Left[k] = k == 0 ? 0 : Left[k - 1] + On2[k - 1] - On[k - 1];
+//                }
+//
+//                if (P[i].y > Ymin && P[i].y < Ymax)
+//                {
+//                    ++On[k];
+//                }
+//                if (P[i].y >= Ymin && P[i].y <= Ymax)
+//                {
+//                    ++On2[k];
+//                }
+//            }
+//
+//            if (k <= 2)
+//            {
+//                return n;
+//            }
+//
+//            int M = 0;
+//            for (int j = 1; j <= k; ++j)
+//            {
+//                Ans = std::max(Ans, Left[j] + On2[j] + M);
+//                M = std::max(M, On[j] - Left[j]);
+//            }
+//        }
+//    }
+//
+//    return Ans;
+//}
+//
+//int main()
+//{
+//    int NO = 0;
+//    while (std::cin >> n && n)
+//    {
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> P[i].x >> P[i].y;
+//            y[i] = P[i].y;
+//        }
+//
+//        std::cout << "Case " << ++NO << ": " << Solve() << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 1000;
+//
+//std::array<std::array<int, MaxN>, MaxN> Mat{ 0 }, Up{ 0 }, Left{ 0 }, Right{ 0 };
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int m, n;
+//        std::cin >> m >> n;
+//        for (int i = 0; i < m; ++i)
+//        {
+//            for (int j = 0; j < n; ++j)
+//            {
+//                auto ch = std::getchar();
+//                while (ch != 'F' && ch != 'R')
+//                {
+//                    ch = std::getchar();
+//                }
+//
+//                Mat[i][j] = ch == 'F' ? 0 : 1;
+//            }
+//        }
+//
+//        int Ans = 0;
+//        for (int i = 0; i < m; ++i)
+//        {
+//            int lo = -1, ro = n;
+//            for (int j = 0; j < n; ++j)
+//            {
+//                if (Mat[i][j] == 1)
+//                {
+//                    Up[i][j] = Left[i][j] = 0;
+//                    lo = j;
+//                }
+//                else
+//                {
+//                    Up[i][j] = i == 0 ? 1 : Up[i - 1][j] + 1;
+//                    Left[i][j] = i == 0 ? lo + 1 : std::max(Left[i - 1][j], lo + 1);
+//                }
+//            }
+//
+//            for (int j = n - 1; j >= 0; --j)
+//            {
+//                if (Mat[i][j] == 1)
+//                {
+//                    Right[i][j] = n;
+//                    ro = j;
+//                }
+//                else
+//                {
+//                    Right[i][j] = i == 0 ? ro - 1 : std::min(Right[i - 1][j], ro - 1);
+//                    Ans = std::max(Ans, Up[i][j] * (Right[i][j] - Left[i][j] + 1));
+//                }
+//            }
+//        }
+//
+//        std::cout << Ans * 3 << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <string>
+//#include <algorithm>
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//
+//    std::array<std::string, 20> Str;
+//    std::string t;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> t;
+//        Str[i] = t;
+//    }
+//
+//    std::sort(Str.begin(), Str.begin() + n, [](const std::string &a, const std::string &b)
+//    {
+//        return a + b > b + a;
+//    });
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cout << Str[i];
+//    }
+//    std::putchar('\n');
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    std::array<int, 21> A{ 0, 1, 1, 2 }, X{ 0 };
+//
+//    int a, n, m, x;
+//    std::cin >> a >> n >> m >> x;
+//    for (int i = 4; i <= n; ++i)
+//    {
+//        A[i] = A[i - 1] + A[i - 2] - 1;
+//        X[i] = X[i - 1] + X[i - 2] + 1;
+//    }
+//
+//    int xx = (m - A[n - 1] * a) / X[n - 1];
+//    std::cout << a * A[x] + xx * X[x] << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
 //#include <cmath>
 //
 //int GCD(int a, int b)
