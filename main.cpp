@@ -1,3 +1,4187 @@
+#include <iostream>
+#include <cmath>
+#include <array>
+#include <algorithm>
+
+constexpr int MaxN = 500 + 10;
+constexpr int MaxP = 100;
+
+using Matrix = std::array<std::array<int, MaxN>, MaxN>;
+using ll = long long;
+
+std::array<bool, MaxN> Vis{ false };
+std::array<int, MaxN> Prime{ 0 };
+
+int GenPrimes(int n)
+{
+    int m = static_cast<int>(std::sqrt(n + 0.5));
+    for (int i = 2; i <= m; ++i)
+    {
+        if (!Vis[i])
+        {
+            for (int j = i * i; j <= n; j += i)
+            {
+                Vis[j] = true;
+            }
+        }
+    }
+
+    int c = 0;
+    for (int i = 2; i <= n; ++i)
+    {
+        if (!Vis[i])
+        {
+            Prime[c++] = i;
+        }
+    }
+
+    return c;
+}
+
+int Rank(Matrix &A, int m, int n)
+{
+    int i = 0, j = 0, r;
+    while (i < m && j < n)
+    {
+        r = i;
+        for (int k = i; k < m; ++k)
+        {
+            if (A[k][j])
+            {
+                r = k;
+                break;
+            }
+        }
+
+        if (A[r][j])
+        {
+            if (r != i)
+            {
+                for (int k = 0; k <= n; ++k)
+                {
+                    std::swap(A[r][k], A[i][k]);
+                }
+            }
+
+            for (int u = i + 1; u < m; ++u)
+            {
+                for (int k = i; k <= n; ++k)
+                {
+                    A[u][k] ^= A[i][k];
+                }
+            }
+
+            ++i;
+        }
+
+        ++j;
+    }
+
+    return i;
+}
+
+int main()
+{
+    auto m = GenPrimes(500);
+
+    int T;
+    std::cin >> T;
+    while (T--)
+    {
+        int n;
+        std::cin >> n;
+
+        int maxp = 0;
+        ll x;
+        Matrix A{ 0 };
+        for (int i = 0; i < n; ++i)
+        {
+            std::cin >> x;
+            for (int j = 0; j < m; ++j)
+            {
+                while (x % Prime[j] == 0)
+                {
+                    x /= Prime[j];
+                    A[j][i] ^= 1;
+                    maxp = std::max(maxp, j);
+                }
+            }
+        }
+
+        auto r = Rank(A, maxp + 1, n);
+        std::cout << (1LL << (n - r)) - 1 << std::endl;
+    }
+
+    return 0;
+}
+//#include <iostream>
+//#include <algorithm>
+//#include <array>
+//#include <vector>
+//
+//constexpr double EPS = 1e-8;
+//constexpr int MaxN = 100 + 10;
+//
+//using Matrix = std::array<std::array<double, MaxN>, MaxN>;
+//
+//int n;
+//
+//std::array<int, MaxN> d{ 0 };
+//std::array<std::vector<int>, MaxN> Prev;
+//
+//void GaussJordan(Matrix &A, int n)
+//{
+//    int r;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        r = i;
+//        for (int j = i + 1; j < n; ++j)
+//        {
+//            if (std::abs(A[j][i]) > std::abs(A[r][i]))
+//            {
+//                r = j;
+//            }
+//        }
+//
+//        if (std::abs(A[r][i]) < EPS)
+//        {
+//            continue;
+//        }
+//
+//        if (r != i)
+//        {
+//            for (int j = 0; j <= n; ++j)
+//            {
+//                std::swap(A[r][j], A[i][j]);
+//            }
+//        }
+//
+//        for (int k = 0; k < n; ++k)
+//        {
+//            if (k != i)
+//            {
+//                for (int j = n; j >= i; --j)
+//                {
+//                    A[k][j] -= A[k][i] / A[i][i] * A[i][j];
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    int NO = 0;
+//    while (std::cin >> n && n)
+//    {
+//        std::fill(d.begin(), d.end(), 0);
+//        for (int i = 0; i < n; ++i)
+//        {
+//            Prev[i].clear();
+//        }
+//
+//        int a, b;
+//        while (std::cin >> a >> b && a)
+//        {
+//            --a;
+//            --b;
+//            ++d[a];
+//            Prev[b].push_back(a);
+//        }
+//
+//        Matrix A{ 0 };
+//        for (int i = 0; i < n; ++i)
+//        {
+//            A[i][i] = 1;
+//            A[0][n] = 1;
+//            for (const auto &r : Prev[i])
+//            {
+//                A[i][r] -= 1.0 / d[r];
+//            }
+//        }
+//
+//        std::array<bool, MaxN> inf{ false };
+//        GaussJordan(A, n);
+//        for (int i = n - 1; i >= 0; --i)
+//        {
+//            if (std::abs(A[i][i]) < EPS && std::abs(A[i][n]) > EPS)
+//            {
+//                inf[i] = true;
+//            }
+//            for (int j = i + 1; j < n; ++j)
+//            {
+//                if (std::abs(A[i][j]) > EPS && inf[j])
+//                {
+//                    inf[i] = true;
+//                }
+//            }
+//        }
+//
+//        int q;
+//        std::cin >> q;
+//        std::cout << "Case #" << ++NO << ":\n";
+//        while (q--)
+//        {
+//            int u;
+//            std::cin >> u;
+//            --u;
+//            if (inf[u])
+//            {
+//                std::puts("infinity");
+//            }
+//            else
+//            {
+//                std::printf("%.3lf\n", std::abs(A[u][u]) < EPS ? 0.0 : A[u][n] / A[u][u]);
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//int MOD;
+//int n;
+//
+//using CirculantMatrix = std::vector<int>;
+//using ll = long long;
+//
+//CirculantMatrix operator*(const CirculantMatrix &a, const CirculantMatrix &b)
+//{
+//    CirculantMatrix c(n);
+//    for (int i = 0; i < n; ++i)
+//    {
+//        for (int j = 0; j < n; ++j)
+//        {
+//            c[i] = (static_cast<ll>(a[j]) * b[(i - j + n) % n] + c[i]) % MOD;
+//        }
+//    }
+//
+//    return c;
+//}
+//
+//template <typename T>
+//T FastPow(const T &a, int k)
+//{
+//    if (k == 1)
+//    {
+//        return a;
+//    }
+//
+//    T b = FastPow(a, k / 2);
+//    b = b * b;
+//    if (k % 2 == 1)
+//    {
+//        b = b * a;
+//    }
+//
+//    return b;
+//}
+//
+//int main()
+//{
+//    int m, d, k;
+//    while (std::cin >> n >> m >> d >> k)
+//    {
+//        MOD = m;
+//        CirculantMatrix Mat(n);
+//        for (int i = 0; i < n; ++i)
+//        {
+//            Mat[i] = std::min(i, n - i) <= d ? 1 : 0;
+//        }
+//
+//        CirculantMatrix v(n);
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> v[i];
+//        }
+//        v = v * FastPow(Mat, k);
+//
+//        std::cout << v.front();
+//        for (int i = 1; i < n; ++i)
+//        {
+//            std::cout << ' ' << v[i];
+//        }
+//        std::putchar('\n');
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr int MaxN = 20;
+//
+//using ll = long long;
+//using Matrix = std::array<std::array<ll, MaxN>, MaxN>;
+//using Vector = std::array<ll, MaxN>;
+//
+//int sz, Mod;
+//
+//void MatrixMul(const Matrix &A, const Matrix &B, Matrix &Res)
+//{
+//    Matrix C{ 0 };
+//    for (int i = 0; i < sz; ++i)
+//    {
+//        for (int j = 0; j < sz; ++j)
+//        {
+//            for (int k = 0; k < sz; ++k)
+//            {
+//                C[i][j] = (C[i][j] + A[i][k] * B[k][j]) % Mod;
+//            }
+//        }
+//    }
+//
+//    Res = C;
+//}
+//
+//void MatrixPow(const Matrix &A, int n, Matrix &Res)
+//{
+//    Matrix a, r{ 0 };
+//    a = A;
+//    for (int i = 0; i < sz; ++i)
+//    {
+//        r[i][i] = 1;
+//    }
+//
+//    while (n)
+//    {
+//        if (n & 1)
+//        {
+//            MatrixMul(r, a, r);
+//        }
+//        n >>= 1;
+//
+//        MatrixMul(a, a, a);
+//    }
+//
+//    Res = r;
+//}
+//
+//void Transform(const Vector &d, const Matrix &A, Vector &Res)
+//{
+//    Vector r{ 0 };
+//    for (int i = 0; i < sz; ++i)
+//    {
+//        for (int j = 0; j < sz; ++j)
+//        {
+//            r[j] = (r[j] + d[i] * A[i][j]) % Mod;
+//        }
+//    }
+//
+//    Res = r;
+//}
+//
+//int main()
+//{
+//    int d, n, m;
+//    while (std::cin >> d >> n >> m && d)
+//    {
+//        Matrix A{ 0 };
+//        Vector a, f;
+//        for (int i = 0; i < d; ++i)
+//        {
+//            std::cin >> a[i];
+//            a[i] %= m;
+//        }
+//        for (int i = d - 1; i >= 0; --i)
+//        {
+//            std::cin >> f[i];
+//            f[i] %= m;
+//        }
+//
+//        for (int i = 0; i < d; ++i)
+//        {
+//            A[i][0] = a[i];
+//        }
+//        for (int i = 1; i < d; ++i)
+//        {
+//            A[i - 1][i] = 1;
+//        }
+//
+//        sz = d;
+//        Mod = m;
+//        MatrixPow(A, n - d, A);
+//        Transform(f, A, f);
+//
+//        std::cout << f[0] << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//#include <array>
+//#include <cctype>
+//#include <numeric>
+//#include <algorithm>
+//
+//constexpr int MaxN = 1024;
+//
+//std::array<int, MaxN * MaxN> Orig{ 0 }, Cur{ 0 };
+//std::array<bool, MaxN * MaxN> Vis{ false };
+//
+//int n;
+//
+//int GCD(int a, int b)
+//{
+//    return b == 0 ? a : GCD(b, a % b);
+//}
+//
+//int LCM(int a, int b)
+//{
+//    return a / GCD(a, b) * b;
+//}
+//
+//int ID(int i, int j)
+//{
+//    return i * n + j;
+//}
+//
+//int NewPos(int n, int i, int j, const std::string &op)
+//{
+//    if (op[0] == 'r')
+//    {
+//        return ID(n - 1 - j, i);
+//    }
+//    else if (op[0] == 's')
+//    {
+//        return ID(i, n - 1 - j);
+//    }
+//    else if (op[0] == 'b' && op[1] == 'h')
+//    {
+//        return i < n / 2 ? ID(i, j) : ID(i, n - 1 - j);
+//    }
+//    else if (op[0] == 'b' && op[1] == 'v')
+//    {
+//        return i < n / 2 ? ID(i, j) : ID(n / 2 + n - i - 1, j);
+//    }
+//    else if (op[0] == 'd')
+//    {
+//        return i % 2 == 0 ? ID(i / 2, j) : ID(n / 2 + i / 2, j);
+//    }
+//    else if (op[0] == 'm')
+//    {
+//        int k = i / 2;
+//        if (j < n / 2)
+//        {
+//            return i % 2 == 0 ? ID(2 * k, 2 * j) : ID(2 * k, 2 * j + 1);
+//        }
+//        else
+//        {
+//            return i % 2 == 0 ? ID(2 * k + 1, 2 * (j - n / 2)) : ID(2 * k + 1, 2 * (j - n / 2) + 1);
+//        }
+//    }
+//    else
+//    {
+//        return ID(i, j);
+//    }
+//}
+//
+//template <typename T>
+//void Apply(T &Image, int n, const std::string &op)
+//{
+//    auto Inv = op.back() == '-';
+//    for (int i = 0; i < n * n; ++i)
+//    {
+//        Orig[i] = Image[i];
+//    }
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        for (int j = 0; j < n; ++j)
+//        {
+//            auto p = ID(i, j), p2 = NewPos(n, i, j, op);
+//            if (!Inv)
+//            {
+//                Image[p2] = Orig[p];
+//            }
+//            else
+//            {
+//                Image[p] = Orig[p2];
+//            }
+//        }
+//    }
+//}
+//
+//template <typename T>
+//int Solve(const T &p, int n)
+//{
+//    std::fill(Vis.begin(), Vis.end(), false);
+//
+//    int Ans = 1;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        if (!Vis[i])
+//        {
+//            int j = i, Len = 0;
+//            do
+//            {
+//                Vis[j] = true;
+//                j = p[j];
+//                ++Len;
+//            } while (j != i);
+//
+//            Ans = LCM(Ans, Len);
+//        }
+//    }
+//
+//    return Ans;
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T >> n;
+//    while (T--)
+//    {
+//        int n2 = 0;
+//        std::iota(Cur.begin(), Cur.begin() + n * n, 0);
+//
+//        std::vector<std::string> ops;
+//        std::string op;
+//        for (int i = 0; ; ++i)
+//        {
+//            if (!(std::cin >> op))
+//            {
+//                break;
+//            }
+//
+//            if (std::isdigit(op.front()))
+//            {
+//                n2 = std::stoi(op);
+//                break;
+//            }
+//
+//            ops.push_back(op);
+//        }
+//
+//        for (auto Beg = ops.crbegin(); Beg != ops.crend(); ++Beg)
+//        {
+//            Apply(Cur, n, *Beg);
+//        }
+//
+//        std::cout << Solve(Cur, n * n) << std::endl;
+//
+//        if (T)
+//        {
+//            std::putchar('\n');
+//        }
+//
+//        n = n2;
+//    }
+//
+//    return 0;
+//}
+//#define _CRT_SECURE_NO_WARNINGS
+//#include <iostream>
+//#include <cmath>
+//
+//const double PI = std::acos(-1.0);
+//
+//int main()
+//{
+//    double R, r, L;
+//    while (std::cin >> R >> r >> L)
+//    {
+//        double S;
+//        S = 4.0 * PI * (R * R + r * r);
+//        double y = (R * R - r * r + L * L) / L / 2.0;
+//        S -= (2.0 * PI * R * (R - y)) + (2.0 * PI * r * (r - L + y));
+//        std::printf("%.12lf\n", S);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int Arr[1000000 + 10] = { 0 };
+//
+//int Read()
+//{
+//    int n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    char Command[10];
+//
+//    int Day = 0;
+//    int T;
+//    T = Read();
+//    while (T--)
+//    {
+//        std::scanf("%s", Command);
+//        if (Command[1] == 'o')
+//        {
+//            int c;
+//            c = Read();
+//            if (Day == 0)
+//            {
+//                Arr[Day] = c;
+//            }
+//            else
+//            {
+//                Arr[Day] = c ^ Arr[Day - 1];
+//            }
+//        }
+//        else
+//        {
+//            int c;
+//            c = Read();
+//            if (c == 0)
+//            {
+//                Arr[Day] = 0;
+//            }
+//            else
+//            {
+//                Arr[Day] = Arr[c - 1];
+//            }
+//        }
+//
+//        std::printf("%d\n", Arr[Day++]);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cctype>
+//#include <string>
+//#include <unordered_map>
+//
+//int main()
+//{
+//    std::unordered_map<char, std::string> Map;
+//    Map['a'] = "Alfa";
+//    Map['b'] = "Bravo";
+//    Map['c'] = "Charlie";
+//    Map['d'] = "Delta";
+//    Map['e'] = "Echo";
+//    Map['f'] = "Foxtrot";
+//    Map['g'] = "Golf";
+//    Map['h'] = "Hotel";
+//    Map['i'] = "India";
+//    Map['j'] = "Juliett";
+//    Map['k'] = "Kilo";
+//    Map['l'] = "Lima";
+//    Map['m'] = "Mike";
+//    Map['n'] = "November";
+//    Map['o'] = "Oscar";
+//    Map['p'] = "Papa";
+//    Map['q'] = "Quebec";
+//    Map['r'] = "Romeo";
+//    Map['s'] = "Sierra";
+//    Map['t'] = "Tango";
+//    Map['u'] = "Uniform";
+//    Map['v'] = "Victor";
+//    Map['w'] = "Whiskey";
+//    Map['x'] = "Xray";
+//    Map['y'] = "Yankee";
+//    Map['z'] = "Zulu";
+//    Map['0'] = "Zero";
+//    Map['1'] = "One";
+//    Map['2'] = "Two";
+//    Map['3'] = "Three";
+//    Map['4'] = "Four";
+//    Map['5'] = "Five";
+//    Map['6'] = "Six";
+//    Map['7'] = "Seven";
+//    Map['8'] = "Eight";
+//    Map['9'] = "Nine";
+//
+//    std::string Str;
+//    while (std::cin >> Str)
+//    {
+//        std::cout << "CQCQCQ tHis Is " << Str << ' ';
+//        for (const auto &r : Str)
+//        {
+//            if ('0' <= r && r <= '9')
+//            {
+//                std::cout << Map[r] << ' ';
+//            }
+//            else if ('a' <= r && r <= 'z')
+//            {
+//                std::cout << Map[r] << ' ';
+//            }
+//            else
+//            {
+//                std::cout << Map[std::tolower(r)] << ' ';
+//            }
+//        }
+//
+//        std::cout << Str << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ull = unsigned long long;
+//
+//int main()
+//{
+//    constexpr int MaxN = 30;
+//    std::array<std::array<ull, MaxN>, MaxN> f{ 0 };
+//    f[1][0] = 1;
+//    for (int i = 2; i <= 21; ++i)
+//    {
+//        for (int j = 0; j < i; ++j)
+//        {
+//            f[i][j] = f[i - 1][j];
+//            if (j)
+//            {
+//                f[i][j] += f[i - 1][j - 1] * (i - 1);
+//            }
+//        }
+//    }
+//
+//    int n, k;
+//    while (std::cin >> n >> k && n)
+//    {
+//        std::cout << f[n][k] << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//#include <algorithm>
+//
+//int main()
+//{
+//    std::string B;
+//    std::array<bool, 30> Vis{ false };
+//    std::array<int, 30> cnt{ 0 };
+//
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        std::fill(Vis.begin(), Vis.end(), false);
+//        std::fill(cnt.begin(), cnt.end(), 0);
+//
+//        std::cin >> B;
+//        for (int i = 0; i < 26; ++i)
+//        {
+//            if (!Vis[i])
+//            {
+//                int j = i, n = 0;
+//                do
+//                {
+//                    Vis[j] = true;
+//                    j = B[j] - 'A';
+//                    ++n;
+//                } while (j != i);
+//
+//                ++cnt[n];
+//            }
+//        }
+//
+//        bool OK = true;
+//        for (int i = 2; i <= 26; i += 2)
+//        {
+//            if (cnt[i] % 2)
+//            {
+//                OK = false;
+//                break;
+//            }
+//        }
+//
+//        if (OK)
+//        {
+//            std::puts("Yes");
+//        }
+//        else
+//        {
+//            std::puts("No");
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//int GCD(int a, int b)
+//{
+//    return b == 0 ? a : GCD(b, a % b);
+//}
+//
+//int main()
+//{
+//    constexpr int MaxN = 100;
+//
+//    int n, t;
+//    while (std::cin >> n >> t && n)
+//    {
+//        std::array<ll, MaxN> Pow;
+//        Pow[0] = 1;
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            Pow[i] = Pow[i - 1] * t;
+//        }
+//
+//        ll a = 0;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            a += Pow[GCD(i, n)];
+//        }
+//
+//        ll b = 0;
+//        if (n % 2)
+//        {
+//            b = n * Pow[(n + 1) / 2];
+//        }
+//        else
+//        {
+//            b = n / 2 * (Pow[n / 2 + 1] + Pow[n / 2]);
+//        }
+//
+//        std::cout << a / n << ' ' << (a + b) / 2 / n << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <bitset>
+//
+//constexpr int MaxN = 1000000 + 10;
+//
+//std::array<double, MaxN> f;
+//std::array<int, MaxN> Primes{ 0 };
+//
+//std::bitset<MaxN> Removed, Vis;
+//
+//void GenPrimes(int n)
+//{
+//    int p = 0;
+//    for (int i = 2; i <= n; ++i)
+//    {
+//        if (!Removed[i])
+//        {
+//            Primes[p++] = i;
+//
+//            if (i <= n / i)
+//            {
+//                for (int j = i * i; j <= n; j += i)
+//                {
+//                    Removed[j] = true;
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//double DP(int x)
+//{
+//    if (x == 1)
+//    {
+//        return 0.0;
+//    }
+//
+//    if (Vis[x])
+//    {
+//        return f[x];
+//    }
+//    Vis[x] = true;
+//
+//    auto &Ans = f[x];
+//    Ans = 0;
+//    int g = 0, p = 0;
+//    for (int i = 0; Primes[i] <= x; ++i)
+//    {
+//        ++p;
+//        if (x % Primes[i] == 0)
+//        {
+//            ++g;
+//            Ans += DP(x / Primes[i]);
+//        }
+//    }
+//
+//    return Ans = (Ans + p) / g;
+//}
+//
+//int main()
+//{
+//    GenPrimes(MaxN - 1);
+//
+//    int T;
+//    std::cin >> T;
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        int n;
+//        std::cin >> n;
+//        std::printf("Case %d: %.10lf\n", NO, DP(n));
+//    }
+//
+//    return 0;
+//}
+//#define _CRT_SECURE_NO_WARNINGS
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    constexpr int MaxN = 100 + 5;
+//
+//    int T;
+//    std::cin >> T;
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        int n, a, b;
+//        std::scanf("%d/%d%d", &a, &b, &n);
+//
+//        std::array<std::array<double, MaxN>, MaxN> d{ 0 };
+//        double p = 1.0 * a / b;
+//        d[0][0] = 1.0;
+//        d[0][1] = 0.0;
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            for (int j = 0; j * b <= a * i; ++j)
+//            {
+//                d[i][j] = d[i - 1][j] * (1 - p);
+//                if (j)
+//                {
+//                    d[i][j] += d[i - 1][j - 1] * p;
+//                }
+//            }
+//        }
+//
+//        double Q = 0.0;
+//        for (int j = 0; j * b <= a * n; ++j)
+//        {
+//            Q += d[n][j];
+//        }
+//
+//        std::cout << "Case #" << NO << ": " << static_cast<int>(1 / Q) << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//double t1, t2, s1, s2, Width, Height;
+//
+//double GetArea(double w)
+//{
+//    auto ly = t1 + w, ry = t2 + w;
+//    auto tx = s2 - w, bx = s1 - w;
+//
+//    auto OnLeft = s1 <= ly && ly <= s2;
+//    auto OnRight = s1 <= ry && ry <= s2;
+//    auto OnTop = t1 <= tx && tx <= t2;
+//    auto OnBottom = t1 <= bx && bx <= t2;
+//
+//    if (OnLeft && OnRight)
+//    {
+//        return (s2 - ly + s2 - ry) * Width * 0.5;
+//    }
+//    else if (OnLeft && OnTop)
+//    {
+//        return (s2 - ly) * (tx - t1) * 0.5;
+//    }
+//    else if (OnTop && OnBottom)
+//    {
+//        return (bx - t1 + tx - t1) * Height * 0.5;
+//    }
+//    else if (OnRight && OnBottom)
+//    {
+//        return Height * Width - (t2 - bx) * (ry - s1) * 0.5;
+//    }
+//    else
+//    {
+//        return ly <= s1 ? Width * Height : 0.0;
+//    }
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        int w;
+//        std::cin >> t1 >> t2 >> s1 >> s2 >> w;
+//        Width = t2 - t1;
+//        Height = s2 - s1;
+//        auto a1 = GetArea(w);
+//        auto a2 = GetArea(-w);
+//        std::printf("Case #%d: %lf\n", NO, (a2 - a1) / Width / Height);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <cmath>
+//#include <algorithm>
+//
+//int main()
+//{
+//    constexpr int MaxN = 1000 + 10, MaxM = 1000 + 10;
+//    std::array<double, MaxN> P;
+//    std::array<double, MaxM> f;
+//
+//    int T;
+//    std::cin >> T;
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        int n, k, m;
+//        std::cin >> n >> k >> m;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> P[i];
+//        }
+//
+//        std::fill(f.begin(), f.end(), 0.0);
+//        f[1] = P[0];
+//        for (int i = 2; i <= m; ++i)
+//        {
+//            for (int j = 0; j < n; ++j)
+//            {
+//                f[i] += P[j] * std::pow(f[i - 1], j);
+//            }
+//        }
+//
+//        std::printf("Case #%d: %lf\n", NO, std::pow(f[m], k));
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <string>
+//#include <algorithm>
+//#include <array>
+//
+//constexpr int MaxN = 200;
+//
+//std::array<int, MaxN + 10> g{ 0 };
+//
+//bool Winning(const std::string &State)
+//{
+//    int n = static_cast<int>(State.size());
+//    for (int i = 0; i < n - 2; ++i)
+//    {
+//        if (State[i] == 'X' && State[i + 1] == 'X' && State[i + 2] == 'X')
+//        {
+//            return false;
+//        }
+//    }
+//
+//    std::array<bool, MaxN + 5> No{ false };
+//    No[n] = true;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        if (State[i] == 'X')
+//        {
+//            for (int d = -2; d <= 2; ++d)
+//            {
+//                if (i + d >= 0 && i + d < n)
+//                {
+//                    if (d != 0 && State[i + d] == 'X')
+//                    {
+//                        return true;
+//                    }
+//
+//                    No[i + d] = true;
+//                }
+//            }
+//        }
+//    }
+//
+//    int sg = 0, Start = -1;
+//    for (int i = 0; i <= n; ++i)
+//    {
+//        if (Start < 0 && !No[i])
+//        {
+//            Start = i;
+//        }
+//
+//        if (No[i] && Start >= 0)
+//        {
+//            sg ^= g[i - Start];
+//        }
+//
+//        if (No[i])
+//        {
+//            Start = -1;
+//        }
+//    }
+//
+//    return sg != 0;
+//}
+//
+//int Mex(std::vector<int> &s)
+//{
+//    if (s.empty())
+//    {
+//        return 0;
+//    }
+//    std::sort(s.begin(), s.end());
+//
+//    if (s.front() != 0)
+//    {
+//        return 0;
+//    }
+//
+//    for (std::size_t i = 1; i < s.size(); ++i)
+//    {
+//        if (s[i] > s[i - 1] + 1)
+//        {
+//            return s[i - 1] + 1;
+//        }
+//    }
+//
+//    return s.back() + 1;
+//}
+//
+//void Init()
+//{
+//    g[1] = g[2] = g[3] = 1;
+//    for (int i = 4; i <= MaxN; ++i)
+//    {
+//        std::vector<int> s;
+//        s.push_back(g[i - 3]);
+//        s.push_back(g[i - 4]);
+//        if (i >= 5)
+//        {
+//            s.push_back(g[i - 5]);
+//        }
+//
+//        for (int j = 3; j < i - 3; ++j)
+//        {
+//            s.push_back(g[j - 2] ^ g[i - j - 3]);
+//        }
+//
+//        g[i] = Mex(s);
+//    }
+//}
+//
+//int main()
+//{
+//    Init();
+//
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        std::string State;
+//        std::cin >> State;
+//        if (!Winning(State))
+//        {
+//            std::puts("LOSING\n");
+//        }
+//        else
+//        {
+//            std::puts("WINNING");
+//
+//            std::vector<int> Moves;
+//            for (std::size_t i = 0; i < State.size(); ++i)
+//            {
+//                if (State[i] == '.')
+//                {
+//                    State[i] = 'X';
+//                    if (!Winning(State))
+//                    {
+//                        Moves.push_back(i + 1);
+//                    }
+//                    State[i] = '.';
+//                }
+//            }
+//
+//            std::cout << Moves.front();
+//            for (auto Beg = Moves.cbegin() + 1; Beg != Moves.cend(); ++Beg)
+//            {
+//                std::cout << ' ' << *Beg;
+//            }
+//            std::putchar('\n');
+//        }
+//    }
+//
+//    return 0;
+//}
+//// 看了一下数据范围，就直接暴力模拟吧
+//// 虽然过得很不好看，因为运行时间有点长（873ms），但是过了不是（滑稽）
+//// 具体见代码吧，像这样暴力的话，这题难度大概“普及-”
+//#include <iostream>
+//#include <string>
+//#include <unordered_map>
+//#include <algorithm>
+//
+//using ll = long long;
+//
+//ll Pri[100000 + 50], Num[100000 + 50];
+//
+//ll Read()
+//{
+//    ll n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    ll n, k, m;
+//    std::cin >> n >> k >> m;
+//    std::unordered_map<std::string, ll> Map;    // <词语名称, 编号>
+//    std::string Str;
+//    for (ll i = 1; i <= n; ++i)
+//    {
+//        std::cin >> Str;
+//        Map[Str] = i;   // 记下每个词语的编号
+//    }
+//
+//    for (ll i = 1; i <= n; ++i)
+//    {
+//        Pri[i] = Read();
+//    }
+//
+//    for (ll i = 1; i <= k; ++i)
+//    {
+//        ll p, Min = 999999999 + 50;
+//        p = Read();
+//        for (ll i = 1; i <= p; ++i)
+//        {
+//            Num[i] = Read();
+//            if (Pri[Num[i]] < Min)  // 记下同类型词语当中花费最小的那个的价格
+//            {
+//                Min = Pri[Num[i]];
+//            }
+//        }
+//
+//        for (ll i = 1; i <= p; ++i)
+//        {
+//            Pri[Num[i]] = Min;  // 然后只要将同类型的词语的花费全都设为最小的即可
+//        }
+//    }
+//
+//    ll Sum = 0; // 因为同类型的词语的当前花费都变成最小的了，所以直接查询目前词语就好了
+//    for (ll i = 1; i <= m; ++i)
+//    {
+//        std::cin >> Str;
+//        Sum += Pri[Map[Str]];
+//    }
+//
+//    std::cout << Sum << std::endl;
+//
+//    return 0;
+//}
+//// 这一题真的是入门难度无疑了
+//// 只要判断输入的数的奇偶性就好了
+//// 若是奇数，则后手赢；若是偶数，则先手赢
+//#include <iostream>
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//
+//    if (n % 2 == 1)
+//    {
+//        std::puts("Ehab");
+//    }
+//    else
+//    {
+//        std::puts("Mahmoud");
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    constexpr int MaxN = 1000 + 5;
+//    std::array<int, MaxN> a{ 0 }, b{ 0 };
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int t;
+//        std::cin >> t;
+//        for (int i = 1; i <= t; ++i)
+//        {
+//            std::cin >> a[i];
+//        }
+//        for (int i = 1; i <= t; ++i)
+//        {
+//            b[i] = a[i] - a[i - 1];
+//        }
+//
+//        int Ans = 0;
+//        for (int i = t; i >= 1; i -= 2)
+//        {
+//            Ans ^= b[i];
+//        }
+//
+//        if (Ans)
+//        {
+//            std::puts("TAK");
+//        }
+//        else
+//        {
+//            std::puts("NIE");
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <cmath>
+//#include <array>
+//#include <set>
+//#include <unordered_map>
+//#include <utility>
+//
+//using ll = long long;
+//
+//constexpr int MOD = 100000007;
+//constexpr int MaxB = 500 + 10;
+//
+//std::array<int, MaxB> x{ 0 }, y{ 0 };
+//
+//int n, m, k, b, r;
+//
+//std::set<std::pair<int, int>> bset;
+//
+//int PowMod(int a, ll p)
+//{
+//    if (p == 0)
+//    {
+//        return 1;
+//    }
+//
+//    int Ans = PowMod(a, p / 2);
+//    Ans = static_cast<ll>(Ans) * Ans % MOD;
+//
+//    if (p % 2 == 1)
+//    {
+//        Ans = static_cast<ll>(Ans) * a % MOD;
+//    }
+//
+//    return Ans;
+//}
+//
+//int MulMod(int a, int b)
+//{
+//    return static_cast<ll>(a) * b % MOD;
+//}
+//
+//int Inv(int a)
+//{
+//    return PowMod(a, MOD - 2);
+//}
+//
+//int LogMod(int a, int b)
+//{
+//    int m = static_cast<int>(std::sqrt(MOD));
+//    int v = Inv(PowMod(a, m));
+//
+//    std::unordered_map<int, int> x;
+//    x[1] = 0;
+//    int e = 1;
+//    for (int i = 1; i < m; ++i)
+//    {
+//        e = MulMod(e, a);
+//        if (!x.count(e))
+//        {
+//            x[e] = i;
+//        }
+//    }
+//
+//    for (int i = 0; i < m; ++i)
+//    {
+//        if (x.count(b)) 
+//        {
+//            return i * m + x[b];
+//        }
+//
+//        b = MulMod(b, v);
+//    }
+//
+//    return -1;
+//}
+//
+//int Count()
+//{
+//    int c = 0;
+//    for (int i = 0; i < b; ++i)
+//    {
+//        if (x[i] != m && !bset.count({ x[i] + 1, y[i] }))
+//        {
+//            ++c;
+//        }
+//    }
+//    c += n;
+//    for (int i = 0; i < b; ++i)
+//    {
+//        if (x[i] == 1)
+//        {
+//            --c;
+//        }
+//    }
+//
+//    return MulMod(PowMod(k, c), PowMod(k - 1, static_cast<ll>(m) * n - b - c));
+//}
+//
+//int Work()
+//{
+//    auto cnt = Count();
+//    if (cnt == r)
+//    {
+//        return m;
+//    }
+//
+//    int c = 0;
+//    for (int i = 0; i < b; ++i)
+//    {
+//        if (x[i] == m)
+//        {
+//            ++c;
+//        }
+//    }
+//    ++m;
+//
+//    cnt = MulMod(MulMod(cnt, PowMod(k, c)), PowMod(k - 1, n - c));
+//    if (cnt == r)
+//    {
+//        return m;
+//    }
+//
+//    return LogMod(PowMod(k - 1, n), MulMod(r, Inv(cnt))) + m;
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        std::cin >> n >> k >> b >> r;
+//        bset.clear();
+//
+//        m = 1;
+//        for (int i = 0; i < b; ++i)
+//        {
+//            std::cin >> x[i] >> y[i];
+//            m = std::max(m, x[i]);
+//            bset.insert({ x[i], y[i] });
+//        }
+//
+//        std::cout << "Case " << NO << ": " << Work() << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//using ll = long long;
+//
+//ll SG(ll x)
+//{
+//    return x % 2 == 0 ? x / 2 : SG(x / 2);
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int n;
+//        ll v = 0;
+//        std::cin >> n;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            ll a;
+//            std::cin >> a;
+//            v ^= SG(a);
+//        }
+//
+//        if (v)
+//        {
+//            std::puts("YES");
+//        }
+//        else
+//        {
+//            std::puts("NO");
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <functional>
+//#include <algorithm>
+//
+//int main()
+//{
+//    constexpr int MaxN = 100000 + 5;
+//    static std::array<int, MaxN> K{ 0 }, D{ 0 }, M{ 0 }, F{ 0 };
+//    static std::array<int, MaxN> SumK{ 0 }, SumD{ 0 }, SumM{ 0 }, SumF{ 0 };
+//    int k, d, m, f;
+//    std::cin >> k >> d >> m >> f;
+//    for (int i = 1; i <= k; ++i)
+//    {
+//        std::cin >> K[i];
+//    }
+//    for (int i = 1; i <= d; ++i)
+//    {
+//        std::cin >> D[i];
+//    }
+//    for (int i = 1; i <= m; ++i)
+//    {
+//        std::cin >> M[i];
+//    }
+//    for (int i = 1; i <= f; ++i)
+//    {
+//        std::cin >> F[i];
+//    }
+//
+//    std::sort(K.begin() + 1, K.begin() + 1 + k, std::greater<int>());
+//    std::sort(D.begin() + 1, D.begin() + 1 + d, std::greater<int>());
+//    std::sort(M.begin() + 1, M.begin() + 1 + m, std::greater<int>());
+//    std::sort(F.begin() + 1, F.begin() + 1 + f, std::greater<int>());
+//
+//    for (int i = 1; i <= d; ++i)
+//    {
+//        SumD[i] = SumD[i - 1] + D[i];
+//    }
+//    for (int i = 1; i <= m; ++i)
+//    {
+//        SumM[i] = SumM[i - 1] + M[i];
+//    }
+//    for (int i = 1; i <= f; ++i)
+//    {
+//        SumF[i] = SumF[i - 1] + F[i];
+//    }
+//
+//    int LastK = 0, LastD = 0, LastM = 0, LastF = 0;
+//    int i = 0;
+//    int Q;
+//    std::cin >> Q;
+//    while (Q--)
+//    {
+//        int A, B, C, Ans = 0;
+//        std::cin >> A >> B >> C;
+//
+//        Ans += K[++i];
+//
+//        Ans += SumD[LastD + A] - SumD[LastD];
+//        LastD += A;
+//
+//        Ans += SumM[LastM + B] - SumM[LastM];
+//        LastM += B;
+//
+//        Ans += SumF[LastF + C] - SumF[LastF];
+//        LastF += C;
+//
+//        std::printf("%.2lf\n", 1.0 * Ans / 11);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//std::array<int, 14> Row{ 0 };
+//std::array<bool, 30> LR{ false }, RL{ false }, Col{ false };
+//
+//int n, Tol = 0;
+//
+//void Print()
+//{
+//    if (Tol <= 3)
+//    {
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            std::cout << Row[i] << ' ';
+//        }
+//        putchar('\n');
+//    }
+//}
+//
+//void DFS(int Now)
+//{
+//    if (Now == n + 1)
+//    {
+//        ++Tol;
+//        Print();
+//
+//        return;
+//    }
+//    else
+//    {
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            if (!Col[i] && !LR[i + Now] && !RL[i - Now + n])
+//            {
+//                Row[Now] = i;
+//                LR[i + Now] = true;
+//                RL[i - Now + n] = true;
+//                Col[i] = true;
+//
+//                DFS(Now + 1);
+//
+//                LR[i + Now] = false;
+//                RL[i - Now + n] = false;
+//                Col[i] = false;
+//            }
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    std::cin >> n;
+//
+//    DFS(1);
+//
+//    std::cout << "Total is : " << Tol << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <unordered_set>
+//#include <algorithm>
+//#include <array>
+//
+//using ll = long long;
+//
+//constexpr int MaxC = 9, MaxK = 100, Limit = 10000;
+//
+//std::array<std::unordered_set<int>, MaxC> Values;
+//std::array<int, MaxC> X{ 0 }, k{ 0 }, a{ 0 };
+//std::array<std::array<int, MaxK>, MaxC> Y{ 0 };
+//
+//std::vector<ll> Sol;
+//
+//int C;
+//
+//void SolveEnum(int S, int bc)
+//{
+//    for (int c = 0; c < C; ++c)
+//    {
+//        if (c != bc)
+//        {
+//            Values[c].clear();
+//            for (int i = 0; i < k[c]; ++i)
+//            {
+//                Values[c].insert(Y[c][i]);
+//            }
+//        }
+//    }
+//
+//    for (int t = 0; S != 0; ++t)
+//    {
+//        for (int i = 0; i < k[bc]; ++i)
+//        {
+//            auto n = static_cast<ll>(X[bc]) * t + Y[bc][i];
+//            if (n == 0)
+//            {
+//                continue;
+//            }
+//
+//            bool OK = true;
+//            for (int c = 0; c < C; ++c)
+//            {
+//                if (c != bc)
+//                {
+//                    if (!Values[c].count(n % X[c]))
+//                    {
+//                        OK = false;
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            if (OK)
+//            {
+//                std::cout << n << std::endl;
+//
+//                if (--S == 0)
+//                {
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//void ExGCD(ll a, ll b, ll &d, ll&x, ll&y)
+//{
+//    if (!b)
+//    {
+//        d = a;
+//        x = 1;
+//        y = 0;
+//    }
+//    else
+//    {
+//        ExGCD(b, a % b, d, y, x);
+//        y -= x * (a / b);
+//    }
+//}
+//
+//template <typename T1, typename T2>
+//ll China(int n, T1 &a, T2 &m)
+//{
+//    ll M = 1, d, y, x = 0;
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        M *= m[i];
+//    }
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        auto w = M / m[i];
+//        ExGCD(m[i], w, d, d, y);
+//        x = (x + y * w * a[i]) % M;
+//    }
+//
+//    return (x + M) % M;
+//}
+//
+//void DFS(int Dep)
+//{
+//    if (Dep == C)
+//    {
+//        Sol.push_back(China(C, a, X));
+//    }
+//    else
+//    {
+//        for (int i = 0; i < k[Dep]; ++i)
+//        {
+//            a[Dep] = Y[Dep][i];
+//            DFS(Dep + 1);
+//        }
+//    }
+//}
+//
+//void SolveChina(int S)
+//{
+//    Sol.clear();
+//    DFS(0);
+//    std::sort(Sol.begin(), Sol.end());
+//
+//    ll M = 1;
+//    for (int i = 0; i < C; ++i)
+//    {
+//        M *= X[i];
+//    }
+//
+//    for (int i = 0; S != 0; ++i)
+//    {
+//        for (std::size_t j = 0; j < Sol.size(); ++j)
+//        {
+//            auto n = M * i + Sol[j];
+//            if (n > 0)
+//            {
+//                std::cout << n << std::endl;
+//
+//                if (--S == 0)
+//                {
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    int S;
+//    while (std::cin >> C >> S && C)
+//    {
+//        ll Tol = 1;
+//        int BestC = 0;
+//        for (int c = 0; c < C; ++c)
+//        {
+//            std::cin >> X[c] >> k[c];
+//            Tol *= k[c];
+//
+//            for (int i = 0; i < k[c]; ++i)
+//            {
+//                std::cin >> Y[c][i];
+//            }
+//            std::sort(Y[c].begin(), Y[c].begin() + k[c]);
+//
+//            if (k[c] * X[BestC] < k[BestC] * X[c])
+//            {
+//                BestC = c;
+//            }
+//        }
+//
+//        if (Tol > Limit)
+//        {
+//            SolveEnum(S, BestC);
+//        }
+//        else
+//        {
+//            SolveChina(S);
+//        }
+//
+//        std::putchar('\n');
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 4000000;
+//
+//std::array<int, MaxN + 5> Phi{ 0 };
+//std::array<ll, MaxN + 5> S{ 0 }, f{ 0 };
+//
+//void PhiTable(int n)
+//{
+//    Phi[1] = 1;
+//    for (int i = 2; i <= n; ++i)
+//    {
+//        if (!Phi[i])
+//        {
+//            for (int j = i; j <= n; j += i)
+//            {
+//                if (!Phi[j])
+//                {
+//                    Phi[j] = j;
+//                }
+//
+//                Phi[j] = Phi[j] / i * (i - 1);
+//            }
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    PhiTable(MaxN);
+//    for (int i = 1; i <= MaxN; ++i)
+//    {
+//        for (int n = i * 2; n <= MaxN; n += i)
+//        {
+//            f[n] += i * Phi[n / i];
+//        }
+//    }
+//
+//    S[2] = f[2];
+//    for (int n = 3; n <= MaxN; ++n)
+//    {
+//        S[n] = S[n - 1] + f[n];
+//    }
+//
+//    int n;
+//    while (std::cin >> n && n)
+//    {
+//        std::cout << S[n] << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    std::array<int, 101> Catalan{ 0 };
+//    Catalan[0] = Catalan[1] = 1;
+//    int T;
+//    std::cin >> T;
+//    for (int n = 2; n <= T; ++n)
+//    {
+//        for (int m = 0; m < n; ++m)
+//        {
+//            Catalan[n] = ((Catalan[m] * Catalan[n - m - 1]) % 100 + Catalan[n]) % 100;
+//        }
+//    }
+//
+//    std::cout << Catalan[T] << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//int main()
+//{
+//    int n, a;
+//    std::scanf("%d,%d", &a, &n);
+//
+//    long long Ans = 0;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        Ans += (n - i) * a * static_cast<long long>(std::pow(10, i));
+//    }
+//
+//    std::cout << "s=" << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    std::string Str;
+//    std::cin >> Str;
+//    for (int i = Str.size() - 1; i >= 0; --i)
+//    {
+//        std::putchar(Str[i]);
+//        std::putchar(' ');
+//    }
+//    std::putchar('\n');
+//
+//    for (int i = Str.find_last_not_of('0'); i >= 0; --i)
+//    {
+//        std::putchar(Str[i]);
+//    }
+//    std::putchar('\n');
+//
+//    std::cout << Str.size() << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//#include <array>
+//
+//constexpr int MaxN = 500 + 5;
+//
+//class game
+//{
+//public:
+//    int Time, Cost;
+//
+//    game() = default;
+//    game(int t, int c) :
+//        Time(t), Cost(c)
+//    {
+//    }
+//
+//    bool operator<(const game &rhs) const noexcept
+//    {
+//        return Cost >= rhs.Cost || (Cost == rhs.Cost && Time > rhs.Time);
+//    }
+//};
+//
+//int main()
+//{
+//    int Ans, n;
+//    std::cin >> Ans >> n;
+//
+//    std::vector<game> Game;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int Time;
+//        std::cin >> Time;
+//        Game.emplace_back(Time - 1, 0);
+//    }
+//    for (auto &r : Game)
+//    {
+//        int Cost;
+//        std::cin >> Cost;
+//        r.Cost = Cost;
+//    }
+//
+//    std::sort(Game.begin(), Game.end());
+//
+//    std::array<bool, MaxN> Used{ false };
+//    for (int i = 0; i < n; ++i)
+//    {
+//        if (!Used[Game[i].Time])
+//        {
+//            Used[Game[i].Time] = true;
+//        }
+//        else
+//        {
+//            bool OK = false;
+//            for (int Now = Game[i].Time; Now >= 0; --Now)
+//            {
+//                if (!Used[Now])
+//                {
+//                    Used[Now] = true;
+//                    OK = true;
+//                    break;
+//                }
+//            }
+//
+//            if (!OK)
+//            {
+//                Ans -= Game[i].Cost;
+//            }
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    int h, k;
+//    std::cin >> h >> k;
+//    std::cout << ((k + 1) << h) << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//using ll = long long;
+//
+//void ExGCD(ll a, ll b, ll &d, ll &x, ll &y)
+//{
+//    if (!b)
+//    {
+//        x = 1;
+//        y = 0;
+//        d = a;
+//    }
+//    else
+//    {
+//        ExGCD(b, a % b, d, y, x);
+//        y -= x * (a / b);
+//    }
+//}
+//
+//int main()
+//{
+//    ll x, y, m, n, l;
+//    std::cin >> x >> y >> m >> n >> l;
+//    if (n > m)
+//    {
+//        std::swap(n, m);
+//        std::swap(x, y);
+//    }
+//
+//    auto a = m - n;
+//    auto b = l;
+//    auto c = y - x;
+//    decltype(a) d;
+//
+//    ExGCD(a, b, d, x, y);
+//    if (c % d != 0)
+//    {
+//        std::puts("Impossible");
+//    }
+//    else
+//    {
+//        auto m = l / d;
+//        std::cout << ((c / d * x) % m + m) % m << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <set>
+//
+//int Read()
+//{
+//    int n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int N, M;
+//        N = Read();
+//        M = Read();
+//        std::set<int> s;
+//        for (int i = 0; i < N; ++i)
+//        {
+//            int x;
+//            x = Read();
+//            s.insert(x);
+//        }
+//
+//        std::string Str;
+//        for (int i = 0; i < M; ++i)
+//        {
+//            std::cin >> Str;
+//            if (Str[0] == 'i')
+//            {
+//                int x;
+//                x = Read();
+//                s.insert(x);
+//            }
+//            else if (Str[0] == 'd')
+//            {
+//                int x;
+//                x = Read();
+//                s.erase(x);
+//            }
+//            else if (Str[0] == 'q')
+//            {
+//                int k;
+//                k = Read();
+//                auto beg = s.crbegin();
+//                while (--k)
+//                {
+//                    ++beg;
+//                }
+//
+//                std::cout << *beg << std::endl;
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cstring>
+//
+//constexpr int MaxN = 100000 + 5;
+//constexpr double EPS = 1e-5;
+//
+//double Ans[MaxN], W[MaxN], V[MaxN];
+//bool Used[MaxN];
+//
+//int n, k;
+//
+//void DFS(int k, double TolV, double TolW)
+//{
+//    if (k == 0 || Ans[k] != 0.0)
+//    {
+//        return;
+//    }
+//    else
+//    {
+//        for (int i = 0; i < n; ++i)
+//        {
+//            if (!Used[i])
+//            {
+//                auto v = TolV + V[i];
+//                auto w = TolW + W[i];
+//                if (v / w > Ans[k])
+//                {
+//                    Used[i] = true;
+//                    Ans[k] = v / w;
+//                    DFS(k - 1, v, w);
+//                    //Used[i] = false;
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        std::memset(Used, false, sizeof(Used));
+//        for (int i = 0; i < MaxN; ++i)
+//        {
+//            Ans[i] = W[i] = V[i] = 0.0;
+//        }
+//
+//        std::cin >> n >> k;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> W[i] >> V[i];
+//        }
+//
+//        DFS(k, 0.0, 0.0);
+//
+//        std::printf("%.2lf\n", Ans[k - 1]);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <queue>
+//#include <utility>
+//#include <array>
+//
+//constexpr int MaxN = 500 + 5;
+//
+//std::array<std::array<char, MaxN>, MaxN> Map;
+//std::array<std::array<int, MaxN>, MaxN> Dis{ 0 };
+//std::array<std::array<bool, MaxN>, MaxN> Visited{ false };
+//std::array<int, 4> dx{ -1, 1, 0, 0 }, dy{ 0, 0, -1, 1 };
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        for (auto &rr : Dis)
+//        {
+//            for (auto &r : rr)
+//            {
+//                r = 0;
+//            }
+//        }
+//        for (auto &rr : Visited)
+//        {
+//            for (auto &r : rr)
+//            {
+//                r = false;
+//            }
+//        }
+//        int n, m;
+//        std::cin >> n >> m;
+//        int SX, SY, TX, TY;
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            for (int j = 1; j <= m; ++j)
+//            {
+//                std::cin >> Map[i][j];
+//                if (Map[i][j] == 's')
+//                {
+//                    SX = i;
+//                    SY = j;
+//                }
+//                else if (Map[i][j] == 't')
+//                {
+//                    TX = i;
+//                    TY = j;
+//                }
+//            }
+//        }
+//
+//        bool OK = false;
+//        std::queue<std::pair<int, int>> Que;
+//        Que.push({ SX, SY });
+//        Visited[SX][SY] = true;
+//        Dis[SX][SY] = 0;
+//        while (!Que.empty())
+//        {
+//            auto x = Que.front().first;
+//            auto y = Que.front().second;
+//            Que.pop();
+//            for (int k = 0; k < 4; ++k)
+//            {
+//                auto p = x + dx[k];
+//                auto q = y + dy[k];
+//                if (p == TX && q == TY)
+//                {
+//                    std::puts("YES");
+//                    OK = true;
+//                    break;
+//                }
+//                if (p > 0 && p <= n && q > 0 && q <= m && !Visited[p][q])
+//                {
+//                    Visited[p][q] = true;
+//                    if (Map[p][q] == '.')
+//                    {
+//                        Que.push({ p, q });
+//                        Dis[p][q] = Dis[x][y] + 1;
+//                    }
+//                }
+//            }
+//
+//            if (OK)
+//            {
+//                break;
+//            }
+//        }
+//
+//        if (!OK)
+//        {
+//            std::puts("NO");
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//    ll T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        ll n;
+//        std::cin >> n;
+//        std::cout << n * n / 4 << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        ll n;
+//        std::cin >> n;
+//        std::cout << ((n * n + 1) / 2) * ((n * n + 1) / 2) << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int n;
+//        std::cin >> n;
+//        int Ans = 0;
+//        while (n)
+//        {
+//            Ans += n / 5;
+//            n /= 5;
+//        }
+//
+//        std::cout << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    std::string Str;
+//    while (T--)
+//    {
+//        std::cin >> Str;
+//        int Ans = 0;
+//        for (const auto &r : Str)
+//        {
+//            if (r == '7')
+//            {
+//                ++Ans;
+//            }
+//        }
+//
+//        std::cout << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//using ll = long long;
+//
+//ll k;
+//
+//ll Read()
+//{
+//    ll n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = (n * 10 + ch - '0') % k;
+//        ch = std::getchar();
+//    }
+//
+//    if (n == 0)
+//    {
+//        return k;
+//    }
+//    else
+//    {
+//        return n % k;
+//    }
+//}
+//
+//int main()
+//{
+//    std::cin >> k;
+//    std::cout << Read() << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr int MaxN = 100000 + 5;
+//
+//std::array<int, MaxN> Star{ 0 }, Sum{ 0 };
+//
+//int main()
+//{
+//    int N, W, L = 0;
+//    std::cin >> N >> W;
+//    for (int i = 1; i <= N; ++i)
+//    {
+//        int x, b;
+//        std::cin >> x >> b;
+//        Star[x] += b;
+//        L = std::max(L, x);
+//    }
+//
+//    for (int i = 1; i <= L; ++i)
+//    {
+//        Sum[i] = Sum[i - 1] + Star[i];
+//    }
+//
+//    int Ans = 0;
+//    for (int i = 1; i <= L - W + 1; ++i)
+//    {
+//        Ans = std::max(Ans, Sum[i + W - 1] - Sum[i - 1]);
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <utility>
+//#include <algorithm>
+//#include <array>
+//
+//constexpr int MaxN = 100000 + 5;
+//
+//class Star
+//{
+//public:
+//    int x, b;
+//
+//    Star() = default;
+//    Star(int x, int b) :
+//        x(x), b(b)
+//    {
+//    }
+//
+//    bool operator<(const Star &rhs) const noexcept
+//    {
+//        return x < rhs.x;
+//    }
+//};
+//
+//int main()
+//{
+//    int N, W;
+//    std::cin >> N >> W;
+//
+//    static std::array<Star, MaxN> S;
+//    for (int i = 1; i <= N; ++i)
+//    {
+//        int x, b;
+//        std::cin >> x >> b;
+//        S[i] = std::move(Star(x, b));
+//    }
+//
+//    std::sort(S.begin() + 1, S.begin() + 1 + N);
+//
+//    static std::array<int, MaxN> Sum{ 0 };
+//    for (int i = 1; i <= N; ++i)
+//    {
+//        Sum[i] = Sum[i - 1] + S[i].b;
+//    }
+//
+//    int Max = 0;
+//    if (W == 0)
+//    {
+//        std::puts("0");
+//    }
+//    else
+//    {
+//        for (int i = 1; i <= N - W + 1; ++i)
+//        {
+//            Max = std::max(Max, Sum[i + W - 1] - Sum[i - 1]);
+//        }
+//    }
+//
+//    std::cout << Max << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <unordered_map>
+//#include <algorithm>
+//
+//using ll = long long;
+//
+//ll Pri[100000 + 50], Num[100000 + 50];
+//
+//ll Read()
+//{
+//    ll n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    ll n, k, m;
+//    std::cin >> n >> k >> m;
+//    std::unordered_map<std::string, ll> Map;
+//    std::string Str;
+//    for (ll i = 1; i <= n; ++i)
+//    {
+//        std::cin >> Str;
+//        Map[Str] = i;
+//    }
+//
+//    for (ll i = 1; i <= n; ++i)
+//    {
+//        Pri[i] = Read();
+//    }
+//
+//    for (ll i = 1; i <= k; ++i)
+//    {
+//        ll p, Min = 999999999 + 50;
+//        p = Read();
+//        for (ll i = 1; i <= p; ++i)
+//        {
+//            Num[i] = Read();
+//            if (Pri[Num[i]] < Min)
+//            {
+//                Min = Pri[Num[i]];
+//            }
+//        }
+//
+//        for (ll i = 1; i <= p; ++i)
+//        {
+//            Pri[Num[i]] = Min;
+//        }
+//    }
+//
+//    ll Sum = 0;
+//    for (ll i = 1; i <= m; ++i)
+//    {
+//        std::cin >> Str;
+//        Sum += Pri[Map[Str]];
+//    }
+//
+//    std::cout << Sum << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//    if (n % 2 == 1)
+//    {
+//        std::puts("Ehab");
+//    }
+//    else
+//    {
+//        std::puts("Mahmoud");
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    std::string Str;
+//    std::cin >> Str;
+//    for (std::size_t i = 0; i < Str.size() - 1; ++i)
+//    {
+//        if (Str[i] == 'A' && Str[i + 1] == 'C')
+//        {
+//            std::puts("Yes");
+//            return 0;
+//        }
+//    }
+//
+//    std::puts("No");
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <algorithm>
+//
+//int main()
+//{
+//    int n;
+//    std::string Str;
+//    std::cin >> n >> Str;
+//    
+//    int Tol = 0;
+//    std::sort(Str.begin(), Str.end());
+//    do
+//    {
+//        for (const auto &c : Str)
+//        {
+//            std::putchar(c);
+//        }
+//        std::putchar('\n');
+//
+//        ++Tol;
+//    } while (std::next_permutation(Str.begin(), Str.end()));
+//
+//    std::cout << Tol << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    std::puts("a single integer");
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    int a, b;
+//    std::cin >> a >> b;
+//    std::cout << a + b << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <cctype>
+//#include <string>
+//
+//using ll = long long;
+//
+//class Polynomial
+//{
+//public:
+//    std::vector<int> a, p;
+//
+//    void ParsePolynomial(const std::string &Expr)
+//    {
+//        auto Len = Expr.size();
+//        decltype(Len) i = 0;
+//        while (i < Len)
+//        {
+//            int Sign = 1;
+//            if (Expr[i] == '+')
+//            {
+//                ++i;
+//            }
+//            if (Expr[i] == '-')
+//            {
+//                Sign = -1;
+//                ++i;
+//            }
+//
+//            int v = 0;
+//            while (i < Len && std::isdigit(Expr[i]))
+//            {
+//                v = v * 10 + Expr[i++] - '0';
+//            }
+//
+//            if (i == Len)
+//            {
+//                a.push_back(v);
+//                p.push_back(0);
+//            }
+//            else
+//            {
+//                if (v == 0)
+//                {
+//                    v = 1;
+//                }
+//                v *= Sign;
+//                
+//                if (Expr[++i] == '^')
+//                {
+//                    a.push_back(v);
+//                    v = 0;
+//                    ++i;
+//                    while (i < Len && std::isdigit(Expr[i]))
+//                    {
+//                        v = v * 10 + Expr[i++] - '0';
+//                    }
+//                    p.push_back(v);
+//                }
+//                else
+//                {
+//                    a.push_back(v);
+//                    p.push_back(1);
+//                }
+//            }
+//        }
+//    }
+//
+//    int Mod(int x, int MOD)
+//    {
+//        auto n = a.size();
+//        int Ans = 0;
+//        for (std::size_t i = 0; i < n; ++i)
+//        {
+//            auto m = a[i];
+//            for (int j = 0; j < p[i]; ++j)
+//            {
+//                m = static_cast<ll>(m) * x % MOD;
+//            }
+//
+//            Ans = (static_cast<ll>(Ans) + m) % MOD;
+//        }
+//
+//        return Ans;
+//    }
+//};
+//
+//bool Check(const std::string &Expr)
+//{
+//    auto p = Expr.find('/');
+//    Polynomial Poly;
+//    Poly.ParsePolynomial(Expr.substr(1, p - 2));
+//
+//    auto D = std::stoi(Expr.substr(p + 1));
+//    for (int i = 1; i <= Poly.p[0] + 1; ++i)
+//    {
+//        if (Poly.Mod(i, D) != 0)
+//        {
+//            return false;
+//        }
+//    }
+//
+//    return true;
+//}
+//
+//int main()
+//{
+//    int NO = 0;
+//    std::string Expr;
+//    while (std::cin >> Expr && Expr[0] != '.')
+//    {
+//        std::cout << "Case " << ++NO << ": ";
+//        if (Check(Expr))
+//        {
+//            std::puts("Always an integer");
+//        }
+//        else
+//        {
+//            std::puts("Not always an integer");
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <cctype>
+//#include <algorithm>
+//
+//int main()
+//{
+//    std::string Str;
+//    std::cin >> Str;
+//
+//    auto Low = std::count_if(Str.cbegin(), Str.cend(), [](char c)
+//    {
+//        return std::islower(c);
+//    });
+//    auto Up = std::count_if(Str.cbegin(), Str.cend(), [](char c)
+//    {
+//        return std::isupper(c);
+//    });
+//
+//    if (Low >= Up)
+//    {
+//        for (auto &r : Str)
+//        {
+//            std::putchar(std::tolower(r));
+//        }
+//        std::putchar('\n');
+//    }
+//    else
+//    {
+//        for (auto &r : Str)
+//        {
+//            std::putchar(std::toupper(r));
+//        }
+//        std::putchar('\n');
+//    }
+//
+//    return 0;
+//}
+//#include <cstdio>
+//#include <cstring>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 30 + 5;
+//
+//ll f[MaxN], d[MaxN][MaxN];
+//
+//ll C(ll n, ll m) {
+//    double Ans = 1;
+//    for (int i = 0; i < m; i++)
+//    {
+//        Ans *= n - i;
+//    }
+//    for (int i = 0; i < m; i++)
+//    {
+//        Ans /= i + 1;
+//    }
+//    return static_cast<ll>(Ans + 0.5);
+//}
+//
+//int main() {
+//    f[1] = 1;
+//    memset(d, 0, sizeof(d));
+//
+//    int n = 30;
+//    for (int i = 0; i <= n; i++)
+//    {
+//        d[i][0] = 1;
+//    }
+//    for (int i = 1; i <= n; i++) 
+//    { 
+//        d[i][1] = 1; 
+//        d[0][i] = 0; 
+//    }
+//
+//    for (int i = 1; i <= n; i++) 
+//    {
+//        for (int j = 2; j <= n; j++) 
+//        {
+//            d[i][j] = 0;
+//            for (int p = 0; p*i <= j; p++)
+//            {
+//                d[i][j] += C(f[i] + p - 1, p) * d[i - 1][j - p * i];
+//            }
+//        }
+//
+//        f[i + 1] = d[i][i + 1];
+//    }
+//
+//    while (scanf("%d", &n) == 1 && n)
+//    {
+//        printf("%lld\n", n == 1 ? 1 : 2 * f[n]);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 30 + 5;
+//
+//std::array<ll, MaxN> f{ 0 };
+//std::array<std::array<ll, MaxN>, MaxN> d{ 0 };
+//
+//ll C(ll n, ll m)
+//{
+//    double Ans = 1;
+//    for (ll i = 0; i < m; ++i)
+//    {
+//        Ans *= n - i;
+//    }
+//    for (ll i = 0; i < m; ++i)
+//    {
+//        Ans /= i + 1;
+//    }
+//
+//    return static_cast<ll>(Ans + 0.5);
+//}
+//
+//int main()
+//{
+//    for (auto &rr : d)
+//    {
+//        for (auto &r : rr)
+//        {
+//            r = 0;
+//        }
+//    }
+//    constexpr ll k = 30;
+//    for (ll i = 0; i <= k; ++i)
+//    {
+//        d[i][0] = 1;
+//    }
+//    for (ll i = 1; i <= k; ++i)
+//    {
+//        d[i][1] = 1;
+//        d[0][i] = 0;
+//    }
+//
+//    f[1] = 1;
+//    for (ll i = 1; i <= k; ++i)
+//    {
+//        for (ll j = 2; j <= k; ++j)
+//        {
+//            d[i][j] = 0;
+//            for (ll p = 0; p * i <= j; ++p)
+//            {
+//                d[i][j] += C(f[i] + p - 1, p) * d[i - 1][j - p * i];
+//            }
+//        }
+//
+//        f[i + 1] = d[i][i + 1];
+//    }
+//
+//    ll n;
+//    while (std::cin >> n && n)
+//    {
+//        std::printf("%lld\n", n == 1 ? 1 : 2 * f[n]);
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 1000;
+//
+//int main()
+//{
+//    std::array<std::array<std::array<ll, 2>, 5>, MaxN + 1> d{ 0 };
+//    for (int k = 0; k < 2; ++k)
+//    {
+//        d[1][0][k] = 1;
+//        for (int i = 2; i <= MaxN; ++i)
+//        {
+//            for (int j = 0; j < 5; ++j)
+//            {
+//                d[i][j][k] = d[i - 1][j][k];
+//                if (j > 0)
+//                {
+//                    d[i][j][k] += d[i - 1][j - 1][k];
+//                }
+//            }
+//        }
+//    }
+//
+//    std::array<ll, MaxN + 1> Ans{ 0 };
+//    for (int i = 4; i <= MaxN; i += 2)
+//    {
+//        auto R = (i + 4) / 2;
+//        Ans[i] = d[R][3][0] + d[R][4][1] + d[R][4][0];
+//    }
+//    
+//    int n, NO = 0;
+//    while (std::cin >> n && n)
+//    {
+//        std::cout << "Case " << ++NO << ": " << Ans[n] << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//int main()
+//{
+//    std::array<std::array<int, 105>, 105> Map{ 0 }, f{ 0 };
+//    int n, m, k;
+//    std::cin >> n >> m >> k;
+//    while (k--)
+//    {
+//        int x, y, w;
+//        std::cin >> x >> y >> w;
+//        Map[x][y] = w;
+//    }
+//
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        for (int j = 1; j <= m; ++j)
+//        {
+//            f[i][j] = std::max(f[i - 1][j], f[i][j - 1]) + Map[i][j];
+//        }
+//    }
+//
+//    std::cout << f[n][m] << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cstring>
+//#include <string>
+//
+//int Pow10[10];
+//int MOD;
+//
+//int Memo[11][90][90];
+//
+//int Mod(int n)
+//{
+//    return (n % MOD + MOD) % MOD;
+//}
+//
+//int f(int d, int m1, int m2)
+//{
+//    if (d == 0)
+//    {
+//        return m1 == 0 && m2 == 0 ? 1 : 0;
+//    }
+//
+//    auto &Ans = Memo[d][m1][m2];
+//    if (Ans >= 0)
+//    {
+//        return Ans;
+//    }
+//    Ans = 0;
+//    for (int x = 0; x <= 9; ++x)
+//    {
+//        Ans += f(d - 1, Mod(m1 - x), Mod(m2 - x * Pow10[d - 1]));
+//    }
+//    
+//    return Ans;
+//}
+//
+//int Sumf(int n)
+//{
+//    auto Digits = std::to_string(n);
+//    int Base = 0, Sumd = 0, Ans = 0;
+//    auto nd = static_cast<int>(Digits.size());
+//    for (int i = 0; i < nd; ++i)
+//    {
+//        auto na = nd - 1 - i;
+//        for (int d = 0; d < Digits[i] - '0'; ++d)
+//        {
+//            int cnt = f(na, Mod(-Sumd - d), Mod(-Base - d * Pow10[na]));
+//            Ans += cnt;
+//        }
+//
+//        Base += (Digits[i] - '0') * Pow10[na];
+//        Sumd += (Digits[i] - '0');
+//    }
+//
+//    return Ans;
+//}
+//
+//int main()
+//{
+//    Pow10[0] = 1;
+//    for (int i = 1; i <= 9; ++i)
+//    {
+//        Pow10[i] = Pow10[i - 1] * 10;
+//    }
+//
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int a, b;
+//        std::cin >> a >> b >> MOD;
+//        std::memset(Memo, -1, sizeof(Memo));
+//        if (MOD > 85)
+//        {
+//            std::puts("0");
+//        }
+//        else
+//        {
+//            std::cout << Sumf(b + 1) - Sumf(a) << std::endl;
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <string>
+//
+//using ll = long long;
+//
+//constexpr int MOD = 1000000000;
+//constexpr int MaxN = 300 + 10;
+//
+//std::array<std::array<ll, MaxN>, MaxN> d{ 0 };
+//
+//std::string S;
+//
+//ll DP(int i, int j)
+//{
+//    if (i == j)
+//    {
+//        return 1;
+//    }
+//
+//    if (S[i] != S[j])
+//    {
+//        return 0;
+//    }
+//
+//    auto &Ans = d[i][j];
+//    if (Ans >= 0)
+//    {
+//        return Ans;
+//    }
+//    Ans = 0;
+//    for (int k = i + 2; k <= j; ++k)
+//    {
+//        if (S[i] == S[k])
+//        {
+//            Ans = (Ans + DP(i + 1, k - 1) * DP(k, j)) % MOD;
+//        }
+//    }
+//
+//    return Ans;
+//}
+//
+//int main()
+//{
+//    while (std::cin >> S)
+//    {
+//        for (auto &rr : d)
+//        {
+//            for (auto &r : rr)
+//            {
+//                r = -1;
+//            }
+//        }
+//
+//        std::cout << DP(0, S.size() - 1) << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr int MaxK = 500;
+//constexpr int MOD = 1000000 + 7;
+//
+//std::array<std::array<int, MaxK + 10>, MaxK + 10> C{ 0 };
+//
+//int main()
+//{
+//    C[0][0] = 1;
+//    for (int i = 0; i <= MaxK; ++i)
+//    {
+//        C[i][0] = C[i][i] = 1;
+//        for (int j = 1; j < i; ++j)
+//        {
+//            C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % MOD;
+//        }
+//    }
+//
+//    int T;
+//    std::cin >> T;
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        int n, m, k;
+//        std::cin >> n >> m >> k;
+//        int Sum = 0;
+//        for (int S = 0; S < (1 << 4); ++S)
+//        {
+//            int b = 0, r = n, c = m;
+//            if (S & (1 << 0))
+//            {
+//                --r;
+//                ++b;
+//            }
+//            if (S & (1 << 1))
+//            {
+//                --r;
+//                ++b;
+//            }
+//            if (S & (1 << 2))
+//            {
+//                --c;
+//                ++b;
+//            }
+//            if (S & (1 << 3))
+//            {
+//                --c;
+//                ++b;
+//            }
+//
+//            if (b % 2 == 1)
+//            {
+//                Sum = (Sum + MOD - C[r * c][k]) % MOD;
+//            }
+//            else
+//            {
+//                Sum = (Sum + C[r * c][k]) % MOD;
+//            }
+//        }
+//
+//        std::cout << "Case " << NO << ": " << Sum << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//using ll = long long;
+//
+//const char *Base = "ZABCDEFGHIJKLMNOPQRSTUVWXY";
+//
+//void ToExcel(const std::string &Str)
+//{
+//    ll Row = 0;
+//    auto Beg = Str.cbegin() + 1;
+//    while (*Beg != 'C')
+//    {
+//        Row *= 10;
+//        Row += *Beg - '0';
+//        ++Beg;
+//    }
+//
+//    ++Beg;
+//    ll Col = 0;
+//    while (Beg != Str.cend())
+//    {
+//        Col *= 10;
+//        Col += *Beg - '0';
+//        ++Beg;
+//    }
+//
+//    std::string StrCol;
+//    for (; Col; Col = Col / 26 - !(Col % 26))
+//    {
+//        StrCol.push_back(Base[Col % 26]);
+//    }
+//    //while (Col > 0)
+//    //{
+//    //    StrCol.push_back(Base[Col % 26]);
+//    //    Col /= 26;
+//    //}
+//
+//    for (auto beg = StrCol.crbegin(); beg != StrCol.crend(); ++beg)
+//    {
+//        std::cout << *beg;
+//    }
+//    std::cout << Row << std::endl;
+//}
+//
+//void ToRXCY(const std::string &Str)
+//{
+//    ll Col = 0;
+//    auto beg = Str.cbegin();
+//    for (; !('0' <= *beg && *beg <= '9'); ++beg)
+//    {
+//        Col *= 26;
+//        Col += *beg - 'A' + 1;
+//    }
+//
+//    ll Row = 0;
+//    while (beg != Str.cend())
+//    {
+//        Row *= 10;
+//        Row += *beg - '0';
+//        ++beg;
+//    }
+//
+//    std::cout << 'R' << Row << 'C' << Col << std::endl;
+//}
+//
+//int main()
+//{
+//    ll n;
+//    std::cin >> n;
+//
+//    while (n--)
+//    {
+//        std::string Str;
+//        std::cin >> Str;
+//        if (Str[0] == 'R' && '0' <= Str[1] && Str[1] <= '9')
+//        {
+//            ToExcel(Str);
+//        }
+//        else
+//        {
+//            ToRXCY(Str);
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 1000000 + 10;
+//
+//std::array<ll, MaxN> f{ 0 };
+//
+//int main()
+//{
+//    for (ll x = 4; x <= MaxN - 10; ++x)
+//    {
+//        f[x] = f[x - 1] + ((x - 1) * (x - 2) / 2 - (x - 1) / 2) / 2;
+//    }
+//
+//    int n;
+//    while (std::cin >> n && n >= 3)
+//    {
+//        std::cout << f[n] << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//using ull = unsigned long long;
+//
+//int main()
+//{
+//    ull n, m;
+//    while (std::cin >> n >> m && n && m)
+//    {
+//        if (n > m)
+//        {
+//            std::swap(n, m);
+//        }
+//
+//        std::cout << n * m * (m + n - 2) + 2 * n * (n - 1) * (3 * m - n - 1) / 3 << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr int MaxN = 100000 + 10;
+//
+//std::array<int, MaxN> x{ 0 }, y{ 0 }, TotalDist{ 0 }, TotalWeight{ 0 }, Dist2Origin{ 0 };
+//std::array<int, MaxN> q{ 0 }, d{ 0 };
+//
+//int Func(int i)
+//{
+//    return d[i] - TotalDist[i + 1] + Dist2Origin[i + 1];
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int c, n;
+//        std::cin >> c >> n;
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            int w;
+//            std::cin >> x[i] >> y[i] >> w;
+//            Dist2Origin[i] = std::abs(x[i]) + std::abs(y[i]);
+//            TotalDist[i] = TotalDist[i - 1] + std::abs(x[i] - x[i - 1]) + std::abs(y[i] - y[i - 1]);
+//            TotalWeight[i] = TotalWeight[i - 1] + w;
+//        }
+//
+//        int Front = 1, Rear = 1;
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            while (Front <= Rear && TotalWeight[i] - TotalWeight[q[Front]] > c)
+//            {
+//                ++Front;
+//            }
+//            d[i] = Func(q[Front]) + TotalDist[i] + Dist2Origin[i];
+//
+//            while (Front <= Rear && Func(i) <= Func(q[Rear]))
+//            {
+//                --Rear;
+//            }
+//            q[++Rear] = i;
+//        }
+//
+//        std::cout << d[n] << std::endl;
+//        if (T > 0)
+//        {
+//            std::putchar('\n');
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <cstring>
+//#include <algorithm>
+//
+//constexpr int MaxN = 16;
+//constexpr int MaxW = 100 + 10;
+//
+//int A[MaxN], Sum[1 << MaxN];
+//bool f[1 << MaxN][MaxW], Vis[1 << MaxN][MaxW];
+//
+//int BitCount(int x)
+//{
+//    return x == 0 ? 0 : BitCount(x >> 1) + (x & 1);
+//}
+//
+//int DP(int S, int x)
+//{
+//    if (Vis[S][x])
+//    {
+//        return f[S][x];
+//    }
+//    Vis[S][x] = true;
+//
+//    auto &Ans = f[S][x];
+//    if (BitCount(S) == 1)
+//    {
+//        return Ans = true;
+//    }
+//    
+//    auto y = Sum[S] / x;
+//    for (int S0 = (S - 1) & S; S0; S0 = (S0 - 1) & S)
+//    {
+//        int S1 = S ^ S0;
+//        if (Sum[S0] % x == 0 && 
+//            DP(S0, std::min(x, Sum[S0] / x)) && 
+//            DP(S1, std::min(x, std::min(x, Sum[S1] / x))))
+//        {
+//            return Ans = true;
+//        }
+//        if (Sum[S0] % y == 0 && 
+//            DP(S0, std::min(y, Sum[S0] / y)) && 
+//            DP(S1, std::min(y, std::min(x, Sum[S1] / y))))
+//        {
+//            return Ans = true;
+//        }
+//    }
+//
+//    return Ans = false;
+//}
+//
+//int main()
+//{
+//    int NO = 0, n;
+//    while (std::cin >> n && n)
+//    {
+//        int x, y;
+//        std::cin >> x >> y;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            std::cin >> A[i];
+//        }
+//
+//        std::memset(Sum, false, sizeof(Sum));
+//        for (int S = 0; S < (1 << n); ++S)
+//        {
+//            for (int i = 0; i < n; ++i)
+//            {
+//                if (S & (1 << i))
+//                {
+//                    Sum[S] += A[i];
+//                }
+//            }
+//        }
+//
+//        std::cout << "Case " << ++NO << ": ";
+//
+//        std::memset(Vis, false, sizeof(Vis));
+//        int All = (1 << n) - 1;
+//        if (Sum[All] != x * y || Sum[All] % x != 0)
+//        {
+//            std::puts("No");
+//        }
+//        else
+//        {
+//            auto Ans = DP(All, std::min(x, y));
+//            if (Ans)
+//            {
+//                std::puts("Yes");
+//            }
+//            else
+//            {
+//                std::puts("No");
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <vector>
+//#include <algorithm>
+//
+//constexpr int MaxN = 1000 + 20;
+//
+//std::array<std::vector<int>, MaxN> Adj;
+//std::array<std::array<bool, 2>, MaxN> Vis{ false };
+//std::array<std::array<int, 2>, MaxN> d{ 0 };
+//
+//int n, m;
+//
+//int DP(int i, int j, int f)
+//{
+//    if (Vis[i][j])
+//    {
+//        return d[i][j];
+//    }
+//    Vis[i][j] = true;
+//
+//    auto &Ans = d[i][j];
+//    Ans = 2000;
+//    for (const auto &c : Adj[i])
+//    {
+//        if (c != f)
+//        {
+//            Ans += DP(c, 1, i);
+//        }
+//    }
+//    if (!j && f >= 0)
+//    {
+//        ++Ans;
+//    }
+//
+//    if (j || f < 0)
+//    {
+//        int Sum = 0;
+//        for (const auto &c : Adj[i])
+//        {
+//            if (c != f)
+//            {
+//                Sum += DP(c, 0, i);
+//            }
+//        }
+//        if (f >= 0)
+//        {
+//            ++Sum;
+//        }
+//
+//        Ans = std::min(Ans, Sum);
+//    }
+//
+//    return Ans;
+//}
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        std::cin >> n >> m;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            Adj[i].clear();
+//        }
+//        for (int i = 0; i < m; ++i)
+//        {
+//            int a, b;
+//            std::cin >> a >> b;
+//            Adj[a].push_back(b);
+//            Adj[b].push_back(a);
+//        }
+//
+//        for (auto &rr : Vis)
+//        {
+//            for (auto &r : rr)
+//            {
+//                r = false;
+//            }
+//        }
+//
+//        int Ans = 0;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            if (!Vis[i][0])
+//            {
+//                Ans += DP(i, 0, -1);
+//            }
+//        }
+//
+//        std::cout << Ans / 2000 << ' ' << m - Ans % 2000 << ' ' << Ans % 2000 << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int n;
+//
+//void DFS(int a, int b, int c, int d)
+//{
+//    if (b > n || d > n)
+//    {
+//        return;
+//    }
+//
+//    DFS(a, b, a + c, b + d);
+//
+//    if (b + d <= n)
+//    {
+//        std::cout << a + c << '/' << b + d << std::endl;
+//    }
+//
+//    DFS(a + c, b + d, c, d);
+//}
+//
+//int main()
+//{
+//    std::cin >> n;
+//
+//    std::puts("0/1");
+//    DFS(0, 1, 1, 1);
+//    std::puts("1/1");
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <map>
+//
+//int Read()
+//{
+//    int n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    std::map<int, int> m;
+//    int n;
+//    n = Read();
+//    while (n--)
+//    {
+//        int x;
+//        x = Read();
+//        ++m[x];
+//    }
+//
+//    for (auto beg = m.cbegin(); beg != m.cend(); ++beg)
+//    {
+//        std::cout << beg->first << ' ' << beg->second << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//int main()
+//{
+//    constexpr int MaxN = (1 << 16) + 1;
+//    int n, NO = 0;
+//    while (std::cin >> n && n)
+//    {
+//        std::array<int, MaxN> P{ 0 }, f{ 0 }, Cover{ 0 };
+//        for (int i = 0; i < n; ++i)
+//        {
+//            int m;
+//            std::cin >> m;
+//            P[i] = 1 << i;
+//            while (m--)
+//            {
+//                int x;
+//                std::cin >> x;
+//                P[i] |= (1 << x);
+//            }
+//        }
+//
+//        for (int S = 0; S < (1 << n); ++S)
+//        {
+//            for (int i = 0; i < n; ++i)
+//            {
+//                if (S & (1 << i))
+//                {
+//                    Cover[S] |= P[i];
+//                }
+//            }
+//        }
+//
+//        int All = (1 << n) - 1;
+//        for (int S = 1; S < (1 << n); ++S)
+//        {
+//            for (int S0 = S; S0; S0 = (S0 - 1) & S)
+//            {
+//                if (Cover[S0] == All)
+//                {
+//                    f[S] = std::max(f[S], f[S ^ S0] + 1);
+//                }
+//            }
+//        }
+//
+//        std::cout << "Case " << ++NO << ": " << f[All] << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 100 + 10;
+//
+//std::array<int, MaxN> A{ 0 }, S{ 0 };
+//std::array<std::array<int, MaxN>, MaxN> f{ 0 }, g{ 0 }, d{ 0 };
+//
+//int main()
+//{
+//    int n;
+//    while (std::cin >> n && n)
+//    {
+//        S[0] = 0;
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            std::cin >> A[i];
+//            S[i] = S[i - 1] + A[i];
+//        }
+//
+//        for (int i = 1; i <= n; ++i)
+//        {
+//            f[i][i] = g[i][i] = d[i][i] = A[i];
+//        }
+//        for (int L = 1; L < n; ++L)
+//        {
+//            for (int i = 1; i + L <= n; ++i)
+//            {
+//                int j = i + L;
+//                int m = 0;
+//                m = std::min(m, f[i + 1][j]);
+//                m = std::min(m, g[i][j - 1]);
+//                d[i][j] = S[j] - S[i - 1] - m;
+//                f[i][j] = std::min(d[i][j], f[i + 1][j]);
+//                g[i][j] = std::min(d[i][j], g[i][j - 1]);
+//            }
+//        }
+//
+//        std::cout << 2 * d[1][n] - S[n] << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 250 * 250;
+//constexpr int INF = 999999999;
+//
+//std::array<int, MaxN> S{ 0 }, g{ 0 }, Num{ 0 };
+//
+//int main()
+//{
+//    int T;
+//    std::cin >> T;
+//    for (int NO = 1; NO <= T; ++NO)
+//    {
+//        int N, p, q;
+//        std::cin >> N >> p >> q;
+//        std::fill(Num.begin(), Num.end(), 0);
+//        for (int i = 1; i <= p + 1; ++i)
+//        {
+//            int x;
+//            std::cin >> x;
+//            Num[x] = i;
+//        }
+//
+//        int n = 0;
+//        for (int i = 0; i < q + 1; ++i)
+//        {
+//            int x;
+//            std::cin >> x;
+//            if (Num[x])
+//            {
+//                S[n++] = Num[x];
+//            }
+//        }
+//
+//        std::fill(g.begin(), g.end(), INF);
+//        int Ans = 0;
+//        for (int i = 0; i < n; ++i)
+//        {
+//            int k = std::lower_bound(g.cbegin() + 1, g.cbegin() + 1 + n, S[i]) - g.cbegin();
+//            g[k] = S[i];
+//            Ans = std::max(Ans, k);
+//        }
+//
+//        std::cout << "Case " << NO << ": " << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    constexpr int MaxN = 10000 + 5;
+//    std::array<int, MaxN> f{ 0 };
+//
+//    int n, k, m;
+//    while (std::cin >> n >> k >> m && n)
+//    {
+//        f[1] = 0;
+//        for (int i = 2; i <= n; ++i)
+//        {
+//            f[i] = (f[i - 1] + k) % i;
+//        }
+//
+//        auto Ans = (m - k + 1 + f[n]) % n;
+//        if (Ans <= 0)
+//        {
+//            Ans += n;
+//        }
+//
+//        std::cout << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <utility>
+//#include <vector>
+//
+//using ll = long long;
+//
+//ll Read()
+//{
+//    ll n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    std::vector<std::pair<ll, ll>> Vec;
+//    ll n, Left;
+//    n = Read();
+//    Left = Read();
+//    for (ll i = 0; i < n; ++i)
+//    {
+//        ll x, y;
+//        x = Read();
+//        y = Read();
+//        Vec.push_back({ x, y });
+//    }
+//
+//    std::sort(Vec.begin(), Vec.end(), [](const std::pair<ll, ll> &a, const std::pair<ll, ll> &b) 
+//    {
+//        return a.first < b.first;
+//    });
+//
+//    ll Ans = 0;
+//    for (const auto &r : Vec)
+//    {
+//        if (Left / r.first >= r.second)
+//        {
+//            Left -= r.first * r.second;
+//            Ans += r.second;
+//        }
+//        else
+//        {
+//            Ans += Left / r.first;
+//            break;
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//int n, t;
+//
+//std::array<int, 50> a{ 1 };
+//
+//void Print(int Tol)
+//{
+//    if (a[Tol] == n)
+//    {
+//        return;
+//    }
+//
+//    for (int i = 1; i < Tol; ++i)
+//    {
+//        std::cout << a[i] << '+';
+//    }
+//    std::cout << a[Tol] << std::endl;
+//}
+//
+//void DFS(int Tol)
+//{
+//    for (int i = a[Tol - 1]; i <= t; ++i)
+//    {
+//        a[Tol] = i;
+//        t -= i;
+//
+//        if (t == 0)
+//        {
+//            Print(Tol);
+//        }
+//        else
+//        {
+//            DFS(Tol + 1);
+//        }
+//
+//        t += i;
+//    }
+//}
+//
+//int main()
+//{
+//    std::cin >> n;
+//    t = n;
+//
+//    DFS(1);
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <cmath>
+//
+//int main()
+//{
+//    int M, N, MaxTime;
+//    std::array<std::array<int, 25>, 25> Field{ 0 };
+//    std::cin >> M >> N >> MaxTime;
+//    for (int i = 1; i <= M; ++i)
+//    {
+//        for (int j = 1; j <= N; ++j)
+//        {
+//            std::cin >> Field[i][j];
+//        }
+//    }
+//
+//    int Peanuts = 0, Time = 0, ci = 0, cj = 0;;
+//    while (Time < MaxTime)
+//    {
+//        int MaxPeanuts = 0, MaxI, MaxJ;
+//        for (int i = 1; i <= M; ++i)
+//        {
+//            for (int j = 1; j <= N; ++j)
+//            {
+//                if (MaxPeanuts < Field[i][j])
+//                {
+//                    MaxPeanuts = Field[i][j];
+//                    MaxI = i;
+//                    MaxJ = j;
+//                }
+//            }
+//        }
+//
+//        if (MaxPeanuts == 0)
+//        {
+//            break;
+//        }
+//
+//        if (ci == 0)
+//        {
+//            cj = MaxJ;
+//        }
+//
+//        if (Time + MaxI + 1 + std::abs(MaxI - ci) + std::abs(MaxJ - cj) <= MaxTime)
+//        {
+//            Time += 1 + std::abs(MaxI - ci) + std::abs(MaxJ - cj);
+//            cj = MaxJ;
+//            ci = MaxI;
+//            Peanuts += Field[MaxI][MaxJ];
+//            Field[MaxI][MaxJ] = 0;
+//        }
+//        else
+//        {
+//            break;
+//        }
+//    }
+//
+//    std::cout << Peanuts << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <climits>
+//#include <algorithm>
+//
+//using ll = long long;
+//
+//constexpr int MaxM = 200000;
+//
+//std::array<ll, MaxM << 2> Tree{ 0 };
+//
+//void Update(ll Root, ll l, ll r, ll Pos, ll k)
+//{
+//    if (l == r)
+//    {
+//        Tree[Root] = k;
+//        return;
+//    }
+//
+//    auto Mid = (l + r) / 2;
+//    if (Mid >= Pos)
+//    {
+//        Update(Root * 2, l, Mid, Pos, k);
+//    }
+//    else
+//    {
+//        Update(Root * 2 + 1, Mid + 1, r, Pos, k);
+//    }
+//
+//    Tree[Root] = std::max(Tree[Root * 2], Tree[Root * 2 + 1]);
+//}
+//
+//ll Query(ll l, ll r, ll ql, ll qr, ll Root)
+//{
+//    if (l >= ql && r <= qr)
+//    {
+//        return Tree[Root];
+//    } 
+//    else if (qr < l || ql > r)
+//    {
+//        return 0;
+//    }
+//    else
+//    {
+//        auto Mid = (l + r) / 2;
+//        return std::max(Query(l, Mid, ql, qr, Root * 2), Query(Mid + 1, r, ql, qr, Root * 2 + 1));
+//    }
+//}
+//
+//ll Read()
+//{
+//    ll n = 0;
+//    char ch = std::getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//    {
+//        ch = std::getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = std::getchar();
+//    }
+//
+//    return n;
+//}
+//
+//int main()
+//{
+//    ll M;
+//    ll D;
+//    M = Read();
+//    D = Read();
+//    ll Last = 0;
+//    ll x = 0;
+//    for (ll i = 0; i < M; ++i)
+//    {
+//        char Command;
+//        std::cin >> Command;
+//        if (Command == 'A')
+//        {
+//            ll k;
+//            k = Read();
+//            Update(1, 1, MaxM, ++Last, (x + k) % D);
+//        }
+//        else
+//        {
+//            ll r;
+//            r = Read();
+//            x = Query(1, MaxM, Last - r + 1, Last, 1);
+//            std::cout << x << std::endl;
+//        }
+//    }
+//
+//    return 0;
+//}
 //#include <iostream>
 //#include <string>
 //#include <array>
