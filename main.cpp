@@ -1,30 +1,2739 @@
-#include <iostream>
 
-enum class Light : int
-{
-    Blue = 10,
-    Red = 20,
-    Yellow = 30,
-};
-
-int main()
-{
-    auto Temp = Light::Red;
-    switch (Temp)
-    {
-    case Light::Blue:
-        break;
-    case Light::Red:
-        std::cout << "Caught" << std::endl;
-        break;
-    case Light::Yellow:
-        break;
-    default:
-        break;
-    }
-
-    return 0;
-}
+//#include <iostream>
+//#include <cmath>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n;
+//    std::cin >> n;
+//
+//    int s = static_cast<int>(std::sqrt(n));
+//    int Now = n - s + 1;
+//    while (1)
+//    {
+//        for (int j = 0; j < s; ++j)
+//        {
+//            std::cout << Now + j << ' ';
+//        }
+//        Now -= s;
+//
+//        if (Now <= 0)
+//        {
+//            break;
+//        }
+//    }
+//    Now += s;
+//    for (int i = 1; i < Now; ++i)
+//    {
+//        std::cout << i << ' ';
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//using ll = long long;
+//
+//ll a, b, c, d;
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//
+//    std::string Str1, Str2;
+//    std::cin >> Str1 >> Str2;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        if (Str1[i] == '0' && Str2[i] == '0')
+//        {
+//            ++a;
+//        }
+//        else if (Str1[i] == '1' && Str2[i] == '1')
+//        {
+//            ++b;
+//        }
+//        else if (Str1[i] == '0' && Str2[i] == '1')
+//        {
+//            ++c;
+//        }
+//        else if (Str1[i] == '1' && Str2[i] == '0')
+//        {
+//            ++d;
+//        }
+//    }
+//    std::cout << a * b + d * (a + c) << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 1000 + 5;
+//
+//std::array<int, MaxN> Arr{ 0 };
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int Sum = 0;
+//    int n;
+//    std::cin >> n;
+//    int Man = 0;
+//    int a, b, c, d;
+//    std::cin >> a >> b >> c >> d;
+//    Man = a + b + c + d;
+//    Arr[0] = Man;
+//    for (int i = 1; i < n; ++i)
+//    {
+//        int a, b, c, d;
+//        std::cin >> a >> b >> c >> d;
+//        Sum = a + b + c + d;
+//        Arr[i] = Sum;
+//    }
+//    std::sort(Arr.begin(), Arr.begin() + n);
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        if (Arr[i] == Man)
+//        {
+//            std::cout << n - i << std::endl;
+//            return 0;
+//        }
+//    }
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n;
+//    std::cin >> n;
+//
+//    int Sum = 0;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int x;
+//        std::cin >> x;
+//        Sum += x;
+//    }
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int y;
+//        std::cin >> y;
+//        Sum -= y;
+//    }
+//
+//    if (Sum < 0)
+//    {
+//        std::cout << "No" << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "Yes" << std::endl;
+//    }
+//
+//    return 0;
+//}
+//// 一道构造题，比赛的时候没有弄出来，去想怎么解方程组去了，当时就应该老老实实开脑洞想构造来着
+//// 首先，利用异或的性质，如果矩阵中每个元素都被异或两边，那么最后的异或和肯定为0
+//// 然后，我们就可以开脑洞构造了：
+//// 首先，除了最后一行和最后一列的元素都设为0
+//// 接着，除了右下角那最后一个元素，其余还没被赋值的地方的元素都设为那一行（列）的异或和
+//// 右下角的那个元素也可以通过异或的性质推出来
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    constexpr int MaxN = 100 + 5;
+//    std::array<int, MaxN> a{ 0 }, b{ 0 };
+//
+//    int n, m, Ans = 0;
+//    std::cin >> n >> m;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> a[i];
+//        Ans ^= a[i];
+//    }
+//    for (int i = 0; i < m; ++i)
+//    {
+//        std::cin >> b[i];
+//        Ans ^= b[i];
+//    }
+//
+//    if (Ans != 0)   // 检验一下所有元素两边异或之后的结果是不是0，不是则证明无解
+//    {
+//        std::cout << "NO" << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "YES" << std::endl;
+//
+//        Ans = b[m - 1]; // 先存一下最后一列的异或和，为了推出右下角的那个元素
+//
+//        for (int i = 0; i < n - 1; ++i)
+//        {
+//            for (int j = 0; j < m - 1; ++j)
+//            {
+//                std::cout << 0 << ' ';  // 除了最后一行和最后一列，其余地方都是0
+//            }
+//            std::cout << a[i] << std::endl; // 最后一列的元素
+//
+//            Ans ^= a[i];    // 根据最后一列的异或和推出右下角那个元素
+//        }
+//        
+//        for (int i = 0; i < m - 1; ++i)
+//        {
+//            std::cout << b[i] << ' ';   // 最后一行的元素
+//        }
+//        std::cout << Ans << std::endl;  // 右下角的元素
+//    }
+//
+//    return 0;
+//}
+//// 比较基础的字符串匹配题目
+//// 预处理两发
+//// 第一发KMP匹配一次，找出所有匹配到的起始点
+//// 第二发前缀和算一遍，方便后续询问
+//#include <iostream>
+//#include <string>
+//#include <array>
+//
+//std::array<int, 10000 + 5> f{ 0 }, Pos{ 0 }, Sum{ 0 };
+//
+//int n, m, q;
+//
+//void GetFail(const std::string &P)
+//{
+//    for (std::size_t i = 1; i < P.size(); ++i)
+//    {
+//        auto j = f[i];
+//        while (j && P[i] != P[j])
+//        {
+//            j = f[j];
+//        }
+//        f[i + 1] = P[i] == P[j] ? j + 1 : 0;
+//    }
+//}
+//
+//void Find(const std::string &T, const std::string &P)
+//{
+//    GetFail(P);
+//    std::size_t j = 0;
+//    for (std::size_t i = 0; i < T.size(); ++i)
+//    {
+//        while (j && P[j] != T[i])
+//        {
+//            j = f[j];
+//        }
+//        if (P[j] == T[i])
+//        {
+//            ++j;
+//        }
+//        if (j == P.size())
+//        {
+//            Pos[i - P.size() + 2] = 1;  // KMP改一下这里就好了，标记一下匹配到的起始点
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    std::cin >> n >> m >> q;
+//
+//    std::string T, P;
+//    std::cin >> T >> P;
+//
+//    Find(T, P); // KMP预处理一次
+//
+//    for (int i = 1; i <= n; ++i)    // 前缀和再预处理一次
+//    {
+//        Sum[i] = Sum[i - 1] + Pos[i];
+//    }
+//
+//    while (q--)
+//    {
+//        int l, r;
+//        std::cin >> l >> r;
+//        if (r - l + 1 < m)  // 如果查询的区间连一个待查询串都容不下，肯定输出0
+//        {
+//            std::cout << 0 << std::endl;
+//        }
+//        else    // 否则就按照前缀和来计算，注意中间加加减减的不要手抖打错了
+//        {
+//            std::cout << Sum[r - m + 1] - Sum[l - 1] << std::endl;
+//        }
+//    }
+//
+//    return 0;
+//}
+//// 这是一个模拟题
+//#include <iostream>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int Sum = 0;    // 计算当前页数的和
+//
+//    int n, m;
+//    std::cin >> n >> m;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int a;
+//        std::cin >> a;
+//        Sum += a;   // 加上要写的页数
+//        std::cout << Sum / m << ' ';    // 计算当天要翻过的页数
+//        Sum %= m;   // 然后计算这一页已经用了多少
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <functional>
+//#include <algorithm>
+//
+//int main()
+//{
+//    std::string T = "Codeforces for for for for";
+//    std::string P = "for";
+//
+//    auto it = std::search(T.begin(), T.end(), std::default_searcher(P.begin(), P.end()));
+//    if (it != T.end())
+//    {
+//        std::cout << *it << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "Not found!" << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//
+//using ll = long long;
+//
+//std::array<ll, 10000 + 5> f{ 0 }, Pos{ 0 }, Sum{ 0 };
+//
+//ll n, m, q;
+//
+//void GetFail(const std::string &P)
+//{
+//    for (std::size_t i = 1; i < P.size(); ++i)
+//    {
+//        auto j = f[i];
+//        while (j && P[i] != P[j])
+//        {
+//            j = f[j];
+//        }
+//        f[i + 1] = P[i] == P[j] ? j + 1 : 0;
+//    }
+//}
+//
+//void Find(const std::string &T, const std::string &P)
+//{
+//    GetFail(P);
+//    std::size_t j = 0;
+//    for (std::size_t i = 0; i < T.size(); ++i)
+//    {
+//        while (j && P[j] != T[i])
+//        {
+//            j = f[j];
+//        }
+//        if (P[j] == T[i])
+//        {
+//            ++j;
+//        }
+//        if (j == P.size())
+//        {
+//            Pos[i - P.size() + 2] = 1;
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    std::cin >> n >> m >> q;
+//
+//    std::string T, P;
+//    std::cin >> T >> P;
+//
+//    Find(T, P);
+//
+//    for (int i = 0; i < q; ++i)
+//    {
+//        int a, b;
+//        std::cin >> a >> b;
+//        
+//        int Ans = 0;
+//        for (int j = a; j <= b - m + 1; ++j)
+//        {
+//            if (Pos[j])
+//            {
+//                ++Ans;
+//            }
+//        }
+//
+//        std::cout << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//using ll = long long;
+//
+//ll n, m, p;
+//
+//ll Last = 0;
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    std::cin >> n >> m;
+//
+//    std::cin >> p;
+//    Last = p % m;
+//    std::cout << p / m << ' ';
+//    for (int i = 1; i < n; ++i)
+//    {
+//        std::cin >> p;
+//        std::cout << (p + Last) / m << ' ';
+//        Last = p % m;
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <iomanip>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, m;
+//    std::cin >> n >> m;
+//
+//    constexpr int MaxN = 1000 + 10;
+//    std::array<int, MaxN> a{ 0 }, b{ 0 };
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> a[i];
+//        if (a[i] == 1)
+//        {
+//            std::cout << -1 << std::endl;
+//            
+//            return 0;
+//        }
+//    }
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> b[i];
+//        if (b[i] == 1)
+//        {
+//            std::cout << -1 << std::endl;
+//
+//            return 0;
+//        }
+//    }
+//
+//    double Tol = 1.0 * m / (b[0] - 1.0) + m;
+//    for (int i = n - 1; i >= 1; --i)
+//    {
+//        Tol += Tol / (a[i] - 1.0);
+//        Tol += Tol / (b[i] - 1.0);
+//    }
+//    Tol += Tol / (a[0] - 1.0);
+//
+//    std::cout << std::fixed << std::setprecision(10) << Tol - m << std::endl;
+//
+//    return 0;
+//}
+//// 思路：先预处理一下每一个数共出现了多少次，然后枚举合法的天数
+//#include <iostream>
+//#include <unordered_map>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, m;
+//    std::cin >> n >> m;
+//
+//    if (n > m)  // 僧多粥少，明显一天都走不动
+//    {
+//        std::cout << 0 << std::endl;
+//    }
+//    else if (n == m)    // 刚好相等，一人一口，一天吃完
+//    {
+//        std::cout << 1 << std::endl;
+//    }
+//    else
+//    {
+//        std::unordered_map<int, int> Map;
+//        for (int i = 0; i < m; ++i) // 统计每个数各出现了多少次
+//        {
+//            int t;
+//            std::cin >> t;
+//            ++Map[t];
+//        }
+//
+//        for (int k = m / n; k >= 1; --k)    // 枚举合法的天数（k代表天数），最高只能是(m / n)天
+//        {
+//            int Tol = 0;
+//            for (const auto &r : Map)
+//            {
+//                Tol += r.second / k;
+//            }
+//
+//            if (Tol >= n)   // 一旦遇到一个合法的就退出，因为我们是从高向低枚举的
+//            {
+//                std::cout << k << std::endl;
+//
+//                break;
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <unordered_map>
+//
+//constexpr int MaxN = 100 + 10;
+//
+//std::unordered_map<int, int> Map;
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, m;
+//    std::cin >> n >> m;
+//
+//    for (int i = 0; i < m; ++i)
+//    {
+//        int t;
+//        std::cin >> t;
+//        ++Map[t];
+//    }
+//
+//    if (n == m)
+//    {
+//        std::cout << 1 << std::endl;
+//    }
+//    else if (n > m)
+//    {
+//        std::cout << 0 << std::endl;
+//    }
+//    else
+//    {
+//        int Ans = 1;
+//        int k = m / n;
+//        for (int i = 2; i <= k; ++i)
+//        {
+//            int Cnt = 0;
+//            for (const auto &r : Map)
+//            {
+//                Cnt += r.second / i;
+//            }
+//            if (Cnt >= n)
+//            {
+//                Ans = i;
+//            }
+//        }
+//        std::cout << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//// 贪心题，首先将字符串按从小到大排序，然后从前往后取字符，只要不是连续的字符就可以取
+//#include <iostream>
+//#include <string>
+//#include <algorithm>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, k;
+//    std::cin >> n >> k;
+//
+//    std::string Str;
+//    std::cin >> Str;
+//
+//    std::sort(Str.begin(), Str.end());
+//
+//    int Ans = Str[0] - 'a' + 1; // 头字符肯定可以取，先取一个看看
+//    --k;
+//
+//    if (k == 0)
+//    {
+//        std::cout << Ans << std::endl;
+//    }
+//    else
+//    {
+//        auto Pre = Str[0];  // 记录上一次取得的字符
+//        for (int i = 1; i < n; ++i)
+//        {
+//            if (Str[i] - Pre > 1)   // 不连续则可以取
+//            {
+//                Ans += Str[i] - 'a' + 1;
+//                Pre = Str[i];
+//
+//                if (--k == 0)
+//                {
+//                    std::cout << Ans << std::endl;
+//
+//                    return 0;
+//                }
+//            }
+//        }
+//
+//        std::cout << -1 << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <set>
+//
+//std::set<int> Set, Ans;
+//
+//int gcd(int a, int b)
+//{
+//    return b == 0 ? a : gcd(b, a % b);
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, k;
+//    std::cin >> n >> k;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int t;
+//        std::cin >> t;
+//        t %= k;
+//        Set.insert(t);
+//    }
+//
+//    auto Iter = Set.begin();
+//    int t = *Iter;
+//    ++Iter;
+//    for (; Iter != Set.end(); ++Iter)
+//    {
+//        t = gcd(t, *Iter);
+//    }
+//
+//    if (t == 0)
+//    {
+//        std::cout << 1 << '\n' << 0 << std::endl;
+//    }
+//    else
+//    {
+//        for (int i = 0; i < k; ++i)
+//        {
+//            if (i % t == 0)
+//            {
+//                Ans.insert(i);
+//            }
+//        }
+//        std::cout << Ans.size() << std::endl;
+//
+//        bool First = true;
+//        for (const auto &r : Ans)
+//        {
+//            std::cout << r << ' ';
+//        }
+//        std::cout << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <iomanip>
+//
+//constexpr int MaxN = 1000 + 5;
+//
+//std::array<int, MaxN> a{ 0 }, b{ 0 };
+//
+//int n, m;
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    std::cin >> n >> m;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        std::cin >> a[i];
+//        if (a[i] == 1)
+//        {
+//            std::cout << -1 << std::endl;
+//            return 0;
+//        }
+//    }
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        std::cin >> b[i];
+//        if (b[i] == 1)
+//        {
+//            std::cout << -1 << std::endl;
+//            return 0;
+//        }
+//    }
+//
+//    double Now = m;
+//    for (int i = n; i > 0; --i)
+//    {
+//        int j = i + 1;
+//        if (j > n)
+//        {
+//            j = 1;
+//        }
+//
+//        double k = Now / (b[j] - 1);
+//        Now += k;
+//        k = Now / (a[i] - 1);
+//        Now += k;
+//    }
+//
+//    std::cout << std::fixed << std::setprecision(10) << Now - m << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <unordered_map>
+//#include <array>
+//
+//constexpr int MaxN = 100 + 10;
+//
+//std::array<int, MaxN> a{ 0 };
+//std::unordered_map<int, int> Map;
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, m;
+//    std::cin >> n >> m;
+//
+//    for (int i = 0; i < m; ++i)
+//    {
+//        std::cin >> a[i];
+//        ++Map[a[i]];
+//    }
+//
+//    if (n == m)
+//    {
+//        std::cout << 1 << std::endl;
+//    }
+//    else if (n > m)
+//    {
+//        std::cout << 0 << std::endl;
+//    }
+//    else
+//    {
+//        int Ans = 1;
+//        int k = m / n;
+//        for (int i = 2; i <= k; ++i)
+//        {
+//            int Cnt = 0;
+//            for (const auto &r : Map)
+//            {
+//                Cnt += r.second / i;
+//            }
+//            if (Cnt >= n)
+//            {
+//                Ans = i;
+//            }
+//        }
+//        std::cout << Ans << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <algorithm>
+//
+//int n, m;
+//
+//std::string Str;
+//
+//int main()
+//{
+//    std::cin >> n >> m;
+//    std::cin >> Str;
+//    std::sort(Str.begin(), Str.end());
+//
+//    --m;
+//    int Ans = Str[0] - 'a' + 1;
+//
+//    if (m == 0)
+//    {
+//        std::cout << Ans << std::endl;
+//
+//        return 0;
+//    }
+//
+//    char Pre = Str[0];
+//    for (std::size_t i = 1; i < Str.size(); ++i)
+//    {
+//        if (Str[i] - Pre > 1)
+//        {
+//            Ans += Str[i] - 'a' + 1;
+//            Pre = Str[i];
+//            if (--m == 0)
+//            {
+//                std::cout << Ans << std::endl;
+//                return 0;
+//            }
+//        }
+//    }
+//    std::cout << -1 << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 200 + 5;
+//std::array<int, MaxN * 2> m{ 0 };
+//std::array<std::array<int, MaxN>, MaxN> dp{ 0 };
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n;
+//    std::cin >> n;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        std::cin >> m[i];
+//        m[i + n] = m[i];
+//    }
+//
+//    for (int t = 1; t <= n; ++t)
+//    {
+//        for (int l = 1; l + t <= 2 * n; ++l)
+//        {
+//            int r = l + t;
+//            for (int k = l + 1; k <= r - 1; ++k)
+//            {
+//                dp[l][r] = std::max(dp[l][r],
+//                                    dp[l][k] + dp[k][r] + m[l] * m[k] * m[r]);
+//            }
+//        }
+//    }
+//
+//    int Ans = 0;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        Ans = std::max(Ans, dp[i][i + n]);
+//    }
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <queue>
+//#include <array>
+//
+//constexpr int MaxN = 500000 + 5;
+//constexpr int INF = 2147483647;
+//
+//class Edge
+//{
+//public:
+//    int From, To, Dist;
+//
+//    Edge() = default;
+//    Edge(int u, int v, int d) :
+//        From(u), To(v), Dist(d)
+//    {
+//    }
+//};
+//
+//std::vector<Edge> Edges;
+//std::array<std::vector<int>, MaxN> G;
+//std::array<bool, MaxN> Done{ false };
+//std::array<int, MaxN> d{ 0 }, p{ 0 };
+//
+//void AddEdge(int From, int To, int Dist)
+//{
+//    Edges.emplace_back(From, To, Dist);
+//    G[From].push_back(Edges.size() - 1);
+//}
+//
+//class HeapNode
+//{
+//public:
+//    int d, u;
+//
+//    HeapNode() = default;
+//    HeapNode(int d, int u) :
+//        d(d), u(u)
+//    {
+//    }
+//
+//    bool operator<(const HeapNode &rhs) const
+//    {
+//        return d > rhs.d;
+//    }
+//};
+//
+//int Read()
+//{
+//    int n = 0, k = 1;
+//    char ch = getchar();
+//    while ((ch > '9' || ch < '0') && ch != '-')
+//        ch = getchar();
+//
+//    if (ch == '-')
+//    {
+//        k = -1;
+//        ch = getchar();
+//    }
+//
+//    while (ch <= '9' && ch >= '0')
+//    {
+//        n = n * 10 + ch - '0';
+//        ch = getchar();
+//    }
+//
+//    return n * k;
+//}
+//
+//int main()
+//{
+//    int N, M, S;
+//    N = Read();
+//    M = Read();
+//    S = Read();
+//    for (int i = 0; i < M; ++i)
+//    {
+//        int From, To, Cost;
+//        From = Read();
+//        To = Read();
+//        Cost = Read();
+//        AddEdge(From, To, Cost);
+//    }
+//
+//    std::priority_queue<HeapNode> Q;
+//    for (int i = 1; i <= N; ++i)
+//    {
+//        d[i] = INF;
+//    }
+//    d[S] = 0;
+//    Q.push(HeapNode(0, S));
+//    while (!Q.empty())
+//    {
+//        auto x = Q.top();
+//        Q.pop();
+//
+//        auto u = x.u;
+//        if (Done[u])
+//        {
+//            continue;
+//        }
+//        Done[u] = true;
+//
+//        for (std::size_t i = 0; i < G[u].size(); ++i)
+//        {
+//            auto &e = Edges[G[u][i]];
+//            if (d[e.To] > d[u] + e.Dist)
+//            {
+//                d[e.To] = d[u] + e.Dist;
+//                p[e.To] = G[u][i];
+//                Q.push(HeapNode(d[e.To], e.To));
+//            }
+//        }
+//    }
+//
+//    for (int i = 1; i <= N; ++i)
+//    {
+//        std::cout << d[i] << ' ';
+//    }
+//    std::putchar('\n');
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <utility>
+//
+//int gcd(int a, int b)
+//{
+//    return b == 0 ? a : gcd(b, a % b);
+//}
+//
+//int main()
+//{
+//    int n, m;
+//    std::cin >> n >> m;
+//
+//    if (m < n - 1)
+//    {
+//        std::cout << "Impossible" << std::endl;
+//    }
+//    else if (m == n - 1)
+//    {
+//        std::cout << "Possible" << std::endl;
+//        for (int i = 2; i <= n; ++i)
+//        {
+//            std::cout << 1 << ' ' << i << std::endl;
+//        }
+//    }
+//    else
+//    {
+//        int Tol = 0;
+//        std::vector<std::pair<int, int>> Vec;
+//        for (int i = 2; i <= n; ++i)
+//        {
+//            for (int j = i + 1; j <= n; ++j)
+//            {
+//                if (gcd(i, j) == 1)
+//                {
+//                    Vec.push_back({ i, j });
+//                    if (++Tol == m - n + 1)
+//                    {
+//                        std::cout << "Possible" << std::endl;
+//                        for (int p = 2; p <= n; ++p)
+//                        {
+//                            std::cout << 1 << ' ' << p << std::endl;
+//                        }
+//                        for (const auto &r : Vec)
+//                        {
+//                            std::cout << r.first << ' ' << r.second << std::endl;
+//                        }
+//
+//                        return 0;
+//                    }
+//                }
+//            }
+//        }
+//
+//        std::cout << "Impossible" << std::endl;
+//    }
+//
+//    return 0;
+//}
+//// 首先我们可以观察到，x其实对于整个数组的元素之和没有太大调整空间，每次数组之和都加上x * n即可
+//// 然后我们再看d，由于d有正负之分，所以我们想要d为正的时候|i - j|尽量大，d为负的时候|i - j|尽量小
+//// 当d为正的时候，我们取的基准点j应该为1或者n，这样|i - j|就尽量大
+//// 当d为负的时候，我们取得基准点j应该为(n / 2)，这样|i - j|就尽量小
+//// 证明可以参考刘汝佳蓝书的第六页，有对于这个问题的详细说明
+//#include <iostream>
+//#include <iomanip>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    ll n, m;
+//    std::cin >> n >> m;
+//
+//    ll Sum = 0, Min = (n / 2) * (n / 2 + 1) - (n % 2 ? 0 : n / 2), Max = n * (n - 1) / 2;
+//    while (m--)
+//    {
+//        ll x, d;
+//        std::cin >> x >> d;
+//
+//        Sum += x * n;
+//        if (d > 0)
+//        {
+//            Sum += Max * d;
+//        }
+//        else
+//        {
+//            Sum += Min * d;
+//        }
+//    }
+//    std::cout << std::fixed << std::setprecision(15) << 1.0 * Sum / n << std::endl;
+//
+//    return 0;
+//}
+//// 本题就是用的贪心，道理跟楼上几位dalao说的一样，因为'1'可以随意动，所以'1'是一个可以被放到任意地方的字符
+//// 我们首先对该字符串遍历一遍，这一遍主要统计字符'1'的个数以及该字符串内是否存在'2'
+//// 然后我们遵循如下的贪心策略：
+//// 对该字符串进行遍历，遇到'0'就输出'0'，遇到'1'就跳过，直到遇到第一个'2'，我们就将所有的'1'输出，然后再输出一个'2'
+//// 再接着（先前已经把所有的'1'都输出了），遇到'0'就输出'0'，遇到'1'就跳过，遇到'2'就输出'2'
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    std::string Str;
+//    std::cin >> Str;
+//
+//    int One = 0, Zero = 0;
+//    bool HasTwo = false;
+//    for (const auto &c : Str)
+//    {
+//        if (c == '0')   // 统计'0'的个数
+//        {
+//            ++Zero;
+//        }
+//        else if (c == '1')   // 统计'1'的个数
+//        {
+//            ++One;
+//        }
+//        else if (c == '2')  // 统计是否有'2'
+//        {
+//            HasTwo = true;
+//        }
+//    }
+//
+//    if (!HasTwo)    // 如果没有'2'，那么就先输出所有的'0'，再输出所有的'1'，然后直接退出程序
+//    {
+//        for (int i = 0; i < Zero; ++i)
+//        {
+//            std::cout << 0;
+//        }
+//        for (int i = 0; i < One; ++i)
+//        {
+//            std::cout << 1;
+//        }
+//        std::cout << std::endl;
+//
+//        return 0;
+//    }
+//
+//    bool Met = false;   // 标记是否第一次遇见'2'
+//    for (const auto &c : Str)
+//    {
+//        if (c == '0')   // 遇到'0'则输出
+//        {
+//            std::cout << 0;
+//        }
+//        else if (c == '1')  // 遇到'1'则跳过
+//        {
+//            continue;
+//        }
+//        else if (c == '2')
+//        {
+//            if (!Met)   // 第一次遇到'2'，则输出所有的'1'，再输出一个'2'
+//            {
+//                Met = true;
+//
+//                for (int i = 0; i < One; ++i)
+//                {
+//                    std::cout << 1;
+//                }
+//                std::cout << 2;
+//            }
+//            else       // 不是第一次遇到'2'，则直接输出'2'
+//            {
+//                std::cout << 2;
+//            }
+//        }
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    std::string Str;
+//    std::cin >> Str;
+//    
+//    int One = 0, Two = 0;
+//    for (const auto &c : Str)
+//    {
+//        if (c == '0')
+//        {
+//            std::cout << 0;
+//            for (int i = 0; i < Two; ++i)
+//            {
+//                std::cout << 2;
+//            }
+//            Two = 0;
+//        }
+//        else if (c == '1')
+//        {
+//            ++One;
+//        }
+//        else if (c == '2')
+//        {
+//            ++Two;
+//
+//            for (int i = 0; i < One; ++i)
+//            {
+//                std::cout << 1;
+//            }
+//            One = 0;
+//        }
+//    }
+//    for (int i = 0; i < One; ++i)
+//    {
+//        std::cout << 1;
+//    }
+//    for (int i = 0; i < Two; ++i)
+//    {
+//        std::cout << 2;
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    for (int i = 0; i < 10; ++i)
+//    {
+//        for (int j = 0; j <= i; ++j)
+//        {
+//            std::cout << '*';
+//        }
+//        std::cout << std::endl;
+//
+//        if (i == 6)
+//        {
+//            break;
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    // std::cout << ((i & 1) ? "odd" : "even") << std::endl;
+//    int i = 31;
+//    if (i & 1)
+//    {
+//        std::cout << "odd" << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "even" << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    int i = 31; // 100000
+//    std::cout << ((i & 1) ? "odd" : "even") << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    std::cout << (1 << 5) << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    std::cout << "Please input i: " << std::endl;
+//
+//    int i;
+//    std::cin >> i;
+//    if (i <= 10)
+//    {
+//        std::cout << i << " <= " << 10 << std::endl;
+//    }
+//    else if (i >= 10 && i < 20)
+//    {
+//        std::cout << "10 <= " << i << " < 20" << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << i << " >= 20" << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    // bla bla...
+//    for (int i = 0; i < 10; ++i) // [0, 10)
+//    {
+//        std::cout << "I love you." << std::endl; 
+//        std::cout << "emmmm" << std::endl;
+//    }
+//
+//    std::cout << "-----------------------------------" << std::endl;
+//
+//    for (int i = 0; i < 10; ++i)
+//    {
+//        std::cout << "I love you." << std::endl;
+//    }
+//    std::cout << "emmmm" << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    constexpr int MaxN = 1000 + 5;
+//    std::array<int, MaxN> a{ 0 }, c{ 0 };
+//    int n, m;
+//    std::cin >> n >> m;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> c[i];
+//    }
+//    for (int i = 0; i < m; ++i)
+//    {
+//        std::cin >> a[i];
+//    }
+//
+//    int Now = 0, Ans = 0;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        if (c[i] <= a[Now])
+//        {
+//            ++Ans;
+//            ++Now;
+//        }
+//        if (Now >= m)
+//        {
+//            break;
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//// 首先要明确一下，如果按照题意里的每次都DFS一下，肯定会T，而且第二个点就T了，别问我是怎么知道的
+//// 然后，我们其实只需要DFS一遍，记录下每个节点被DFS访问到的时刻，然后再记录一下一个节点后面能访问到的节点总数，用以判断是否存在u后k个元素
+//#include <iostream>
+//#include <vector>
+//#include <array>
+//
+//constexpr int MaxN = 200000 + 5;
+//
+//std::array<std::vector<int>, MaxN> G;
+//std::array<int, MaxN> DFN{ 0 }, Size{ 0 }, Pos{ 0 };
+//
+//// DFN[x]: 节点x被DFS访问到的时刻
+//// Size[x]: 节点x下方有多少个节点（包括它自己）
+//// Pos[x]: DFS在x时刻访问到的节点编号
+//
+//int Clock = 0;  // DFS时钟
+//
+//void DFS(int p)
+//{
+//    Size[p] = 1;    // 一开始节点p及其下方节点就只有自己一个
+//    ++Clock;        // DFS访问时刻加一
+//    DFN[p] = Clock; // 记录下节点p被访问到的时刻
+//    Pos[Clock] = p; // 记录下该时刻访问到的是节点p
+//
+//    for (const auto &q : G[p])  // 遍历p的所有直接相接的子节点
+//    {
+//        DFS(q);
+//        Size[p] += Size[q];     // p下方的节点数等于p的所有子节点下方的节点数之和
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, q;
+//    std::cin >> n >> q;
+//
+//    for (int i = 2; i <= n; ++i)
+//    {
+//        int p;
+//        std::cin >> p;
+//        G[p].push_back(i);
+//    }
+//
+//    DFS(1); // 从根节点进行一遍DFS
+//
+//    while (q--)
+//    {
+//        int u, k;
+//        std::cin >> u >> k;
+//        if (Size[u] < k)    // 如果节点u下方的所有节点数都没有k大，那么这个查询是失败的
+//        {
+//            std::cout << -1 << std::endl;
+//        }
+//        else                // 否则计算出u后k - 1个节点的编号，因为自身也算一个
+//        {
+//            std::cout << Pos[DFN[u] + k - 1] << std::endl;
+//        }
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <array>
+//
+//constexpr int MaxN = 200000 + 5;
+//
+//std::array<std::vector<int>, MaxN> G;
+//
+//int u, k;
+//
+//bool ok = false;
+//
+//void DFS(int p)
+//{
+//    if (k > 0 && G[p].size() == 0)
+//    {
+//        return;
+//    }
+//    else
+//    {
+//        for (const auto &q : G[p])
+//        {
+//            --k;
+//            if (k == 0)
+//            {
+//                ok = true;
+//                std::cout << q << std::endl;
+//                return;
+//            }
+//            else
+//            {
+//                DFS(q);
+//            }
+//        }
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, q;
+//    std::cin >> n >> q;
+//    for (int i = 2; i <= n; ++i)
+//    {
+//        int p;
+//        std::cin >> p;
+//        G[p].push_back(i);
+//    }
+//
+//    while (q--)
+//    {
+//        std::cin >> u >> k;
+//        if (k == 1)
+//        {
+//            std::cout << u << std::endl;
+//        }
+//        else
+//        {
+//            ok = false;
+//
+//            --k;
+//            DFS(u);
+//
+//            if (!ok)
+//            {
+//                std::cout << -1 << std::endl;
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+//// 这一题用双指针，设一头一尾的指针为l和r，然后这两根指针不停地往中间移动，遇到头尾之和分别相等时则记录一下
+//// 中间移动的过程中注意一下何时移动一根指针，何时两根指针同时移动就很容易AC了
+//#include <iostream>
+//#include <algorithm>
+//#include <array>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 200000 + 5;
+//
+//std::array<int, MaxN> Arr{ 0 };
+//
+//ll Ans = 0;
+//
+//// 我们设DFS(l, r, sl, sr)为头指针指向Arr[l]，尾指针指向Arr[r]，此时头之和为sl，尾之和为sr
+//void DFS(int l, int r, ll sl, ll sr)
+//{
+//    if (sl == sr)   // 遇到头尾之和相等的情况
+//    {
+//        Ans = sl;   // 则记录一下目前的最大值（由于数列中所有数都是正数，可以保证每次遇到相等的情况都是目前为止的最优解）
+//
+//        if (l < r)  // 两根指针还没有相遇，则它们还能同时向中间进一步
+//        {
+//            DFS(l + 1, r - 1, sl + Arr[l], sr + Arr[r]);
+//        }
+//    }
+//    else if (l > r) // 递归终点
+//    {
+//        return;
+//    }
+//    else if (sl < sr)   // 头之和比较小，所以移动头指针
+//    {
+//        DFS(l + 1, r, sl + Arr[l], sr);
+//    }
+//    else if (sl > sr)   // 尾之和比较小，所以移动尾指针
+//    {
+//        DFS(l, r - 1, sl, sr + Arr[r]);
+//    }
+//    else    // 不知道还有什么奇奇怪怪的情况反正剪掉就是了
+//    {
+//        return;
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n;
+//    std::cin >> n;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> Arr[i];
+//    }
+//
+//    DFS(0, n - 1, 0, 0);    // 一头一尾开始搜，初始时头之和和尾之和都为0
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//// 这一题要求对字符串a（第一个字符串）进行修改（注意看题，我在这里WA了几遍）
+//// 于是我们将a、b字符串中的每个字符分组，一头一尾分为一组
+//// 具体说来就是将{a(i), a(l - i - 1), b(i), b(l - i - 1)}合并成一组
+//// 然后统计每一组中不同的字符的个数，通过对不同字符个数进行分类讨论得出答案
+//#include <iostream>
+//#include <unordered_map>
+//#include <string>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int l;
+//    std::cin >> l;
+//
+//    std::string Str1, Str2;
+//    std::cin >> Str1 >> Str2;
+//
+//    int Ans = 0;
+//    for (int i = 0; i < l / 2; ++i)
+//    {
+//        std::unordered_map<char, int> Map;
+//        ++Map[Str1[i]];
+//        ++Map[Str2[i]];
+//        ++Map[Str1[l - i - 1]];
+//        ++Map[Str2[l - i - 1]];
+//
+//        if (Map.size() == 2)    // 如果只有两个字符不同
+//        {
+//            if (Map[Str1[i]] != 2)  // 那就看看其中一个字符的个数是不是2，如果不是的话，证明一个字符是3，一个字符是1，则需要调整一个字符
+//            {
+//                ++Ans;
+//            }
+//        }
+//        else if (Map.size() == 3)   // 如果有三个字符不同
+//        {
+//            if (Str1[i] == Str1[l - i - 1]) // 看看a字符串头尾是否相等，是的话那么b字符串的头尾都得修改，就是2
+//            {
+//                Ans += 2;
+//            }
+//            else   // 如果a字符串头尾不相等，那么b字符串只需要修改一个字符即可
+//            {
+//                ++Ans;
+//            }
+//        }
+//        else if (Map.size() == 4)   // 如果四个字符都不想等，那就调两个字符出来修改，改成中心对称的形式
+//        {
+//            Ans += 2;
+//        }
+//    }
+//
+//    if (l & 1)  // 如果字符串的长度是奇数，那么中间的一对字符需要特殊地拿出来看一下，因为组不成四个字符一组了
+//    {
+//        if (Str1[l / 2] != Str2[l / 2]) // 不相等，还得再调整一个字符
+//        {
+//            ++Ans;
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <unordered_set>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int l;
+//    std::cin >> l;
+//
+//    std::string Str1, Str2;
+//    std::cin >> Str1 >> Str2;
+//
+//    int Ans = 0;
+//    for (int i = 0; i < l / 2; ++i)
+//    {
+//        if ((Str1[i] == Str1[l - i - 1] && Str2[i] == Str2[l - i - 1]) ||
+//            (Str1[i] == Str2[l - i - 1] && Str2[i] == Str1[l - i - 1]))
+//        {
+//            continue;
+//        }
+//        else if ((Str1[i] != Str2[i] && Str1[l - i - 1] == Str2[l - i - 1]) ||
+//                 (Str1[i] == Str2[i] && Str1[l - i - 1] != Str2[l - i - 1]))
+//        {
+//            ++Ans;
+//        }
+//        else if (Str1[i] != Str2[i] && Str1[l - i - 1] != Str2[l - i - 1])
+//        {
+//            std::unordered_set<char> Set;
+//            Set.insert({ Str1[i], Str2[i], Str1[l - i - 1], Str2[l - i - 1] });
+//
+//            if (Set.size() == 3)
+//            {
+//                if (Str1[i] == Str2[i] ||
+//                    Str1[l - i - 1] == Str2[l - i - 1] ||
+//                    Str1[i] == Str2[l - i - 1] ||
+//                    Str1[l - i - 1] == Str2[i])
+//                {
+//                    ++Ans;
+//                }
+//                else
+//                {
+//                    Ans += 2;
+//                }
+//            }
+//            else if (Set.size() == 4)
+//            {
+//                Ans += 2;
+//            }
+//        }
+//    }
+//
+//    if (l & 1)
+//    {
+//        if (Str1[l / 2] != Str2[l / 2])
+//        {
+//            ++Ans;
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//// 首先，我们能观察到这一题要求的最大获利就是数列前k大的数之和
+//// 通过排序，我们能找出前k大的数
+//// 然后，我们把这前k大的数的位置找出来，用它们来作为隔板分割数列
+//// 注意头尾的操作，开头记个0，尾部记个n
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//class Pair
+//{
+//public:
+//    int Key, Pos;   // 记在Pos位上的数为Key
+//
+//    Pair() = default;
+//    Pair(int k, int p)
+//        : Key(k), Pos(p)
+//    {
+//    }
+//
+//    bool operator<(const Pair &rhs) const noexcept
+//    {
+//        return Key > rhs.Key || (Key == rhs.Key && Pos < rhs.Pos);
+//    }
+//};
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, k;
+//    std::cin >> n >> k;
+//
+//    std::vector<Pair> Vec(n);
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int t;
+//        std::cin >> t;
+//        Vec[i] = Pair(t, i + 1);
+//    }
+//    std::sort(Vec.begin(), Vec.end());
+//
+//    int Ans = 0;    // 前k大的数之和
+//    for (int i = 0; i < k; ++i)
+//    {
+//        Ans += Vec[i].Key;
+//    }
+//    std::cout << Ans << std::endl;
+//
+//    std::vector<int> Arr(k);
+//    for (int i = 0; i < k; ++i)
+//    {
+//        Arr[i] = Vec[i].Pos;
+//    }
+//    std::sort(Arr.begin(), Arr.end());
+//
+//    int Last = 0;   // 开头记个0
+//    for (int i = 0; i < k - 1; ++i)
+//    {
+//        std::cout << Arr[i] - Last << ' ';  // 中间的直接两两相减即可
+//        Last = Arr[i];
+//    }
+//    std::cout << n - Last << std::endl; // 尾部记个n
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <map>
+//#include <algorithm>
+//#include <array>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int n, k;
+//    std::cin >> n >> k;
+//    std::multimap<int, int> Map;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int t;
+//        std::cin >> t;
+//        Map[t] = i;
+//    }
+//
+//    constexpr int MaxN = 2000 + 5;
+//    std::array<int, MaxN> Arr{ 0 };
+//    int Now = 0, Ans = 0;
+//    for (auto Iter = Map.crbegin(); Iter != Map.crend(); ++Iter)
+//    {
+//        Ans += Iter->first;
+//        Arr[Now] = Iter->second;
+//        ++Now;
+//        if (Now == k)
+//        {
+//            break;
+//        }
+//    }
+//    Arr[Now] = n;
+//
+//    std::cout << Ans << std::endl;
+//
+//    std::sort(Arr.begin(), Arr.begin() + k);
+//    for (int i = 1; i <= k; ++i)
+//    {
+//        std::cout << Arr[i] - Arr[i - 1] << ' ';
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//// 直接找规律：发现每次先处理奇数再处理偶数，所以奇数由奇->偶->奇，偶数由偶->奇
+//// 因此奇数不变，偶数减一既是答案
+//#include <iostream>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int T;
+//    std::cin >> T;
+//    while (T--)
+//    {
+//        int n;
+//        std::cin >> n;
+//        std::cout << (n & 1 ? n : n - 1) << ' ';
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//// 多拿几个串试一遍就知道，最后状态必然形如：bbb...bbaa...a
+//// 我们逆序处理该字符串，如果遇到一个'a'，那么就看一下它之前有几个'b'，答案就加上几个，同时'b'的数量要翻倍
+//// 如果遇到一个'b'，那么'b'的数量就加一，同时答案保持不变
+//// 因为与'a'直接相邻的'b'的数量则是要被替换成"bba"的次数，然后每次做完这些替换之后'b'的个数会翻倍
+//// 最后，要注意取模
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    constexpr int MOD = 1000000000 + 7;
+//
+//    int Ans = 0, b = 0;
+//
+//    std::string Str;
+//    std::cin >> Str;
+//    for (auto Iter = Str.crbegin(); Iter != Str.crend(); ++Iter)
+//    {
+//        if (*Iter == 'a')
+//        {
+//            Ans = (Ans + b) % MOD;
+//            b = b * 2 % MOD;
+//        }
+//        else if (*Iter == 'b')
+//        {
+//            ++b;
+//        }
+//    }
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//// 这是一个贪心题
+//// 每次都尽量走(i + j == n + 1)的点对，实在不行就走(i + j == n + 2)的
+//// 那么就有一半的边能取0，一半的边能取1，然后总共(n - 1)条边，答案便是(n - 1) / 2
+//#include <iostream>
+//
+//int main()
+//{
+//    int n;
+//    std::cin >> n;
+//    std::cout << (n - 1) / 2 << std::endl;
+//
+//    return 0;
+//}
+//// 这一题只要构造一个合适的循环节即可，题中要求'c'的数量尽量小，我们可以尝试完全不使用'c'
+//// 在草稿纸上多试几遍就能找到属于你的循环节了，不唯一
+//// 我构造的循环节如下：abba abba abba ...
+//#include <iostream>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    std::cout.tie(nullptr);
+//
+//    int Length;
+//    std::cin >> Length;
+//    for (int i = 0; i < Length; ++i)
+//    {
+//        switch (i % 4)
+//        {
+//        case 0: case 3:
+//            std::cout << 'a';
+//            break;
+//
+//        case 1: case 2:
+//            std::cout << 'b';
+//            break;
+//
+//        default:
+//            break;
+//        }
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//// 这一题其实特别水，我一开始就是被样例吓到了，其实再仔细读题会发现如果有多个答案，那就随意输出一个
+//// 我们都知道一个>=2的整数要么是奇数要么是偶数，所以2这个因子占的比例是最高的
+//// 但是有个例外，就是[质数，质数]的情况，而且区间长度为1，那么就直接输出端点即可，否则就输出2
+//#include <iostream>
+//
+//int main()
+//{
+//    int a, b;
+//    std::cin >> a >> b;
+//    std::cout << (a == b ? a : 2) << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//constexpr int MaxN = 100000 + 5;
+//
+//std::array<int, MaxN> Arr{ 0 };
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//
+//    int n;
+//    std::cin >> n;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> Arr[i];
+//    }
+//
+//    std::sort(Arr.begin(), Arr.begin() + n);
+//
+//    int Now = 0;
+//    for (int i = 1; i < n; ++i)
+//    {
+//        if (Arr[i] > Arr[0])
+//        {
+//            Now = i;
+//            break;
+//        }
+//    }
+//
+//    int Ans = 0;
+//    if (Now < n)
+//    {
+//        for (int i = 0; i < n; ++i)
+//        {
+//            while (Now < n && Arr[Now] <= Arr[i])
+//            {
+//                ++Now;
+//            }
+//
+//            if (Now > n)
+//            {
+//                break;
+//            }
+//            if (Arr[Now] > Arr[i])
+//            {
+//                ++Ans;
+//                ++Now;
+//            }
+//        }
+//    }
+//
+//    std::cout << Ans << std::endl;
+//
+//    return 0;
+//}
+//// 来自yyf的一句话题意：判断一个字符串是不是除了'n'这个辅音后面总是跟着一个元音字母
+//#include <iostream>
+//#include <string>
+//
+//bool OK(char c) // 判断字母c是否为元音字母
+//{
+//    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+//    {
+//        return true;
+//    }
+//    else
+//    {
+//        return false;
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//
+//    std::string Str;
+//    std::cin >> Str;
+//
+//    // 继续默读来自yyf的一句话题意：判断一个字符串是不是除了'n'这个辅音后面总是跟着一个元音字母
+//    for (std::size_t i = 0; i < Str.size(); ++i)
+//    {
+//        if (OK(Str[i])) // 如果是元音字母，则不考虑
+//        {
+//            continue;
+//        }
+//        else if (Str[i] == 'n') // 如果是辅音字母但是是'n'，则不考虑
+//        {
+//            continue;
+//        }
+//        else if (i != Str.size() - 1 && OK(Str[i + 1])) // 否则需要在辅音后面跟一个元音字母
+//        {
+//            continue;
+//        }
+//        else   // 都不符合前面的条件则说明不是Berlanese
+//        {
+//            std::cout << "NO" << std::endl;
+//            return 0;
+//        }
+//    }
+//    std::cout << "YES" << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//int main()
+//{
+//    int t;
+//    std::cin >> t;
+//    
+//    --t;
+//
+//    int a, b;
+//    std::cin >> a >> b;
+//    int min = std::max(a, b);
+//
+//    while (t--)
+//    {
+//        std::cin >> a >> b;
+//        if (min >= std::max(a, b))
+//        {
+//            min = std::max(a, b);
+//        }
+//        else if (min >= a && min <= b)
+//        {
+//            min = a;
+//        }
+//        else if (min >= b && min <= a)
+//        {
+//            min = b;
+//        }
+//        else
+//        {
+//            std::cout << "NO" << std::endl;
+//            return 0;
+//        }
+//    }
+//    std::cout << "YES" << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <cctype>
+//
+//bool OK(char c)
+//{
+//    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+//    {
+//        return true;
+//    }
+//    else
+//    {
+//        return false;
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    
+//    std::string Str;
+//    std::cin >> Str;
+//    for (std::size_t i = 0; i < Str.size(); ++i)
+//    {
+//        Str[i] = static_cast<char>(std::tolower(Str[i]));
+//    }
+//
+//    if (!OK(Str.back()) && Str.back() != 'n')
+//    {
+//        std::cout << "NO" << std::endl;
+//        return 0;
+//    }
+//    else
+//    {
+//        for (std::size_t i = 0; i < Str.size(); i += 2)
+//        {
+//            if (!OK(Str[i]) && Str[i] != 'n' && OK(Str[i + 1]))
+//            {
+//                continue;
+//            }
+//            else if (Str[i] == 'n')
+//            {
+//                continue;
+//            }
+//            else
+//            {
+//                std::cout << "NO" << std::endl;
+//                return 0;
+//            }
+//        }
+//    }
+//
+//    std::cout << "YES" << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <algorithm>
+//
+//std::array<int, 5> s1, s2, s3, s4;
+//
+//bool Check1(int i, int j)
+//{
+//    if (i >= std::min(s1[1], s1[3]) && i <= std::max(s1[1], s1[3]) 
+//     && j >= std::min(s2[1], s2[3]) && j <= std::max(s2[1], s2[3]))
+//    {
+//        return true;
+//    }
+//    else
+//    {
+//        return false;
+//    }
+//}
+//
+//bool Check2(int i, int j)
+//{
+//    int x = (s3[1] + s3[3]) / 2;
+//    int y = (s4[1] + s4[3]) / 2;
+//    if (std::abs(i - x) + std::abs(j - y) <= std::max(std::abs(s3[1] - x), std::abs(s3[2] - x)))
+//    {
+//        return true;
+//    }
+//    else
+//    {
+//        return false;
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//
+//    for (int i = 1; i <= 4; ++i)
+//    {
+//        std::cin >> s1[i] >> s2[i];
+//    }
+//    for (int i = 1; i <= 4; ++i)
+//    {
+//        std::cin >> s3[i] >> s4[i];
+//    }
+//
+//    for (int i = -100; i <= 100; ++i)
+//    {
+//        for (int j = -100; j <= 100; ++j)
+//        {
+//            if (Check1(i, j) && Check2(i, j))
+//            {
+//                std::cout << "YES" << std::endl;
+//                return 0;
+//            }
+//        }
+//    }
+//    std::cout << "NO" << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <array>
+//
+//constexpr double EPS = 1e-3;
+//
+//class Point
+//{
+//public:
+//    double p1, p2;
+//
+//    Point() = default;
+//    Point(double p1, double p2)
+//        : p1(p1), p2(p2)
+//    {
+//    }
+//
+//    bool operator<(const Point &rhs) const
+//    {
+//        return p1 < rhs.p1 || (std::abs(p1 - rhs.p1) <= EPS && p2 <= rhs.p2);
+//    }
+//};
+//
+//bool Check(double p1, double p2, const std::array<Point, 4> &s)
+//{
+//    if (p1 >= s[0].p1 && p1 <= s[2].p1 && p2 >= s[0].p2 && p2 <= s[1].p2)
+//    {
+//        return true;
+//    }
+//    else
+//    {
+//        return false;
+//    }
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//    
+//    std::array<Point, 4> s1, s2;
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        std::cin >> s1[i].p1 >> s1[i].p2;
+//    }
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        std::cin >> s2[i].p1 >> s2[i].p2;
+//    }
+//
+//    std::sort(s1.begin(), s1.begin() + 4);
+//    std::sort(s2.begin(), s2.begin() + 4);
+//
+//    bool f1 = false;
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        if (Check(s2[i].p1, s2[i].p2, s1))
+//        {
+//            f1 = true;
+//            break;
+//        }
+//    }
+//
+//    const double cos45 = std::sqrt(2.0) / 2.0, sin45 = -1.0 * std::sqrt(2.0) / 2.0;
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        auto x = s1[i].p1, y = s1[i].p2;
+//        s1[i].p1 = x * cos45 + y * sin45;
+//        s1[i].p2 = y * cos45 - x * sin45;
+//    }
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        auto x = s2[i].p1, y = s2[i].p2;
+//        s2[i].p1 = x * cos45 + y * sin45;
+//        s2[i].p2 = y * cos45 - x * sin45;
+//    }
+//
+//    std::sort(s1.begin(), s1.begin() + 4);
+//    std::sort(s2.begin(), s2.begin() + 4);
+//
+//    bool f2 = false;
+//    for (int i = 0; i < 4; ++i)
+//    {
+//        if (Check(s1[i].p1, s1[i].p2, s2))
+//        {
+//            f2 = true;
+//            break;
+//        }
+//    }
+//
+//    if (f1 || f2)
+//    {
+//        std::cout << "YES" << std::endl;
+//    }
+//    else
+//    {
+//        std::cout << "NO" << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <cmath>
+//
+//constexpr double EPS = 1e-5;
+//
+//bool Check(double p1, double p2, std::array<double, 6> &s)
+//{
+//    ;
+//}
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//
+//    std::array<double, 6> s1, s2;
+//    for (int i = 0; i < 6; ++i)
+//    {
+//        std::cin >> s1[i];
+//    }
+//    for (int i = 0; i < 6; ++i)
+//    {
+//        std::cin >> s2[i];
+//    }
+//}
+//#include <iostream>
+//#include <queue>
+//#include <array>
+//#include <vector>
+//#include <algorithm>
+//
+//using ll = long long;
+//
+//constexpr int MaxN = 100000 + 10;
+//
+//std::array<ll, MaxN> Ans{ 0 };
+//
+//class Knight
+//{
+//public:
+//    int p, c, i;
+//
+//    Knight() = default;
+//    Knight(int p, int c, int i)
+//        : p(p), c(c), i(i)
+//    {
+//    }
+//};
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//
+//    int n, k;
+//    std::cin >> n >> k;
+//
+//    std::vector<Knight> K;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int p;
+//        std::cin >> p;
+//        K.emplace_back(p, 0, i);
+//    }
+//    for (int i = 0; i < n; ++i)
+//    {
+//        int c;
+//        std::cin >> c;
+//        K[i].c = c;
+//    }
+//    std::sort(K.begin(), K.end(), [](const Knight &l, const Knight &r)
+//    {
+//        return l.p < r.p;
+//    });
+//
+//    auto cmp = [](const Knight &l, const Knight &r)
+//    {
+//        return l.c < r.c;
+//    };
+//    std::priority_queue<Knight, std::vector<Knight>, decltype(cmp)> pq(cmp);
+//
+//    std::vector<Knight> Temp;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        if (i == 0)
+//        {
+//            Ans[K[i].i] = K[i].c;
+//            pq.push(K[i]);
+//        }
+//        else if (i > 0 && i < k)
+//        {
+//            Ans[K[i].i] = Ans[K[i - 1].i] + K[i].c;
+//            pq.push(K[i]);
+//        }
+//        else
+//        {
+//            auto t = K[i];
+//
+//            for (int j = 0; j < k; ++j)
+//            {
+//                Ans[K[i].i] += pq.top().c;
+//                Temp.push_back(pq.top());
+//                pq.pop();
+//            }
+//            for (int j = 0; j < k; ++j)
+//            {
+//                pq.push(Temp.back());
+//                Temp.pop_back();
+//            }
+//            Ans[K[i].i] += K[i].c;
+//
+//            pq.push(t);
+//        }
+//    }
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cout << Ans[i] << ' ';
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <array>
+//#include <tuple>
+//#include <algorithm>
+//#include <vector>
+//
+//int main()
+//{
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//
+//    int n, q;
+//    std::cin >> n >> q;
+//
+//    std::vector<std::tuple<int, int, int>> Q;   // 端点对<l, r, x>的集合
+//    for (int i = 0; i < q; ++i)
+//    {
+//        int l, r, x;
+//        std::cin >> l >> r >> x;
+//        Q.push_back({ l, r, x });
+//    }
+//    std::sort(Q.begin(), Q.end(), [](const auto &l, const auto &r) // 按右端点从小到大进行排序
+//    {
+//        return std::get<1>(l) < std::get<1>(r);
+//    });
+//
+//    constexpr int MaxN = 10000 + 5;
+//    std::array<int, MaxN> dp{ 0 };
+//
+//    // dp[i]表示数字i能够达到的最右边的端点位置，如果数字i无法取得则为0
+//    // 起始状态是dp[0] = n，因为一开始全是0，0本身就能达到最右的端点n
+//    dp[0] = n;
+//    for (int i = 0; i < q; ++i) // 排序之后遍历每一个区间
+//    {
+//        const auto &[l, r, x] = Q[i];
+//
+//        for (int j = n; j >= x; --j)    // 由于不能超过n，所以从n往下循环，但到底的时候j - x不能小于零，因此下界是x
+//        {
+//            if (dp[j - x] >= l) // 如果左端点小于j - x能在的最右位置，说明j - x有可能被这个加上的x更新。然后我们有两种更新方式：
+//            {
+//                if (dp[j - x] <= r) // 如果当前区间能够包含j - x所在的最右端点，说明j - x可以被更新为j，那么就看一下更新之后是否能延申j的最右端
+//                {
+//                    dp[j] = std::max(dp[j], dp[j - x]);
+//                }
+//                else // 如果当前区间不能包含j - x，那就看看能不能更新x的位置，由于r以按从小到大排序，所以直接赋值r就行了，它是递增的
+//                {
+//                    dp[x] = r;
+//                }
+//            }
+//        }
+//    }
+//
+//    int Ans = 0;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        if (dp[i])  // 统计能达到的数字有多少个，因为按照原先的约定，无法取得的数字右端点被设为了0
+//        {
+//            ++Ans;
+//        }
+//    }
+//
+//    // 按题意输出
+//    std::cout << Ans << std::endl;
+//    for (int i = 1; i <= n; ++i)
+//    {
+//        if (dp[i])
+//        {
+//            std::cout << i << ' ';
+//        }
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//// 数据范围太小了，两重循环都直接过，就是按顺序挨个判断一遍是否出现就行了
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//    std::array<int, 10 + 5> A{ 0 }, B{ 0 };
+//
+//    std::ios::sync_with_stdio(false);
+//    std::cin.tie(nullptr);
+//
+//    int n, m;
+//    std::cin >> n >> m;
+//    for (int i = 0; i < n; ++i)
+//    {
+//        std::cin >> A[i];
+//    }
+//    for (int i = 0; i < m; ++i)
+//    {
+//        std::cin >> B[i];
+//    }
+//
+//    for (int i = 0; i < n; ++i)
+//    {
+//        for (int j = 0; j < m; ++j)
+//        {
+//            if (A[i] == B[j])
+//            {
+//                std::cout << A[i] << ' ';
+//            }
+//        }
+//    }
+//    std::cout << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <set>
+//#include <utility>
+//#include <vector>
+//
+//using Pair = std::pair<int, std::set<int>>;
+//
+//int main()
+//{
+//    std::vector<Pair> P;
+//    P.emplace_back(1, std::set<int>{1, 2, 4});
+//    for (const auto &r : P.front().second)
+//    {
+//        std::cout << r << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//class Component
+//{
+//public:
+//    Component()
+//    {
+//        std::cout << "Component" << std::endl;
+//    }
+//    ~Component()
+//    {
+//        std::cout << "~Component" << std::endl;
+//    }
+//};
+//
+//class Base
+//{
+//public:
+//    Base()
+//    {
+//        std::cout << "Base" << std::endl;
+//    }
+//    ~Base()
+//    {
+//        std::cout << "~Base" << std::endl;
+//    }
+//};
+//
+//class Derived : public Base
+//{
+//public:
+//    Derived()
+//    {
+//        std::cout << "Derived" << std::endl;
+//    }
+//    ~Derived()
+//    {
+//        std::cout << "~Derived" << std::endl;
+//    }
+//
+//private:
+//    Component component;
+//};
+//
+//int main()
+//{
+//    Derived derived;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <fstream>
+//#include <filesystem>
+//
+//namespace fs = std::filesystem;
+//
+//int main()
+//{
+//    fs::create_directory("sandbox");
+//    std::ofstream("sandbox/file1.txt").put('o');
+//    fs::copy_file("sandbox/file1.txt", "sandbox/file2.txt");
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <numeric>
+//
+//int main()
+//{
+//    std::cout << std::gcd(100, 893) << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//    std::cout << __cplusplus << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//int gcd(int a, int b)
+//{
+//    if (a < b)
+//    {
+//        std::swap(a, b);
+//    }
+//    
+//    if (b == 0)
+//    {
+//        return a;
+//    }
+//    else if ((a & 1) == 0 && (b & 1) == 0)
+//    {
+//        return gcd(a >> 1, b >> 1) << 1;
+//    }
+//    else if ((a & 1) == 0 && (b & 1) != 0)
+//    {
+//        return gcd(a >> 1, b);
+//    }
+//    else if ((a & 1) != 0 && (b & 1) == 0)
+//    {
+//        return gcd(a, b >> 1);
+//    }
+//    else
+//    {
+//        return gcd(a - b, b);
+//    }
+//}
+//
+//int main()
+//{
+//    std::cout << gcd(5, 3) << std::endl;
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <numeric>
+//
+//int main()
+//{
+//    std::cout << std::gcd(5, 10) << std::endl;
+//
+//    if (std::gcd(5, 10) <= 10)
+//    {
+//        std::cout << "!= <= >= <> ++ +++ *** ***" << std::endl;
+//    }
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//enum class Light : int
+//{
+//    Blue = 10,
+//    Red = 20,
+//    Yellow = 30,
+//};
+//
+//int main()
+//{
+//    auto Temp = Light::Red;
+//    switch (Temp)
+//    {
+//    case Light::Blue:
+//        break;
+//    case Light::Red:
+//        std::cout << "Caught" << std::endl;
+//        break;
+//    case Light::Yellow:
+//        break;
+//    default:
+//        break;
+//    }
+//
+//    return 0;
+//}
 //#include <iostream>
 //
 //int main()
