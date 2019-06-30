@@ -1,3 +1,6315 @@
+#include <iostream>
+#include <vector>
+
+template <typename T>
+void Print(const T &t)
+{
+	std::cout << t;
+}
+
+template <typename T>
+void Print(const std::vector<T> &Vec)
+{
+	for (const auto &r : Vec)
+	{
+		std::cout << r << ' ';
+	}
+}
+
+int main()
+{
+	std::vector Vec{ { 1, 2, 3, 4, 5 } };
+	Print(Vec);
+
+	return 0;
+}
+//#include <iostream>
+//#include <type_traits>
+//#include <typeinfo>
+//#include <vector>
+//
+//template <typename ...T>
+//struct TellMeaningOf;
+//
+//template <typename T>
+//struct TellMeaningOf<T>
+//{
+//	void operator()() noexcept
+//	{
+//		if constexpr (!std::is_const_v<T> && std::is_fundamental_v<T>)
+//		{
+//			std::cout << typeid(T).name();
+//		}
+//		else
+//		{
+//			std::cout << typeid(T).name();
+//		}
+//	}
+//};
+//
+//template <>
+//struct TellMeaningOf<>
+//{
+//	void operator()() noexcept
+//	{
+//		std::cout << "void";
+//	}
+//};
+//
+//template <typename ReturnT, typename ...ParaT>
+//struct TellMeaningOf<ReturnT(ParaT...)>
+//{
+//	void operator()() noexcept
+//	{
+//		std::cout << "function (";
+//		TellMeaningOf<ParaT...>()();
+//		std::cout << ") returning ";
+//		TellMeaningOf<ReturnT>()();
+//	}
+//};
+//
+//template <typename First, typename ...Last>
+//struct TellMeaningOf<First, Last...>
+//{
+//	void operator()() noexcept
+//	{
+//		TellMeaningOf<First>()();
+//		std::cout << ", ";
+//		TellMeaningOf<Last...>()();
+//	}
+//};
+//
+//template <typename T>
+//struct TellMeaningOf<T*>
+//{
+//	void operator()() noexcept
+//	{
+//		std::cout << "pointer to ";
+//		TellMeaningOf<T>()();
+//	}
+//};
+//
+//template <typename T>
+//struct TellMeaningOf<const T*>
+//{
+//	void operator()() noexcept
+//	{
+//		std::cout << "pointer to const ";
+//		TellMeaningOf<T>()();
+//	}
+//};
+//
+//template <typename T>
+//struct TellMeaningOf<const T>
+//{
+//	void operator()() noexcept
+//	{
+//		std::cout << "const ";
+//		TellMeaningOf<T>()();
+//	}
+//};
+//
+//template <typename T, std::size_t N>
+//struct TellMeaningOf<T[N]>
+//{
+//	void operator()() noexcept
+//	{
+//		std::cout << "array " << N << " of ";
+//		TellMeaningOf<T>()();
+//	}
+//};
+//
+//int main()
+//{
+//	TellMeaningOf<int(*(*)(void))[3]>()();
+//	std::cout << std::endl;
+//
+//	TellMeaningOf<int(int(char), double)>()();
+//	std::cout << std::endl;
+//
+//	auto Lambda = []()
+//	{
+//		return 0;
+//	};
+//	TellMeaningOf<decltype(Lambda)>()();
+//	std::cout << std::endl;
+//
+//	TellMeaningOf<std::vector<int>(*(*)(void))[3]>()();
+//	std::cout << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int a[6] = { 0, 1, 2, 3, 4, 5 };
+//
+//	for (const auto &i : *(int (*)[5])(a + 1))
+//	{
+//		std::cout << i << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	std::cout << abs(-9.99) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int gcd(int a, int b)
+//{
+//	return b == 0 ? a : gcd(b, a % b);
+//}
+//
+//int main()
+//{
+//	int a = 2264, b = 1268;
+//	int c = gcd(a, b);
+//	std::cout << a / c << '/' << b / c << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <memory>
+//
+//class Amount
+//{
+//public:
+//	Amount() = default;
+//	Amount(double Money)
+//		: Money(Money)
+//	{
+//	}
+//
+//	virtual std::string GetName() const noexcept = 0;
+//	
+//	std::shared_ptr<Amount> SetNext(const std::shared_ptr<Amount> &Next)
+//	{
+//		return Ptr = Next;
+//	}
+//
+//	void Pay(double Price)
+//	{
+//		if (Money >= Price)
+//		{
+//			std::cout << "Paid " << Price << " using " << GetName() << std::endl;
+//		}
+//		else if (Ptr)
+//		{
+//			std::cout << "Can't pay using " << GetName() << ", using next." << std::endl;
+//			Ptr->Pay(Price);
+//		}
+//		else
+//		{
+//			std::cout << "Oh too expensive!" << std::endl;
+//		}
+//	}
+//
+//private:
+//	double Money;
+//	std::shared_ptr<Amount> Ptr = nullptr;
+//};
+//
+//class Taobao : public Amount
+//{
+//public:
+//	Taobao() = default;
+//	Taobao(double Money)
+//		: Amount(Money)
+//	{
+//	}
+//
+//	virtual std::string GetName() const noexcept override
+//	{
+//		return "Taobao";
+//	}
+//};
+//
+//class Alipay : public Amount
+//{
+//public:
+//	Alipay() = default;
+//	Alipay(double Money)
+//		: Amount(Money)
+//	{
+//	}
+//
+//	virtual std::string GetName() const noexcept override
+//	{
+//		return "Alipay";
+//	}
+//};
+//
+//class Bank : public Amount
+//{
+//public:
+//	Bank() = default;
+//	Bank(double Money)
+//		: Amount(Money)
+//	{
+//	}
+//
+//	virtual std::string GetName() const noexcept override
+//	{
+//		return "Bank";
+//	}
+//};
+//
+//int main()
+//{
+//	auto _Bank = std::make_shared<Bank>(100);
+//	_Bank->SetNext(std::make_shared<Taobao>(200))->SetNext(std::make_shared<Alipay>(300));
+//	_Bank->Pay(99);
+//	_Bank->Pay(199);
+//	_Bank->Pay(299);
+//	_Bank->Pay(399);
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//class Fruit
+//{
+//public:
+//	virtual void Eat() const = 0;
+//};
+//
+//class Apple : public Fruit
+//{
+//public:
+//	virtual void Eat() const override
+//	{
+//		std::cout << "Eat apple." << std::endl;
+//	}
+//};
+//
+//class BoomApple
+//{
+//public:
+//	BoomApple() = default;
+//	BoomApple(Fruit &SimpleApple)
+//		: SimpleApple{ SimpleApple }
+//	{
+//	}
+//
+//	void Eat(const std::string &Password) const
+//	{
+//		if (Password == "Password")
+//		{
+//			SimpleApple.Eat();
+//		}
+//		else
+//		{
+//			std::cout << "Boom boom!" << std::endl;
+//		}
+//	}
+//
+//private:
+//	Fruit& SimpleApple;
+//};
+//
+//int main()
+//{
+//	Apple SimpleApple;
+//	BoomApple UnusualApple{ SimpleApple };
+//	UnusualApple.Eat("NoPassword");
+//	UnusualApple.Eat("Password");
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <unordered_map>
+//#include <string>
+//
+//class Fruit
+//{
+//public:
+//	Fruit() = default;
+//	Fruit(const std::string &Name)
+//		: Name(Name)
+//	{
+//	}
+//
+//	std::string GetName() const noexcept
+//	{
+//		return Name;
+//	}
+//
+//private:
+//	std::string Name;
+//};
+//
+//class FruitProvider
+//{
+//public:
+//	Fruit* Make(const std::string &Name)
+//	{
+//		if (FruitBucket.find(Name) != FruitBucket.end())
+//		{
+//			return FruitBucket[Name];
+//		}
+//		else
+//		{
+//			return FruitBucket[Name] = new Fruit(Name);
+//		}
+//	}
+//
+//private:
+//	std::unordered_map<std::string, Fruit*> FruitBucket;
+//};
+//
+//class FruitShop
+//{
+//public:
+//	FruitShop() = default;
+//	FruitShop(const FruitProvider &Provider)
+//		: Provider(Provider)
+//	{
+//	}
+//
+//	void TakeOrder(const std::string &Name, int Customer)
+//	{
+//		Things[Customer] = Provider.Make(Name);
+//	}
+//
+//	void Serve() const noexcept
+//	{
+//		for (const auto &r : Things)
+//		{
+//			std::cout << r.first << ' ' << r.second->GetName() << std::endl;
+//		}
+//	}
+//
+//private:
+//	std::unordered_map<int, Fruit*> Things;
+//
+//	FruitProvider Provider;
+//};
+//
+//int main()
+//{
+//	FruitProvider Provider;
+//	FruitShop Shop(Provider);
+//	Shop.TakeOrder("Apple", 1);
+//	Shop.TakeOrder("Banana", 2);
+//	Shop.TakeOrder("Orange", 3);
+//	Shop.TakeOrder("Lemon", 4);
+//	Shop.Serve();
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class Go
+//{
+//public:
+//	void Up1()
+//	{
+//		std::cout << "Up1" << std::endl;
+//	}
+//
+//	void Up2()
+//	{
+//		std::cout << "Up2" << std::endl;
+//	}
+//
+//	void Up3()
+//	{
+//		std::cout << "Up3" << std::endl;
+//	}
+//
+//	void Down1()
+//	{
+//		std::cout << "Down1" << std::endl;
+//	}
+//
+//	void Down2()
+//	{
+//		std::cout << "Down2" << std::endl;
+//	}
+//
+//	void Down3()
+//	{
+//		std::cout << "Down3" << std::endl;
+//	}
+//};
+//
+//class GoFacede
+//{
+//private:
+//	Go TrueGo;
+//
+//public:
+//	GoFacede() = default;
+//	GoFacede(const Go& rhs)
+//		: TrueGo(rhs)
+//	{
+//	}
+//
+//	void Up()
+//	{
+//		TrueGo.Up1();
+//		TrueGo.Up2();
+//		TrueGo.Up3();
+//	}
+//
+//	void Down()
+//	{
+//		TrueGo.Down1();
+//		TrueGo.Down2();
+//		TrueGo.Down3();
+//	}
+//};
+//
+//int main()
+//{
+//	Go TrueGo;
+//	GoFacede FakeGo(TrueGo);
+//	FakeGo.Up();
+//	FakeGo.Down();
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class Widget
+//{
+//public:
+//	virtual void Draw() = 0;
+//};
+//
+//class TextField : public Widget
+//{
+//private:
+//	int Width, Height;
+//
+//public:
+//	TextField() = default;
+//	TextField(int w, int h)
+//		: Width(w), Height(h)
+//	{
+//	}
+//
+//	virtual void Draw() override
+//	{
+//		std::cout << "TextField: " << Width << ' ' << Height << std::endl;
+//	}
+//};
+//
+//class Decorator : public Widget
+//{
+//private:
+//	Widget *w;
+//
+//public:
+//	Decorator() = default;
+//	Decorator(Widget *w)
+//		: w(w)
+//	{
+//	}
+//
+//	virtual void Draw() override
+//	{
+//		w->Draw();
+//	}
+//};
+//
+//class BorderDecorator : public Decorator
+//{
+//public:
+//	BorderDecorator() = default;
+//	BorderDecorator(Widget *w)
+//		: Decorator(w)
+//	{
+//	}
+//
+//	virtual void Draw() override
+//	{
+//		Decorator::Draw();
+//		std::cout << "BorderDecorator" << std::endl;
+//	}
+//};
+//
+//class ScrollDecorator : public Decorator
+//{
+//public:
+//	ScrollDecorator() = default;
+//	ScrollDecorator(Widget *w)
+//		: Decorator(w)
+//	{
+//	}
+//
+//	virtual void Draw() override
+//	{
+//		Decorator::Draw();
+//		std::cout << "ScrollDecorator" << std::endl;
+//	}
+//};
+//
+//int main()
+//{
+//	(new BorderDecorator
+//		(new ScrollDecorator
+//			(new BorderDecorator
+//				(new BorderDecorator
+//					(new TextField(10, 20))))))
+//	->Draw();
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//
+//class Person
+//{
+//private:
+//	std::string Name;
+//
+//public:
+//	Person() = default;
+//	Person(const std::string &Name)
+//		: Name(Name)
+//	{
+//	}
+//
+//	void TellName() const
+//	{
+//		std::cout << Name << std::endl;
+//	}
+//};
+//
+//class Man : public Person
+//{
+//public:
+//	Man() = default;
+//	Man(const std::string &Name)
+//		: Person(Name)
+//	{
+//	}
+//};
+//
+//class Woman : public Person
+//{
+//public:
+//	Woman() = default;
+//	Woman(const std::string &Name)
+//		: Person(Name)
+//	{
+//	}
+//};
+//
+//int main()
+//{
+//	std::vector<Person*> Persons;
+//	Persons.push_back(new Man("Man"));
+//	Persons.push_back(new Woman("Woman"));
+//	Persons.push_back(new Person("Person"));
+//
+//	for (const auto &r : Persons)
+//	{
+//		r->TellName();
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <thread>
+//
+//int main()
+//{
+//	std::thread Thread1([]()
+//	{
+//		for (int i = 0; i < 10; ++i)
+//		{
+//			std::cout << "Thread1\n";
+//		}
+//	});
+//	std::thread Thread2([]()
+//	{
+//		for (int i = 0; i < 10; ++i)
+//		{
+//			std::cout << "Thread2\n";
+//		}
+//	});
+//	std::thread Thread3([]()
+//	{
+//		for (int i = 0; i < 10; ++i)
+//		{
+//			std::cout << "Thread3\n";
+//		}
+//	});
+//
+//	Thread1.join();
+//	Thread2.join();
+//	Thread3.join();
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//constexpr int MaxN = 100;
+//char Map[MaxN][MaxN];
+//
+//void Print(int i, int j)
+//{
+//	if (Map[i][j] == '.' && Map[i - 1][j] == '.'
+//     && Map[i + 1][j] == '.' && Map[i][j - 1] == '.' && Map[i][j + 1] == '.')
+//	{
+//		Map[i][j] = '#';
+//		Map[i + 1][j] = '#';
+//		Map[i - 1][j] = '#';
+//		Map[i][j - 1] = '#';
+//		Map[i][j + 1] = '#';
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			std::cin >> Map[i][j];
+//		}
+//	}
+//
+//	for (int i = 1; i < n - 1; ++i)
+//	{
+//		for (int j = 1; j < n - 1; ++j)
+//		{
+//			Print(i, j);
+//		}
+//	}
+//
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			if (Map[i][j] == '.')
+//			{
+//				std::cout << "NO" << std::endl;
+//
+//				return 0;
+//			}
+//		}
+//	}
+//	std::cout << "YES" << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m, r;
+//	std::cin >> n >> m >> r;
+//
+//	int Buy = 1000000000;
+//	while (n--)
+//	{
+//		int t;
+//		std::cin >> t;
+//		Buy = std::min(Buy, t);
+//	}
+//
+//	int Sell = 0;
+//	while (m--)
+//	{
+//		int t;
+//		std::cin >> t;
+//		Sell = std::max(Sell, t);
+//	}
+//
+//	int ToBuy = r / Buy;
+//	int Left = r - ToBuy * Buy;
+//	if (Sell <= Buy)
+//	{
+//		std::cout << r << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << ToBuy * Sell + Left << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	
+//	int One = 0, Two = 0;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int t;
+//		std::cin >> t;
+//		if (t == 1)
+//		{
+//			++One;
+//		}
+//		else if (t == 2)
+//		{
+//			++Two;
+//		}
+//	}
+//
+//	int Sum = 0;
+//	if (Two > 0)
+//	{
+//		Sum += 2;
+//		--Two;
+//		std::cout << 2 << ' ';
+//	}
+//
+//	while (One != 0 && Two != 0)
+//	{
+//		if (Sum == 1)
+//		{
+//			--One;
+//			Sum += 1;
+//			std::cout << 1 << ' ';
+//		}
+//		else if (Sum % 2 == 0)
+//		{
+//			--One;
+//			Sum += 1;
+//			std::cout << 1 << ' ';
+//		}
+//		else
+//		{
+//			--Two;
+//			Sum += 2;
+//			std::cout << 2 << ' ';
+//		}
+//	}
+//	for (int i = 0; i < Two; ++i)
+//	{
+//		std::cout << 2 << ' ';
+//	}
+//	for (int i = 0; i < One; ++i)
+//	{
+//		std::cout << 1 << ' ';
+//	}
+//
+//	return 0;
+//}
+//// 思路：
+//// 由于数据有些大，所以先对该“字符串”进行离散化
+//// 然后套用莫队，求出区间众数即可
+//#include <iostream>
+//#include <array>
+//#include <cmath>
+//#include <algorithm>
+//
+//constexpr int MaxN = 400000 + 5;
+//std::array<int, MaxN> s{ 0 }, q{ 0 }, d{ 0 }, Ans{ 0 }, Sum{ 0 }, cnt{ 0 };
+//// Sum[t]表示t这个数出现的次数
+//// cnt[i]表示出现了i次的数有几个
+//// Ans[i]表示第i次的询问的答案
+//
+//class Query
+//{
+//public:
+//	int x, y, id;
+//
+//	Query() = default;
+//	Query(int x, int y, int id) :
+//		x(x), y(y), id(id)
+//	{
+//	}
+//
+//	bool operator<(const Query &rhs) const noexcept
+//	{
+//		if (s[x] != s[rhs.x])   // 如果处于不同的分块，那就按分块的次序来排列
+//		{
+//			return s[x] < s[rhs.x];
+//		}
+//		else // 如果处于相同的分块，那就按照右端点的次序来排列
+//		{
+//			return y < rhs.y;
+//		}
+//	}
+//};
+//
+//std::array<Query, MaxN> Que;
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m;
+//	std::cin >> n >> m;
+//
+//	int sqt = static_cast<int>(std::sqrt(n));
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		int t;
+//		std::cin >> t;
+//		q[i] = t;   // 将要被排序去重的数组
+//		d[i] = t;   // 原数组，记录下原封不动的数字序列，就是题目中的“字符串”
+//		s[i] = i / sqt;   // 分块
+//	}
+//
+//	// 先给q数组排序，然后求出不相同的元素的个数（Size），为后面离散化做准备
+//	std::sort(q.begin() + 1, q.begin() + n + 1);
+//	auto Size = std::unique(q.begin() + 1, q.begin() + n + 1) - (q.begin() + 1);
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		// 记录下原数组中每个数是第几大的，也就是离散化了
+//		d[i] = static_cast<int>(std::lower_bound(q.begin() + 1, q.begin() + Size + 1, d[i]) - q.begin());
+//	}
+//	for (int i = 1; i <= m; ++i)
+//	{
+//		int l, r;
+//		std::cin >> l >> r;
+//		Que[i] = std::move(Query(l, r, i));
+//	}
+//	std::sort(Que.begin() + 1, Que.begin() + m + 1);    // 用莫队前要先排序
+//
+//	// 注意l一定要从1开始，我在这里WA了四次!
+//	int l = 1, r = 0, Now = 1;
+//	cnt[0] = 1;
+//	for (int i = 1; i <= m; ++i)
+//	{
+//		auto x = Que[i].x, y = Que[i].y;
+//
+//		while (l > x)   // 当前l在询问的左端点的右侧
+//		{
+//			--l;    // l退一步
+//			auto &t = Sum[d[l]];    // t：数字d[l]出现的个数
+//			--cnt[t];   // 数字d[l]的个数发生了变化，这一句有点绕
+//			if (Now == t)   // 如果遇到了原来的众数，就把计数器加一
+//			{
+//				++Now;
+//			}
+//
+//			++t;    // 这时候才可以更新数字d[l]的个数
+//			++cnt[t];
+//		}
+//
+//		// 后面的也还是莫队的套路，同理了
+//		while (r < y)
+//		{
+//			++r;
+//			auto &t = Sum[d[r]];
+//			if (Now == t)
+//			{
+//				++Now;
+//			}
+//
+//			--cnt[t];
+//			++t;
+//			++cnt[t];
+//		}
+//
+//		while (l < x)
+//		{
+//			auto &t = Sum[d[l]];
+//			--cnt[t];
+//			if (Now == t && cnt[t] == 0)    // 如果没有别的数也能有那么多个，那计数器就得减一了
+//			{
+//				--Now;
+//			}
+//
+//			--t;
+//			++cnt[t];
+//			++l;
+//		}
+//
+//		while (r > y)
+//		{
+//			auto &t = Sum[d[r]];
+//			--cnt[t];
+//			if (Now == t && cnt[t] == 0)
+//			{
+//				--Now;
+//			}
+//
+//			--t;
+//			++cnt[t];
+//			--r;
+//		}
+//
+//		Ans[Que[i].id] = Now;
+//	}
+//
+//	for (int i = 1; i <= m; ++i)
+//	{
+//		std::cout << -Ans[i] << std::endl;  // 题目要求输出的是相反数，别被坑到了
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <utility>
+//#include <algorithm>
+//
+//bool q[100000 * 3] = { false };
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//
+//	std::vector<std::pair<int, int>> Ps;
+//	std::vector<int> t;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int l, r;
+//		std::cin >> l >> r;
+//		Ps.push_back({ l, r });
+//		t.push_back(l);
+//		t.push_back(r);
+//	}
+//	std::sort(t.begin(), t.end());
+//	t.erase(std::unique(t.begin(), t.end()), t.end());
+//
+//	std::vector<std::pair<int, int>> ps;
+//	int b = 100000 * 3, e = 0;
+//	for (int i = 0; i < Ps.size(); ++i)
+//	{
+//		auto [l, r] = Ps[i];
+//		int x = std::lower_bound(t.cbegin(), t.cend(), l) - t.cbegin();
+//		int y = std::lower_bound(t.cbegin(), t.cend(), r) - t.cbegin();
+//		ps.push_back({ x, y });
+//		b = std::min(b, x);
+//		e = std::max(e, y);
+//	}
+//
+//	for (const auto &r : ps)
+//	{
+//		for (int g = r.first; g <= r.second; ++g)
+//		{
+//			q[g] = true;
+//		}
+//
+//		int Ans = 0;
+//		for (int i = b; i <= e + 1; ++i)
+//		{
+//			if (q[i] == true && q[i + 1] == false)
+//			{
+//				++Ans;
+//			}
+//		}
+//		std::cout << Ans << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <queue>
+//#include <vector>
+//
+//std::vector<int> G[100];
+//bool Vis[100] = { false };
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int a, b;
+//		std::cin >> a >> b;
+//		G[a].push_back(b);
+//		G[b].push_back(a);
+//	}
+//
+//	int u = 1;
+//	std::queue<int> q;
+//	q.push(u);
+//	Vis[u] = true;
+//	while (!q.empty())
+//	{
+//		int n = q.front();
+//		std::cout << n << std::endl;
+//		q.pop();
+//		for (const auto &r : G[n])
+//		{
+//			if (!Vis[r])
+//			{
+//				q.push(r);
+//				Vis[r] = true;
+//			}
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//void Quick(int Arr[], int Begin, int End)
+//{
+//	if (Begin == End)
+//	{
+//		for (int i = 0; i <= End; ++i)
+//		{
+//			std::cout << Arr[i] << ' ';
+//		}
+//		std::cout << std::endl;
+//	}
+//	else
+//	{
+//		for (int i = Begin; i <= End; ++i)
+//		{
+//			std::swap(Arr[i], Arr[Begin]);
+//			Quick(Arr, Begin + 1, End);
+//			std::swap(Arr[i], Arr[Begin]);
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	int Arr[] = { 1, 2, 3, 4 };
+//	Quick(Arr, 0, 3);
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class Base
+//{
+//public:
+//	virtual void Do()
+//	{
+//		std::cout << "Base" << std::endl;
+//	}
+//};
+//
+//class Derived : public Base
+//{
+//public:
+//	virtual void Do() override
+//	{
+//		std::cout << "Derived" << std::endl;
+//	}
+//};
+//
+//int main()
+//{
+//	Base *pb = new Derived;
+//	pb->Do();
+//
+//	Derived *ppb = static_cast<Derived*>(pb);
+//	ppb->Do();
+//
+//	Derived *pppb = dynamic_cast<Derived*>(pb);
+//	pppb->Do();
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//void QuickSort(int Arr[], int l, int r)
+//{
+//	int i = l, j = r, x = Arr[l];
+//	while (i < j)
+//	{
+//		while (i < j && Arr[j] >= x)
+//		{
+//			--j;
+//		}
+//		if (i < j)
+//		{
+//			Arr[i] = Arr[j];
+//			++i;
+//		}
+//		while (i < j && Arr[i] < x)
+//		{
+//			++i;
+//		}
+//		if (i < j)
+//		{
+//			Arr[j] = Arr[i];
+//			--j;
+//		}
+//		Arr[i] = x;
+//
+//		QuickSort(Arr, l, i - 1);
+//		QuickSort(Arr, i + 1, r);
+//	}
+//}
+//
+//int main()
+//{
+//	int Arr[] = { 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 1 };
+//	QuickSort(Arr, 0, 10);
+//	for (int i = 0; i < 11; ++i)
+//	{
+//		std::cout << Arr[i] << ' ';
+//	}
+//	std::cout << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <conio.h>
+//
+//int main()
+//{
+//	while (true)
+//	{
+//		char c = _getch();
+//		if (c == 'n')
+//		{
+//			std::cout << "I don't display n" << std::endl;
+//		}
+//		else if (c == 27)	// ASCII for ESC
+//		{
+//			std::cout << "You pressed ESC" << std::endl;
+//
+//			break;
+//		}
+//		else
+//		{
+//			std::cout << "You pressed " << c << std::endl;
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <memory>
+//
+//class Frult
+//{
+//public:
+//	virtual void Eat() const = 0;
+//};
+//
+//class Apple : public Frult
+//{
+//public:
+//	virtual void Eat() const
+//	{
+//		std::cout << "Apple!" << std::endl;
+//	}
+//};
+//
+//class Banana : public Frult
+//{
+//public:
+//	virtual void Eat() const
+//	{
+//		std::cout << "Banana!" << std::endl;
+//	}
+//};
+//
+//class Orange : public Frult
+//{
+//public:
+//	virtual void Eat() const
+//	{
+//		std::cout << "Orange!" << std::endl;
+//	}
+//};
+//
+//int main()
+//{
+//	std::vector<std::shared_ptr<Frult>> Frults;
+//	Frults.push_back(std::make_shared<Apple>());
+//	Frults.push_back(std::make_shared<Banana>());
+//	Frults.push_back(std::make_shared<Orange>());
+//	for (const auto &r : Frults)
+//	{
+//		r->Eat();
+//	}
+//
+//	return 0;
+//}
+//// Bridge
+//#include <iostream>
+//#include <string>
+//#include <memory>
+//
+//class ITheme
+//{
+//public:
+//	virtual std::string GetColor() const = 0;
+//};
+//
+//class YellowTheme : public ITheme
+//{
+//public:
+//	virtual std::string GetColor() const override
+//	{
+//		return "Yellow";
+//	}
+//};
+//
+//class OrangeTheme : public ITheme
+//{
+//public:
+//	virtual std::string GetColor() const override
+//	{
+//		return "Orange";
+//	}
+//};
+//
+//class IPage
+//{
+//public:
+//	virtual void TellColor() const = 0;
+//};
+//
+//class PageA : public IPage
+//{
+//public:
+//	PageA(const std::shared_ptr<ITheme> &Theme)
+//		: Theme(Theme)
+//	{
+//	}
+//
+//	void TellColor() const override
+//	{
+//		std::cout << "PageA is " << Theme->GetColor() << std::endl;
+//	}
+//
+//private:
+//	std::shared_ptr<ITheme> Theme;
+//};
+//
+//class PageB : public IPage
+//{
+//public:
+//	PageB(const std::shared_ptr<ITheme> &Theme)
+//		: Theme(Theme)
+//	{
+//	}
+//
+//	void TellColor() const override
+//	{
+//		std::cout << "PageB is " << Theme->GetColor() << std::endl;
+//	}
+//
+//private:
+//	std::shared_ptr<ITheme> Theme;
+//};
+//
+//int main()
+//{
+//	auto Yellow = std::make_shared<YellowTheme>();
+//	auto Orange = std::make_shared<OrangeTheme>();
+//
+//	PageA(Yellow).TellColor();
+//	PageB(Orange).TellColor();
+//
+//	return 0;
+//}
+//// Adapter
+//#include <iostream>
+//#include <memory>
+//
+//class Apple
+//{
+//public:
+//	virtual void EatApple() const
+//	{
+//		std::cout << "I eat an apple." << std::endl;
+//	}
+//};
+//
+//class Banana
+//{
+//public:
+//	void EatBanana() const
+//	{
+//		std::cout << "I eat a banana." << std::endl;
+//	}
+//};
+//
+//class BananaAdapter : public Apple
+//{
+//public:
+//	BananaAdapter() = default;
+//	BananaAdapter(const Banana &rhs)
+//		: FakeApple(rhs)
+//	{
+//	}
+//
+//	virtual void EatApple() const override
+//	{
+//		FakeApple.EatBanana();
+//	}
+//
+//private:
+//	Banana FakeApple;
+//};
+//
+//class AppleEater
+//{
+//public:
+//	void EatApple(const Apple &AnApple)
+//	{
+//		AnApple.EatApple();
+//	}
+//};
+//
+//int main()
+//{
+//	AppleEater().EatApple(BananaAdapter(Banana()));
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <memory>
+//
+//class Frult
+//{
+//public:
+//	virtual std::shared_ptr<Frult> Clone() = 0;
+//	virtual void Eat() = 0;
+//};
+//
+//class Apple : public Frult
+//{
+//public:
+//	Apple() = default;
+//	Apple(int Type)
+//		: Type(Type)
+//	{
+//	}
+//	Apple(const Apple &rhs)
+//	{
+//		Type = rhs.Type;
+//	}
+//
+//	virtual std::shared_ptr<Frult> Clone()
+//	{
+//		return std::make_shared<Apple>(*this);
+//	}
+//
+//	virtual void Eat() override
+//	{
+//		std::cout << Type << std::endl;
+//	}
+//
+//private:
+//	int Type;
+//};
+//
+//int main()
+//{
+//	Apple MyApple(10);
+//	auto YourApple = MyApple.Clone();
+//	YourApple->Eat();
+//
+//	auto HisApple = MyApple.Clone();
+//	HisApple->Eat();
+//
+//	auto HerApple = MyApple.Clone();
+//	HerApple->Eat();
+//
+//	return 0;
+//}
+//// Builder
+//#include <iostream>
+//#include <memory>
+//
+//class FrultEater
+//{
+//public:
+//	class Builder;
+//
+//	void ShowHowMuchIEat()
+//	{
+//		std::cout << Apple << ' ' << Orange << ' ' << Banana << std::endl;
+//	}
+//
+//private:
+//	int Apple, Orange, Banana;
+//};
+//
+//class FrultEater::Builder
+//{
+//public:
+//	Builder()
+//	{
+//		EaterPtr = std::make_shared<FrultEater>();
+//	}
+//
+//	Builder& Apple(int i)
+//	{
+//		EaterPtr->Apple = i;
+//
+//		return *this;
+//	}
+//
+//	Builder& Banana(int i)
+//	{
+//		EaterPtr->Banana = i;
+//
+//		return *this;
+//	}
+//
+//	Builder& Orange(int i)
+//	{
+//		EaterPtr->Orange = i;
+//
+//		return *this;
+//	}
+//
+//	std::shared_ptr<FrultEater> Build()
+//	{
+//		return EaterPtr;
+//	}
+//
+//private:
+//	std::shared_ptr<FrultEater> EaterPtr;
+//};
+//
+//int main()
+//{
+//	FrultEater::Builder().Apple(10).Banana(100).Orange(1000).Build()->ShowHowMuchIEat();
+//
+//	return 0;
+//}
+//// Abstract Factory
+//#include <iostream>
+//#include <memory>
+//
+//class IProduct
+//{
+//public:
+//	virtual void Do() = 0;
+//};
+//
+//class IProductA : public IProduct
+//{
+//public:
+//	virtual void Do() = 0;
+//};
+//
+//class ProductA1 : public IProductA
+//{
+//public:
+//	virtual void Do() override
+//	{
+//		std::cout << "ProductA1" << std::endl;
+//	}
+//};
+//
+//class ProductA2 : public IProductA
+//{
+//public:
+//	virtual void Do() override
+//	{
+//		std::cout << "ProductA2" << std::endl;
+//	}
+//};
+//
+//class IProductB : public IProduct
+//{
+//public:
+//	virtual void Do() = 0;
+//};
+//
+//class ProductB1 : public IProductB
+//{
+//public:
+//	virtual void Do() override
+//	{
+//		std::cout << "ProductB1" << std::endl;
+//	}
+//};
+//
+//class ProductB2 : public IProductB
+//{
+//public:
+//	virtual void Do() override
+//	{
+//		std::cout << "ProductB2" << std::endl;
+//	}
+//};
+//
+//class IFactory
+//{
+//public:
+//	virtual std::shared_ptr<IProduct> Create(int) = 0;
+//};
+//
+//class FactoryA : public IFactory
+//{
+//public:
+//	std::shared_ptr<IProduct> Create(int Type) override
+//	{
+//		if (Type == 0)
+//		{
+//			return std::make_shared<ProductA1>();
+//		}
+//		else if (Type == 1)
+//		{
+//			return std::make_shared<ProductA2>();
+//		}
+//		else
+//		{
+//			return nullptr;
+//		}
+//	}
+//};
+//
+//class FactoryB : public IFactory
+//{
+//public:
+//	std::shared_ptr<IProduct> Create(int Type) override
+//	{
+//		if (Type == 0)
+//		{
+//			return std::make_shared<ProductB1>();
+//		}
+//		else if (Type == 1)
+//		{
+//			return std::make_shared<ProductB2>();
+//		}
+//		else
+//		{
+//			return nullptr;
+//		}
+//	}
+//};
+//
+//class Factory
+//{
+//public:
+//	static std::shared_ptr<IFactory> CreateFactory(int Type)
+//	{
+//		if (Type == 0)
+//		{
+//			return std::make_shared<FactoryA>();
+//		}
+//		else if (Type == 1)
+//		{
+//			return std::make_shared<FactoryB>();
+//		}
+//		else
+//		{
+//			return nullptr;
+//		}
+//	}
+//};
+//
+//int main()
+//{
+//	Factory::CreateFactory(0)->Create(0)->Do();
+//	Factory::CreateFactory(0)->Create(1)->Do();
+//	Factory::CreateFactory(1)->Create(0)->Do();
+//	Factory::CreateFactory(1)->Create(1)->Do();
+//
+//	return 0;
+//}
+//// Factory Method
+//#include <iostream>
+//#include <type_traits>
+//#include <memory>
+//
+//class IFrult
+//{
+//public:
+//	virtual void Eat() = 0;
+//};
+//
+//class Apple : public IFrult
+//{
+//public:
+//	virtual void Eat() override
+//	{
+//		std::cout << "Eat apple." << std::endl;
+//	}
+//};
+//
+//class Banana : public IFrult
+//{
+//public:
+//	virtual void Eat() override
+//	{
+//		std::cout << "Eat banana." << std::endl;
+//	}
+//};
+//
+//class Orange : public IFrult
+//{
+//public:
+//	virtual void Eat() override
+//	{
+//		std::cout << "Eat orange." << std::endl;
+//	}
+//};
+//
+//class Eater
+//{
+//protected:
+//	virtual std::shared_ptr<IFrult> MakeSomething() = 0;
+//
+//public:
+//	void EatSomething()
+//	{
+//		MakeSomething()->Eat();
+//	}
+//};
+//
+//template <class Frult>
+//class FrultEater : public Eater
+//{
+//protected:
+//	virtual std::shared_ptr<IFrult> MakeSomething() override
+//	{
+//		static_assert(std::is_base_of_v<IFrult, Frult>, "Frult shoule be based of IFrult.");
+//
+//		return std::make_shared<Frult>();
+//	}
+//};
+//
+//int main()
+//{
+//	FrultEater<Apple>().EatSomething();
+//	FrultEater<Banana>().EatSomething();
+//	FrultEater<Orange>().EatSomething();
+//
+//	return 0;
+//}
+//// Simple Factory
+//#include <iostream>
+//#include <memory>
+//
+//class ICat
+//{
+//public:
+//	virtual void Mew() = 0;
+//};
+//
+//class ACat : public ICat
+//{
+//public:
+//	virtual void Mew() override
+//	{
+//		std::cout << "ACat mews" << std::endl;
+//	}
+//};
+//
+//class BCat : public ICat
+//{
+//public:
+//	virtual void Mew() override
+//	{
+//		std::cout << "BCat mews" << std::endl;
+//	}
+//};
+//
+//class CCat : public ICat
+//{
+//public:
+//	virtual void Mew() override
+//	{
+//		std::cout << "CCat mews" << std::endl;
+//	}
+//};
+//
+//class CatsFactory
+//{
+//public:
+//	static std::shared_ptr<ICat> CreateCat(int Type)
+//	{
+//		switch (Type)
+//		{
+//		case 0:
+//			return std::make_shared<ACat>();
+//
+//			break;
+//		case 1:
+//			return std::make_shared<BCat>();
+//
+//			break;
+//
+//		case 2:
+//			return std::make_shared<CCat>();
+//
+//			break;
+//
+//		default:
+//			return nullptr;
+//		}
+//	}
+//};
+//
+//int main()
+//{
+//	auto A = CatsFactory::CreateCat(0);
+//	A->Mew();
+//
+//	auto B = CatsFactory::CreateCat(1);
+//	B->Mew();
+//
+//	auto C = CatsFactory::CreateCat(2);
+//	C->Mew();
+//
+//	return 0;
+//}
+//// Singelton
+//#include <iostream>
+//
+//class Singelton
+//{
+//public:
+//	static Singelton& GetInstance()
+//	{
+//		static Singelton Singel;
+//
+//		return Singel;
+//	}
+//
+//	Singelton(const Singelton&) = delete;
+//	Singelton(Singelton&&) = delete;
+//	Singelton& operator=(const Singelton&) = delete;
+//	Singelton& operator=(Singelton&&) = delete;
+//
+//private:
+//	Singelton() = default;
+//};
+//
+//int main()
+//{
+//	auto &Instance1 = Singelton::GetInstance();
+//	auto &Instance2 = Singelton::GetInstance();
+//	if (&Instance1 == &Instance2)
+//	{
+//		std::cout << "OK the same instance" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "NO not the same instance" << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//void MaxHeapify(int Arr[], int Start, int End)
+//{
+//	int Dad = Start;
+//	int Son = Dad * 2 + 1;
+//	while (Son <= End)
+//	{
+//		if (Son + 1 <= End && Arr[Son] < Arr[Son + 1])
+//		{
+//			++Son;
+//		}
+//
+//		if (Arr[Dad] > Arr[Son])
+//		{
+//			return;
+//		}
+//		else
+//		{
+//			std::swap(Arr[Dad], Arr[Son]);
+//			Dad = Son;
+//			Son = Dad * 2 + 1;
+//		}
+//	}
+//}
+//
+//void HeapSort(int Arr[], int Len)
+//{
+//	for (int i = (Len - 2) / 2; i >= 0; --i)
+//	{
+//		MaxHeapify(Arr, i, Len - 1);
+//	}
+//
+//	for (int i = Len - 1; i > 0; --i)
+//	{
+//		std::swap(Arr[0], Arr[i]);
+//		MaxHeapify(Arr, 0, i - 1);
+//	}
+//}
+//
+//int main()
+//{
+//	int Arr[] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1 };
+//	int Len = static_cast<int>(sizeof(Arr)) / sizeof(int);
+//	HeapSort(Arr, Len);
+//	for (int i = 0; i < Len; ++i)
+//	{
+//		std::cout << Arr[i] << ' ';
+//	}
+//	std::cout << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cstdlib>
+//
+//void Func1()
+//{
+//	std::cout << "Func1() called!" << std::endl;
+//}
+//
+//void Func2()
+//{
+//	std::cout << "Func2() called!" << std::endl;
+//}
+//
+//int main()
+//{
+//	const int R1 = std::atexit(Func1);
+//	const int R2 = std::atexit(Func2);
+//	if (R1 == 0 && R2 == 0)
+//	{
+//		std::cout << "OK" << std::endl;
+//
+//		return EXIT_SUCCESS;
+//	}
+//	else
+//	{
+//		std::cout << "NOT OK" << std::endl;
+//
+//		return EXIT_FAILURE;
+//	}
+//}
+//#include <iostream>
+//#include <bitset>
+//#include <string>
+//#include <functional>
+//
+//template <class ElemType, std::size_t Size>
+//class BloomFilter
+//{
+//private:
+//	std::bitset<Size> Bitmap;
+//
+//	constexpr static std::size_t K = 3;
+//
+//	std::size_t Hash(const ElemType &Elem, std::size_t k) const
+//	{
+//		k += 11210904;
+//		return (std::hash<ElemType>()(Elem) + 0x9e3779b9 + (k << 6) + (k >> 2)) % Size;
+//	}
+//
+//public:
+//	BloomFilter() = default;
+//
+//	bool Contains(const ElemType&) const noexcept;
+//	void Add(const ElemType&);
+//};
+//
+//template <class ElemType, std::size_t Size>
+//bool BloomFilter<ElemType, Size>::Contains(const ElemType &Elem) const noexcept
+//{
+//	bool Found = true;
+//	for (std::size_t i = 0; i < K; ++i)
+//	{
+//		Found &= Bitmap.test(Hash(Elem, i));
+//	}
+//
+//	return Found;
+//}
+//
+//template <class ElemType, std::size_t Size>
+//void BloomFilter<ElemType, Size>::Add(const ElemType &Elem)
+//{
+//	for (std::size_t i = 0; i < K; ++i)
+//	{
+//		Bitmap.set(Hash(Elem, i));
+//	}
+//}
+//
+//int main()
+//{
+//	BloomFilter<std::string, 32> BF;
+//	BF.Add("xiaozhaxie");
+//	BF.Add("damiantuo");
+//	std::cout << BF.Contains("xiaozhaxie") << std::endl;
+//	std::cout << BF.Contains("xiaomiantuo") << std::endl;
+//	std::cout << BF.Contains("damiantuo") << std::endl;
+//
+//	return 0;
+//}
+//// Client
+//#define _WINSOCK_DEPRECATED_NO_WARNINGS
+//#include <iostream>
+//#include <Windows.h>
+//#include <chrono>
+//
+//#pragma comment(lib, "ws2_32.lib")
+//
+//int main()
+//{
+//	WORD SocketVersion = MAKEWORD(2, 2);
+//	WSADATA WsaData;
+//	if (WSAStartup(SocketVersion, &WsaData) != 0)
+//	{
+//		std::cout << "Startup Failed" << std::endl;
+//		return 0;
+//	}
+//
+//	SOCKET Client = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+//
+//	sockaddr_in Sin;
+//	Sin.sin_family = AF_INET;
+//	Sin.sin_port = htons(8888);
+//	Sin.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+//	int Len = sizeof(Sin);
+//
+//	int Count = 0;
+//	while (Count < 10)
+//	{
+//		const char *Str = "来自客户端的数据包";
+//		sendto(Client, Str, strlen(Str), 0, (sockaddr*)&Sin, Len);
+//
+//		int NetTimeout = 1000;	// ms
+//		if (setsockopt(Client, SOL_SOCKET, SO_RCVTIMEO, (char*)&NetTimeout, sizeof(int)) == SOCKET_ERROR)
+//		{
+//			std::cout << "Set Opt Failed" << std::endl;
+//		}
+//
+//		std::cout << "第" << Count << "次尝试：";
+//
+//		char RecvData[255];
+//		auto Begin = std::chrono::system_clock::now();
+//		int Ret = recvfrom(Client, RecvData, 255, 0, (sockaddr*)&Sin, &Len);
+//
+//		if (Ret > 0)
+//		{
+//			RecvData[Ret] = 0x00;
+//			if (strcmp(RecvData, "PING") == 0)
+//			{
+//				auto End = std::chrono::system_clock::now();
+//				std::chrono::duration<double, std::milli> Duration = End - Begin;
+//				std::cout << "请求成功，RTT为：" << Duration.count() << "ms" << std::endl;
+//			}
+//
+//			++Count;
+//		}
+//		else if (Ret < 0)
+//		{
+//			std::cout << "请求失败" << std::endl;
+//		}
+//	}
+//
+//
+//	closesocket(Client);
+//	WSACleanup();
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class TestClass
+//{
+//public:
+//	void DoNothing()
+//	{
+//	}
+//};
+//
+//int main()
+//{
+//	TestClass TC;
+//	auto TestLamb = [&]()
+//	{
+//		TC.DoNothing();
+//	};
+//
+//	return 0;
+//}
+//// Reference:
+//// http://www.martinbroadhurst.com/Consistent-Hash-Ring.html
+//// http://www.zsythink.net/archives/1182
+//// https://blog.csdn.net/cywosp/article/details/23397179
+//#include <iostream>
+//#include <string>
+//#include <map>
+//#include <functional>
+//#include <exception>
+//
+//class EmptyRingException : public std::exception
+//{
+//public:
+//	EmptyRingException() = default;
+//
+//	virtual const char* what() const noexcept override
+//	{
+//		return "The HashRing is EMPTY now!";
+//	}
+//};
+//
+//template <class Node, class Data, class Hash = std::hash<std::string>>
+//class HashRing
+//{
+//public:
+//	using NodeMap = std::map<std::size_t, Node>;
+//
+//	HashRing(int Replicas)
+//		: Replicas(Replicas)
+//	{
+//	}
+//
+//	void AddNode(const Node &node)
+//	{
+//		for (int i = 0; i < Replicas; ++i)
+//		{
+//			auto Hash_ = hash(node + std::to_string(i));
+//			Ring[Hash_] = node;
+//		}
+//	}
+//
+//	void RemoveNode(const Node &node)
+//	{
+//		for (int i = 0; i < Replicas; ++i)
+//		{
+//			auto Hash_ = hash(node+ std::to_string(i));
+//			Ring.erase(Hash_);
+//		}
+//	}
+//
+//	const Node& GetNode(const Data &data) const
+//	{
+//		if (!Ring.empty())
+//		{
+//			auto Hash_ = hash(data);
+//			auto Iter = Ring.lower_bound(Hash_);
+//			if (Iter == Ring.end())
+//			{
+//				Iter = Ring.begin();
+//			}
+//
+//			return Iter->second;
+//		}
+//		else
+//		{
+//			throw EmptyRingException();
+//		}
+//	}
+//
+//private:
+//	const int Replicas;
+//	NodeMap Ring;
+//	Hash hash;
+//};
+//
+//int main()
+//{
+//	HashRing<std::string, std::string> MyHashRing(5);
+//	MyHashRing.AddNode("123456");
+//	MyHashRing.AddNode("234567");
+//	std::cout << MyHashRing.GetNode("MyHash") << std::endl;
+//
+//	return 0;
+//}
+//// Server
+//#include <iostream>
+//#include <Windows.h>
+//
+//#pragma comment(lib, "ws2_32.lib")
+//
+//int main()
+//{
+//	WSADATA MyWsaData;
+//	WORD SockVersion = MAKEWORD(2, 2);
+//	if (WSAStartup(SockVersion, &MyWsaData) != 0)
+//	{
+//		std::cout << "Init Failed" << std::endl;
+//
+//		return 0;
+//	}
+//	else
+//	{
+//		std::cout << "Init Successed" << std::endl;
+//	}
+//
+//
+//	SOCKET SerSocker = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+//	if (SerSocker == INVALID_SOCKET)
+//	{
+//		std::cout << "Socket Failed" << std::endl;
+//
+//		return 0;
+//	}
+//	else
+//	{
+//		std::cout << "Socket Successed" << std::endl;
+//	}
+//
+//	SOCKADDR_IN SerAddr;
+//	SerAddr.sin_family = AF_INET;
+//	SerAddr.sin_port = htons(8888);
+//	SerAddr.sin_addr.S_un.S_addr = INADDR_ANY;
+//	if (bind(SerSocker, (sockaddr*)(&SerAddr), sizeof(SerAddr)) == SOCKET_ERROR)
+//	{
+//		std::cout << "Bind Failed" << std::endl;
+//
+//		return 0;
+//	}
+//	else
+//	{
+//		std::cout << "Bind Successed" << std::endl;
+//	}
+//
+//	SOCKADDR_IN RemoteAddr;
+//	int AddrLen = sizeof(RemoteAddr);
+//	while (true)
+//	{
+//		char RecvData[255];
+//		int Ret = recvfrom(SerSocker, RecvData, 255, 0, (sockaddr*)&RemoteAddr, &AddrLen);
+//		if (Ret > 0)
+//		{
+//			RecvData[Ret] = 0x00;
+//			std::cout << "收到" << inet_ntoa(RemoteAddr.sin_addr);
+//			std::cout << RecvData << std::endl;
+//		}
+//
+//		const char *PING = "PING";
+//		sendto(SerSocker, PING, (int)strlen(PING), 0, (sockaddr*)&RemoteAddr, AddrLen);
+//	}
+//
+//	closesocket(SerSocker);
+//	WSACleanup();
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <Windows.h>
+//
+//#pragma comment(lib, "ws2_32.lib")
+//
+//int main()
+//{
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int t;
+//	while (std::cin >> t && t)
+//	{
+//		std::cout << t * 8 - 4 << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class Base
+//{
+//public:
+//	virtual void Do()
+//	{
+//		std::cout << "In Base" << std::endl;
+//	}
+//
+//	virtual void Go()
+//	{
+//		Do();
+//	}
+//};
+//
+//class Derived : public Base
+//{
+//	void Do() override
+//	{
+//		std::cout << "In Derived" << std::endl;
+//	}
+//};
+//
+//int main()
+//{
+//	Base *Der = new Derived;
+//	Der->Go();
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//using namespace std;
+//
+//enum error : ptrdiff_t {
+//	ce = ptrdiff_t{ 8 },
+//};
+//
+//struct S {
+//	S(int) {}
+//};
+//
+//inline int operator/(S, int) {
+//	return 0;
+//}
+//
+//int main() {
+//	size_t p = 3;
+//	auto r = p / ce;
+//}
+//#include <iostream>
+//#include <cstring>
+//#include <unordered_set>
+//
+//using ll = long long;
+//
+//std::unordered_set<int> Map[300000 + 10];
+//
+//ll Pay[100000 + 10];
+//
+//bool Visited[100000 + 10] = { false };
+//
+////template <typename T>
+////int Find(const T &x)
+////{
+////	if (Par[x] == x)
+////		return x;
+////	else
+////		return Par[x] = Find(Par[x]);
+////}
+////
+////ll Count(int t)
+////{
+////	ll Ans = 0LL;
+////	while (Par[t] != t)
+////	{
+////		Ans += Pay[t];
+////		t = Par[t];
+////	}
+////
+////	return Ans;
+////}
+////
+////template <typename T>
+////void Unite(T &x, T &y)
+////{
+////	x = Find(x);
+////	y = Find(y);
+////	if (x == y)
+////		return;
+////
+////	if (Rank[x] < Rank[y])
+////	{
+////		Par[x] = y;
+////	}
+////	else
+////	{
+////		Par[y] = x;
+////		if (Rank[x] == Rank[y])
+////			++Rank[x];
+////	}
+////}
+//
+//ll Ans = 0LL;
+//
+//void DFS(int x)
+//{
+//	Visited[x] = true;
+//	for (const auto &c : Map[x])
+//	{
+//		if (!Visited[c])
+//		{
+//			Ans += Pay[c];
+//			Visited[c] = true;
+//			DFS(c);
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	//for (int i = 1; i <= 100000 + 10; ++i)
+//	//{
+//	//	Par[i] = i;
+//	//}
+//
+//	int n, m;
+//	std::cin >> n >> m;
+//
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		std::cin >> Pay[i];
+//	}
+//	while (m--)
+//	{
+//		int t;
+//		std::cin >> t;
+//		if (t == 1)
+//		{
+//			int x, y, l;
+//			std::cin >> x >> y >> l;
+//			Map[x].insert(y);
+//			Map[y].insert(x);
+//			//x = Find(x);
+//			//y = Find(y);
+//			//Par[x] = y;
+//			//Unite(x, y);
+//		}
+//		else if (t == 2)
+//		{
+//			int x;
+//			ll v;
+//			std::cin >> x >> v;
+//			Pay[x] += v;
+//		}
+//		else if (t == 3)
+//		{
+//			int x;
+//			std::cin >> x;
+//			DFS(x);
+//			std::cout << Ans << std::endl;
+//			Ans = 0LL;
+//			std::memset(Visited, 0, sizeof(Visited));
+//		}
+//	}
+//
+//	return 0;
+//}
+
+//#include <iostream>
+//#include <algorithm>
+//
+//constexpr auto MaxN = 1000 + 5;
+//
+//int MaxWhere[MaxN][MaxN * 2] = { 0 };
+//int Map[MaxN * 2] = { 0 };
+//
+//int N, M;
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> N >> M;
+//	for (int i = 1; i <= N; ++i)
+//	{
+//		for (int j = 1; j <= 2 * M; ++j) //  M -> 2 * M
+//		{
+//			int t;
+//			std::cin >> t;
+//			Map[j * 2 - 1] = t;
+//			Map[j * 2] = -1;
+//		}
+//
+//		int mx = 0, id = 0;
+//		for (int k = 1; k <= M; ++k)
+//		{
+//			if (mx > k)
+//			{
+//				MaxWhere[i][k] = std::min(MaxWhere[i][id * 2 - k], mx - k);
+//			}
+//			else
+//			{
+//				MaxWhere[i][k] = 1;
+//			}
+//			while (Map[k + MaxWhere[i][k]] == Map[k - MaxWhere[i][k]])
+//			{
+//				++MaxWhere[i][k];
+//			}
+//			if (mx < MaxWhere[i][k] + k)
+//			{
+//				mx = MaxWhere[i][k] + k;
+//				id = k;
+//			}
+//		}
+//
+//		for (int k = 1; k <= M; ++k)
+//		{
+//			MaxWhere[i][k] = MaxWhere[i][k * 2 - 1];
+//		}
+//
+//		for (int k = 1; k <= M; ++k)
+//		{
+//			std::cout << MaxWhere[i][k] << ' ';
+//		}
+//		std::cout << std::endl;
+//	}
+//
+//	for (int i = 1; i <= N; ++i)
+//	{
+//		MaxWhere[i][M] = 1;
+//	}
+//
+//	int Ans = 0;
+//	for (int i = 1; i <= N; ++i)
+//	{
+//		for (int j = 1; j <= M; ++j)
+//		{
+//			int x = MaxWhere[i][j];
+//			int t;
+//			if (x & 1)
+//			{
+//				t = x * 2 - 1;
+//			}
+//			else
+//			{
+//				t = x * 2;
+//			}
+//
+//			int p = i;
+//			while (p <= N && MaxWhere[p][j] == x)
+//			{
+//				++p;
+//			}
+//			if (p == N + 1)
+//			{
+//				Ans = std::max(Ans, (N - i + 1) * t);
+//			}
+//			else
+//			{
+//				Ans = std::max(Ans, (p - i) * t);
+//			}
+//		}
+//	}
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//	std::cout << (n > 2 ? "gg tuixuele" : "Oh my god I'm saved") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	for (int i = 1; i <= 100; ++i)
+//	{
+//		int Ans = 0;
+//		for (int j = 1; j <= i; ++j)
+//		{
+//			Ans ^= j;
+//		}
+//		std::cout << Ans << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	bool dp[100 + 10];
+//	dp[1] = dp[2] = dp[3] = true;
+//	for (int i = 4; i <= 100; ++i)
+//	{
+//		dp[i] = !dp[i - 1] && !dp[i - 2];
+//	}
+//	for (int i = 1; i <= 100; ++i)
+//	{
+//		std::cout << dp[i] << std::endl;
+//	}
+//
+//	int n;
+//	std::cin >> n;
+//	std::cout << (dp[n] ? "Oh my god I'm saved" : "gg tuixuele") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//	if (n & 1)
+//	{
+//		std::cout << "gg tuixuele" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "Oh my god I'm saved" << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class Date
+//{
+//public:
+//	Date() = default;
+//	Date(int Year, int Month, int Day)
+//		: Year(Year), Month(Month), Day(Day)
+//	{
+//	}
+//	
+//	int Year, Month, Day;
+//};
+//
+//bool IsLeap(int Year)
+//{
+//	return ((Year % 4 == 0) && (Year % 100 != 0) || Year % 400 == 0);
+//}
+//
+//int LastDay(const Date &date)
+//{
+//	switch (date.Month)
+//	{
+//	case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+//		return 31;
+//
+//	case 2:
+//		return 28 + IsLeap(date.Year);
+//
+//	default:
+//		return 30;
+//	}
+//}
+//
+//bool Cmp(const Date &lhs, const Date &rhs)
+//{
+//	if (lhs.Year < rhs.Year)
+//	{
+//		return true;
+//	}
+//	else if (lhs.Year <= rhs.Year && lhs.Month < rhs.Month)
+//	{
+//		return true;
+//	}
+//	else if (lhs.Year <= rhs.Year && lhs.Month <= rhs.Month && lhs.Day < rhs.Day)
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
+//
+//void AddDay(Date &date)
+//{
+//	++date.Day;
+//	if (date.Day > LastDay(date))
+//	{
+//		date.Day = 1;
+//		++date.Month;
+//		if (date.Month > 12)
+//		{
+//			date.Month = 1;
+//			++date.Year;
+//		}
+//	}
+//}
+//
+//long Diff(Date &lhs, Date &rhs)
+//{
+//	if (!Cmp(lhs, rhs))
+//	{
+//		auto Tmp = lhs;
+//		lhs = rhs;
+//		rhs = Tmp;
+//	}
+//
+//	long Ans = 0L;
+//	while (Cmp(lhs, rhs))
+//	{
+//		AddDay(lhs);
+//		++Ans;
+//	}
+//
+//	return Ans;
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	Date lhs, rhs;
+//
+//	int T;
+//	std::cin >> T;
+//	while (T--)
+//	{
+//		int Y;
+//		std::cin >> Y;
+//		lhs.Year = rhs.Year = Y;
+//		std::cin >> lhs.Month >> lhs.Day >> rhs.Month >> rhs.Day;
+//
+//		if (!Cmp(lhs, rhs))
+//		{
+//			++rhs.Year;
+//		}
+//		std::cout << Diff(lhs, rhs) << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int N;
+//	std::cin >> N;
+//	
+//	ll Ans = 0LL;
+//	for (int i = 0; i < N; ++i)
+//	{
+//		ll t;
+//		std::cin >> t;
+//		Ans += t;
+//	}
+//	Ans -= N - 1;
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//#include <functional>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m, k;
+//	std::cin >> n >> m >> k;
+//	std::vector<int> Vec(n);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> Vec[i];
+//	}
+//
+//	if (k > n)
+//	{
+//		std::cout << 0 << std::endl;
+//	}
+//	else
+//	{
+//		std::sort(Vec.begin(), Vec.end(), std::greater<int>());
+//		std::cout << Vec[k - 1] << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//void DoSomething()
+//{
+//	std::cout << "void" << std::endl;
+//}
+//
+//void DoSomething(int i)
+//{
+//	std::cout << "int" << std::endl;
+//}
+//
+//int main()
+//{
+//	using p = void(int);
+//	p *pp = DoSomething;
+//	pp(10);
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//
+//	std::vector<int> Vec(n), Inc(n), Dec(n);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> Vec[i];
+//		Inc[i] = Dec[i] = 1;
+//	}
+//
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < i; ++j)
+//		{
+//			if (Vec[i] > Vec[j])
+//			{
+//				Inc[i] = std::max(Inc[i], Inc[j] + 1);
+//			}
+//		}
+//	}
+//
+//	for (int i = n - 1; i >= 0; --i)
+//	{
+//		for (int j = n - 1; j > i; --j)
+//		{
+//			if (Vec[i] > Vec[j])
+//			{
+//				Dec[i] = std::max(Dec[i], Dec[j] + 1);
+//			}
+//		}
+//	}
+//
+//	int Ans = 0;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		Ans = std::max(Ans, Inc[i] + Dec[i] - 1);
+//	}
+//	std::cout << n - Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//
+//int n, m, D;
+//
+//constexpr auto MaxN = 200000 + 10;
+//std::vector<int> Map[MaxN];
+//
+//int p[MaxN] = { 0 };
+//bool Visited[MaxN] = { false };
+//
+//void DFS(int r)
+//{
+//	Visited[r] = true;
+//	for (const auto &s : Map[r])
+//	{
+//		if (!Visited[s])
+//		{
+//			Visited[s] = true;
+//			p[s] = r;
+//			if (r == 1)
+//			{
+//				--D;
+//			}
+//			DFS(s);
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> n >> m >> D;
+//	for (int i = 0; i < m; ++i)
+//	{
+//		int u, v;
+//		std::cin >> u >> v;
+//		Map[u].push_back(v);
+//		Map[v].push_back(u);
+//	}
+//	if (Map[1].size() < D)
+//	{
+//		std::cout << "NO" << std::endl;
+//	}
+//	else
+//	{
+//		DFS(1);
+//		if (D < 0)
+//		{
+//			std::cout << "NO" << std::endl;
+//		}
+//		else
+//		{
+//			std::cout << "YES" << std::endl;
+//			for (const auto &s : Map[1])
+//			{
+//				if (D && p[s] != 1)
+//				{
+//					--D;
+//					p[s] = 1;
+//					if (!D)
+//					{
+//						break;
+//					}
+//				}
+//			}
+//			if (D != 0)
+//			{
+//				std::cout << "NO" << std::endl;
+//			}
+//			else
+//			{
+//				for (int i = 2; i <= n; ++i)
+//				{
+//					std::cout << p[i] << ' ' << i << std::endl;
+//				}
+//			}
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//constexpr int MaxN = 5000 + 10, MaxK = 5000 + 10;
+//int dp[MaxN][MaxK] = { 0 };
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, k;
+//	std::cin >> n >> k;
+//
+//	std::vector<int> a(n + 10);
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		std::cin >> a[i];
+//	}
+//	std::sort(a.begin() + 1, a.begin() + 1 + n);
+//
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		for (int j = 1; j <= k; ++j)
+//		{
+//			int x = static_cast<int>(std::lower_bound(a.cbegin() + 1, a.cbegin() + 1 + i, a[i] - 5) - a.cbegin());
+//			dp[i][j] = std::max(dp[i - 1][j], dp[x - 1][j - 1] + i - x + 1);
+//		}
+//	}
+//	std::cout << dp[n][k] << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	std::cout << _MSC_VER << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <utility>
+//#include <algorithm>
+//#include <string>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//
+//	std::string s1, s2;
+//	std::cin >> s1 >> s2;
+//
+//	std::vector<int> Mark[2];
+//	std::vector<int> s[26][2];
+//	for (int i = 0; i < n; ++i)
+//	{
+//		if (s1[i] == '?')
+//		{
+//			Mark[0].push_back(i + 1);
+//		}
+//		else
+//		{
+//			s[s1[i] - 'a'][0].push_back(i + 1);
+//		}
+//
+//		if (s2[i] == '?')
+//		{
+//			Mark[1].push_back(i + 1);
+//		}
+//		else
+//		{
+//			s[s2[i] - 'a'][1].push_back(i + 1);
+//		}
+//	}
+//
+//	std::vector<std::pair<int, int>> Ans;
+//	for (int i = 0; i < 26; ++i)
+//	{
+//		for (std::size_t j = 0; j < std::min(s[i][0].size(), s[i][1].size()); ++j)
+//		{
+//			Ans.push_back({ s[i][0][j], s[i][1][j] });
+//		}
+//		if (s[i][0].size() == s[i][1].size())
+//		{
+//			continue;
+//		}
+//		else if (s[i][0].size() < s[i][1].size())
+//		{
+//			auto t = s[i][0].size();
+//			while (Mark[0].size() && t < s[i][1].size())
+//			{
+//				int p1 = Mark[0][Mark[0].size() - 1];
+//				int p2 = s[i][1][t];
+//				++t;
+//				Mark[0].pop_back();
+//				Ans.push_back({ p1, p2 });
+//			}
+//		}
+//		else
+//		{
+//			auto t = s[i][1].size();
+//			while (Mark[1].size() && t < s[i][0].size())
+//			{
+//				int p1 = s[i][0][t];
+//				int p2 = Mark[1][Mark[1].size() - 1];
+//				++t;
+//				Mark[1].pop_back();
+//				Ans.push_back({ p1, p2 });
+//			}
+//		}
+//	}
+//
+//	for (std::size_t i = 0; i < std::min(Mark[0].size(), Mark[1].size()); ++i)
+//	{
+//		Ans.push_back({ Mark[0][i], Mark[1][i] });
+//	}
+//	std::cout << Ans.size() << std::endl;
+//	for (const auto &r : Ans)
+//	{
+//		std::cout << r.first << ' ' << r.second << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <algorithm>
+//#include <vector>
+//#include <utility>
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//
+//	std::string s1, s2;
+//	std::cin >> s1 >> s2;
+//	std::vector<std::pair<char, int>> v1(n), v2(n);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		v1[i] = { s1[i], i + 1 };
+//		v2[1] = { s2[i], i + 1 };
+//	}
+//	std::sort(v1.begin(), v1.end());
+//	std::sort(v2.begin(), v2.end());
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m;
+//	std::cin >> n >> m;
+//	if (m % n != 0)
+//	{
+//		std::cout << -1 << std::endl;
+//	}
+//	else if (n == m)
+//	{
+//		std::cout << 0 << std::endl;
+//	}
+//	else
+//	{
+//		int t = m / n;
+//		int Ans = 0;
+//		while (t % 3 == 0)
+//		{
+//			t /= 3;
+//			++Ans;
+//		}
+//		while (t % 2 == 0)
+//		{
+//			t /= 2;
+//			++Ans;
+//		}
+//		std::cout << Ans << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	std::vector<int> Vec(n);
+//	bool Broken = false;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> Vec[i];
+//	}
+//
+//	int First = 0, Last = 0;
+//	for (std::size_t i = 0; i < Vec.size(); ++i)
+//	{
+//		if (Vec[i] == 1)
+//		{
+//			++First;
+//		}
+//		else
+//		{
+//			break;
+//		}
+//	}
+//	for (int i = static_cast<int>(Vec.size()) - 1; i >= 0; --i)
+//	{
+//		if (Vec[i] == 1)
+//		{
+//			++Last;
+//		}
+//		else
+//		{
+//			break;
+//		}
+//	}
+//
+//	int Now = 0, Ans = 0;
+//	for (std::size_t i = 0; i < Vec.size(); ++i)
+//	{
+//		if (Vec[i] == 1)
+//		{
+//			++Now;
+//		}
+//		else
+//		{
+//			Ans = std::max(Ans, Now);
+//			Now = 0;
+//		}
+//	}
+//	std::cout << std::max(Ans, First + Last) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m;
+//	std::cin >> n >> m;
+//	if (m % n != 0)
+//	{
+//		std::cout << -1 << std::endl;
+//	}
+//	else if (n == m)
+//	{
+//		std::cout << 0 << std::endl;
+//	}
+//	else
+//	{
+//		int t = m / n;
+//		int Ans = 0;
+//		while (t % 3 == 0)
+//		{
+//			t /= 3;
+//			++Ans;
+//		}
+//		while (t % 2 == 0)
+//		{
+//			t /= 2;
+//			++Ans;
+//		}
+//		std::cout << Ans << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//#include <queue>
+//
+//constexpr int MaxN = 200000 + 10;
+//
+//std::vector<int> Map[MaxN];
+//
+//bool Visited[MaxN] = { false };
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m;
+//	std::cin >> n >> m;
+//
+//	int Begin, Max = 0;
+//	for (int i = 0; i < m; ++i)
+//	{
+//		int a, b;
+//		std::cin >> a >> b;
+//		Map[a].push_back(b);
+//		Map[b].push_back(a);
+//		if (Map[a].size() > Max)
+//		{
+//			Max = Map[a].size();
+//			Begin = a;
+//		}
+//		if (Map[b].size() > Max)
+//		{
+//			Max = Map[b].size();
+//			Begin = b;
+//		}
+//	}
+//
+//	std::queue<int> Que;
+//	Que.push(Begin);
+//	Visited[Begin] = true;
+//	while (!Que.empty())
+//	{
+//		auto t = Que.front();
+//		Que.pop();
+//		for (const auto &c : Map[t])
+//		{
+//			if (!Visited[c])
+//			{
+//				Que.push(c);
+//				Visited[c] = true;
+//				std::cout << t << ' ' << c << std::endl;
+//			}
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	
+//	std::vector<int> Vec(n);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> Vec[i];
+//	}
+//	std::sort(Vec.begin(), Vec.end());
+//
+//	int Ans = 0;
+//	for (auto Iter = Vec.cbegin(); Iter != Vec.cend(); ++Iter)
+//	{
+//		Ans = std::max(Ans, static_cast<int>(std::upper_bound(Iter, Vec.cend(), *Iter + 5) - Iter));
+//	}
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <map>
+//#include <algorithm>
+//#include <utility>
+//#include <vector>
+//#include <functional>
+//
+//using ll = long long;
+//
+////struct MyHasher
+////{
+////	std::size_t operator()(const std::pair<ll, ll> &rhs) const
+////	{
+////		auto t = std::hash<ll>();
+////		return (t(rhs.first) ^ t(rhs.second) << 1) >> 1;
+////	}
+////};
+//
+//ll gcd(ll a, ll b)
+//{
+//	return b == 0 ? a : gcd(b, a % b);
+//}
+//
+//constexpr int MaxN = 200000 + 10;
+//
+//ll a[MaxN], b[MaxN];
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> a[i];
+//	}
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> b[i];
+//	}
+//
+//	std::map<std::pair<ll, ll>, int> Map;
+//	int ZeroZero = 0;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		if (a[i] == 0 && b[i] == 0)
+//		{
+//			++ZeroZero;
+//		}
+//		else if (a[i] == 0)
+//		{
+//			continue;
+//		}
+//		else
+//		{
+//			ll g = gcd(a[i], b[i]);
+//			++Map[{a[i] / g, b[i] / g}];
+//		}
+//	}
+//
+//	int Ans = 0;
+//	for (const auto &r : Map)
+//	{
+//		Ans = std::max(Ans, r.second);
+//	}
+//	std::cout << Ans + ZeroZero;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <unordered_map>
+//#include <algorithm>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, k;
+//	std::cin >> n >> k;
+//
+//	std::unordered_map<int, int> Map;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		ll t;
+//		std::cin >> t;
+//		++Map[t % k];
+//	}
+//
+//	ll Ans = 0LL;
+//	if (Map[0] >= 2)
+//	{
+//		Ans += Map[0] % 2 ? Map[0] - 1 : Map[0];
+//	}
+//	for (int i = 1; i < k; ++i)
+//	{
+//		if (i == k - i)
+//		{
+//			if (Map[i] >= 2)
+//			{
+//				Ans += Map[i] % 2 ? Map[i] - 1 : Map[i];
+//			}
+//		}
+//		else
+//		{
+//			Ans += std::min(Map[i], Map[k - i]);
+//		}
+//	}
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#define _CRT_SECURE_NO_WARNINGS
+//#include <iostream>
+//
+//int main()
+//{
+//	int a, b, c, d;
+//	std::scanf("%d:%d", &a, &b);
+//	std::scanf("%d:%d", &c, &d);
+//
+//	int Begin = a * 60 + b, End = c * 60 + d;
+//	int Middle = (Begin + End) / 2;
+//	std::printf("%02d:%02d", Middle / 60, Middle % 60);
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::string Str;
+//	std::cin >> Str;
+//
+//	std::array<int, 26> Cnt{ 0 };
+//	int Sum = 0;
+//	for (int i = 0; i < 26; ++i)
+//	{
+//		std::cin >> Cnt[i];
+//		Sum += Cnt[i];
+//	}
+//
+//	if (Sum > static_cast<int>(Str.size()))
+//	{
+//		std::cout << "No" << std::endl;
+//	}
+//	else
+//	{
+//		std::array<int, 26> Temp{ 0 };
+//		for (int i = 0; i < Sum; ++i)
+//		{
+//			++Temp[Str[i] - 'a'];
+//		}
+//		if (Temp == Cnt)
+//		{
+//			std::cout << "Yes" << std::endl;
+//
+//			return 0;
+//		}
+//		else
+//		{
+//			for (int i = 0; i < Str.size() - Sum; ++i)
+//			{
+//				--Temp[Str[i] - 'a'];
+//				++Temp[Str[i + Sum] - 'a'];
+//				if (Temp == Cnt)
+//				{
+//					std::cout << "Yes" << std::endl;
+//
+//					return 0;
+//				}
+//			}
+//		}
+//		std::cout << "No" << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int a, b;
+//	std::cin >> a >> b;
+//	std::cout << a << ' ' << b << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <array>
+//
+//std::array<int, 500001> Par{ 0 }, Rank{ 0 };
+//
+//template <typename T>
+//int Find(const T &x)
+//{
+//	if (Par[x] == x)
+//	{
+//		return x;
+//	}
+//	else
+//	{
+//		return Par[x] = Find(Par[x]);
+//	}
+//}
+//
+//template <typename T>
+//void Init(const T &n)
+//{
+//	for (int i = 0; i < n; ++i)
+//	{
+//		Par[i] = i;
+//	}
+//}
+//
+//template <typename T>
+//void Unite(T x, T y)
+//{
+//	x = Find(x);
+//	y = Find(y);
+//
+//	if (x == y)
+//	{
+//		return;
+//	}
+//
+//	if (Rank[x] < Rank[y])
+//	{
+//		Par[x] = y;
+//	}
+//	else
+//	{
+//		Par[y] = x;
+//
+//		if (Rank[x] == Rank[y])
+//		{
+//			++Rank[x];
+//		}
+//	}
+//}
+//
+//template <typename T>
+//bool IsSame(const T &x, const T &y)
+//{
+//	return Find(x) == Find(y);
+//}
+//
+//struct Edge
+//{
+//	int From, To, Cost;
+//};
+//
+//std::array<struct Edge, 500001> Edges;
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int N, M;
+//	std::cin >> N >> M;
+//
+//	int Dummy;
+//	std::cin >> Dummy;
+//
+//	for (int i = 0; i < M; ++i)
+//	{
+//		std::cin >> Edges[i].From >> Edges[i].To >> Edges[i].Cost;
+//	}
+//
+//	std::sort(Edges.begin(), Edges.begin() + M, [](const Edge &a, const Edge &b)
+//	{
+//		return a.Cost < b.Cost;
+//	});
+//
+//	Init(N);
+//
+//	int Res = 0;
+//	for (int i = 0; i < M; ++i)
+//	{
+//		auto e = Edges[i];
+//		if (!IsSame(e.From, e.To))
+//		{
+//			Unite(e.From, e.To);
+//			Res = std::max(Res, e.Cost);
+//		}
+//	}
+//
+//	std::cout << Res << std::endl;
+//
+//	return 0;
+//}
+
+//#include <type_traits>
+//
+//class Father
+//{
+//public:
+//	Father() = default;
+//};
+//
+//class Son : public Father
+//{
+//public:
+//	Son() = default;
+//};
+//
+//int main()
+//{
+//	static_assert(std::is_base_of<Father, Son>::value, "Type A must be a subclass of Type B");
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//template <typename Son>
+//class Base
+//{
+//public:
+//	Base()
+//	{
+//		reinterpret_cast<Son*>(this)->OverrideMe();
+//	}
+//
+//	virtual void OverrideMe()
+//	{
+//		std::cout << "From Father" << std::endl;
+//	}
+//};
+//
+//class Deri : public Base<Deri>
+//{
+//public:
+//	Deri()
+//	{
+//	}
+//
+//	void OverrideMe() override
+//	{
+//		std::cout << "From Son" << std::endl;
+//	}
+//};
+//
+//int main()
+//{
+//	Deri d;
+//	Base<Deri> *b = &d;
+//	b->OverrideMe();
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <cmath>
+//
+//using ll = long long;
+//
+//int get(ll n)
+//{
+//	int p = 0;
+//	while (n)
+//	{
+//		n /= 2;
+//		++p;
+//	}
+//
+//	return p;
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int q;
+//	std::cin >> q;
+//	while (q--)
+//	{
+//		ll x;
+//		std::cin >> x;
+//		int t = get(x);
+//		ll y = (1ll << t) - 1;
+//		if (x == y)
+//		{
+//			int r = 1;
+//			for (int i = 2; i <= std::sqrt(x + 0.5); ++i)
+//			{
+//				if (x % i == 0)
+//				{
+//					r = std::max((ll)r, std::max((ll)i, x / i));
+//				}
+//			}
+//			std::cout << r << std::endl;
+//		}
+//		else
+//		{
+//			std::cout << y << std::endl;
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	for (int i = 1; i <= 25; ++i)
+//	{
+//		long long p = (1ll << i) - 1;
+//		bool ok = false;
+//		for (long long j = 2; j <= std::sqrt(p); ++j)
+//		{
+//			if (p % j == 0)
+//			{
+//				ok = true;
+//				std::cout << j << std::endl;
+//
+//				break;
+//			}
+//		}
+//		if (!ok)
+//		{
+//			std::cout << 1 << std::endl;
+//		}
+//	}
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//using ll = long long;
+//
+//int p[25] = { 1, 1, 3, 1, 3, 1, 3, 7, 3, 23, 3, 1, 3, 7, 3, 1, 3, 1, 3, 7, 3, 47, 3, 31 };
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int q;
+//	std::cin >> q;
+//	while (q--)
+//	{
+//		ll a;
+//		std::cin >> a;
+//
+//		int i;
+//		for (i = 0; i <= 25; ++i)
+//		{
+//			ll j = 1ll << i;
+//			if (j >= a)
+//			{
+//				break;
+//			}
+//		}
+//		if (a == ((1ll << i) - 1))
+//		{
+//			if (p[i - 1] == 1)
+//			{
+//				std::cout << 1 << std::endl;
+//			}
+//			else
+//			{
+//				std::cout << a / p[i - 2] << std::endl;
+//			}
+//		}
+//		else if (a == (1ll << i))
+//		{
+//			std::cout << a * 2 - 1 << std::endl;
+//		}
+//		else
+//		{
+//			std::cout << (1ll << i) - 1 << std::endl;
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//
+//int gcd(int a, int b)
+//{
+//	return b == 0 ? a : gcd(b, a % b);
+//}
+//
+//int main()
+//{
+//	for (int i = 2; i <= 100; ++i)
+//	{
+//		int Ans = 0;
+//		for (int j = 1; j < i; ++j)
+//		{
+//			Ans = std::max(Ans, gcd(i ^ j, i & j));
+//		}
+//		std::cout << Ans << ' ' << i << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//using ll = unsigned long long;
+//
+//ll pow(ll a, int b)
+//{
+//	ll res = 1;
+//	while (b)
+//	{
+//		if (b & 1)
+//		{
+//			res *= a;
+//		}
+//		a *= a;
+//		b >>= 1;
+//	}
+//
+//	return res;
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//
+//	ll b;
+//	int k;
+//	std::cin >> b >> k;
+//
+//	ll Ans = 0;
+//	for (int i = k - 1; i >= 0; --i)
+//	{
+//		ll a;
+//		std::cin >> a;
+//		Ans += pow(b, i) * a;
+//	}
+//	if (Ans % 2 == 0)
+//	{
+//		std::cout << "even" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "odd" << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//int n, m, k;
+//
+//int main()
+//{
+//	std::cin >> n >> m >> k;
+//
+//	--k;
+//
+//	std::vector<int> Vec(n + 2);
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		std::cin >> Vec[i];
+//	}
+//
+//	int Ans = Vec[n] - Vec[1] + 1;
+//	std::vector<int> a(n + 2);
+//	for (int i = 1; i < n; ++i)
+//	{
+//		a[i] = Vec[i + 1] - Vec[i];
+//	}
+//	--n;
+//	std::sort(a.begin() + 1, a.begin() + 1 + n);
+//	for (int i = n; i && k > 0; --i, --k)
+//	{
+//		Ans -= a[i] - 1;
+//	}
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//using ll = long long;
+//
+//ll pow(ll a, ll b)
+//{
+//	ll res = 1;
+//	while (b)
+//	{
+//		if (b & 1)
+//		{
+//			res *= a;
+//		}
+//		a *= a;
+//		b >>= 1;
+//	}
+//
+//	return res;
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//
+//	ll b, k;
+//	std::cin >> b >> k;
+//
+//	ll Ans = 0;
+//	for (ll i = k - 1; i >= 0; --i)
+//	{
+//		ll a;
+//		std::cin >> a;
+//		Ans += pow(b, i) * a;
+//	}
+//	if (Ans % 2 == 0)
+//	{
+//		std::cout << "even" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "odd" << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <iomanip>
+//
+//int a[100000 + 50];
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m, k;
+//	std::cin >> n >> m >> k;
+//
+//	double Tol = 0.0;
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		std::cin >> a[i];
+//		Tol += a[i];
+//	}
+//	std::sort(a + 1, a + n + 1);
+//
+//	int Pos, Cnt = 0;
+//	for (Pos = 1; Pos < n && Pos <= k; ++Pos)
+//	{
+//		if (a[Pos] > Tol / (n - Pos + 1))
+//		{
+//			break;
+//		}
+//		else
+//		{
+//			Tol -= a[Pos];
+//		}
+//	}
+//	std::cout << std::fixed << std::setprecision(20) << Tol + std::min(m, k - Pos + 1) / (n - Pos + 1) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <set>
+//
+//int main()
+//{
+//	int n, k, m;
+//	std::cin >> n >> k >> m;
+//	std::set<int> s;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int t;
+//		std::cin >> t;
+//		s.insert(t);
+//	}
+//
+//	std::set<int> Ans;
+//	while (m)
+//	{
+//		if (s.size() >= 2)
+//		{
+//			s.erase(s.begin());
+//			--m;
+//		}
+//
+//		auto end = s.rbegin();
+//		if (m <= k)
+//		{
+//			Ans.insert((*end) + m);
+//			s.erase(--s.end());
+//			m = 0;
+//		}
+//		else
+//		{
+//			Ans.insert((*end) + k);
+//			s.erase(--s.end());
+//			m -= k;
+//		}
+//	}
+//
+//	int Tol = 0;
+//	for (const auto &c : Ans)
+//	{
+//		Tol += c;
+//	}
+//	for (const auto &c : s)
+//	{
+//		Tol += c;
+//	}
+//	std::cout << 1.0 * Tol / (Ans.size() + s.size()) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//bool OK(char c)
+//{
+//	if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::string s;
+//	std::string t;
+//	std::cin >> s >> t;
+//	if (s.size() != t.size())
+//	{
+//		std::cout << "NO" << std::endl;
+//
+//		return 0;
+//	}
+//	else
+//	{
+//		for (std::size_t i = 0; i < s.size(); ++i)
+//		{
+//			if ((OK(s[i]) && OK(t[i])) || (!OK(s[i]) && !OK(t[i])))
+//			{
+//				continue;
+//			}
+//			else
+//			{
+//				std::cout << "NO" << std::endl;
+//
+//				return 0;
+//			}
+//		}
+//	}
+//	std::cout << "YES" << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//
+//	int m = static_cast<int>(std::sqrt(n));
+//	if (m * m == n)
+//	{
+//		std::cout << 2 * m << std::endl;
+//	}
+//	else if (m * (m + 1) >= n)
+//	{
+//		std::cout << 2 * m + 1 << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << 2 * m + 2 << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int w, h;
+//	std::cin >> w >> h;
+//	int u1, d1, u2, d2;
+//	std::cin >> u1 >> d1 >> u2 >> d2;
+//	
+//	int Now = w;
+//	for (int H = h; H > 0; --H)
+//	{
+//		Now += H;
+//
+//		if (H == d1)
+//		{
+//			Now -= u1;
+//			if (Now < 0)
+//			{
+//				Now = 0;
+//			}
+//		}
+//		else if (H == d2)
+//		{
+//			Now -= u2;
+//			if (Now < 0)
+//			{
+//				Now = 0;
+//			}
+//		}
+//	}
+//	std::cout << Now << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int w, h;
+//	std::cin >> w >> h;
+//	int u1, d1, u2, d2;
+//	std::cin >> u1 >> d1 >> u2 >> d2;
+//	std::cout << w + (1 + h) * h / 2 - u1 - u2 << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	while (n--)
+//	{
+//		ll a, b;
+//		std::cin >> a >> b;
+//		std::cout << (a - 1) * 9 + b << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//	int t;
+//	std::cin >> t;
+//
+//	while (t--)
+//	{
+//		int n;
+//		std::cin >> n;
+//		std::string Str;
+//		std::cin >> Str;
+//
+//		if (n == 2 && Str[0] >= Str[1])
+//		{
+//			std::cout << "NO" << std::endl;
+//		}
+//		else
+//		{
+//			std::cout << "YES\n2\n" << Str[0] << ' ' << Str.substr(1, Str.size()) << std::endl;
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//struct t
+//{
+//	int Pri, Num;
+//};
+//
+//t l[100000 + 50];
+//
+//int main()
+//{
+//	int n, m;
+//	std::cin >> n >> m;
+//
+//	int Sum = 0;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> l[i].Num;
+//		Sum += l[i].Num;
+//	}
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> l[i].Pri;
+//	}
+//
+//	while (m--)
+//	{
+//		int x, y, Tol = 0;
+//		std::cin >> x >> y;
+//		if (Sum < y)
+//		{
+//			Sum = 0;
+//			std::cout << 0 << std::endl;
+//		}
+//		else if (l[x].Num >= y)
+//		{
+//			Sum -= y;
+//			l[x].Num -= y;
+//			std::cout << y * l[x].Pri << std::endl;
+//		}
+//		else
+//		{
+//			Sum -= y;
+//			Tol += l[x].Pri * l[x].Num;
+//			y -= l[x].Num;
+//			l[x].Num = 0;
+//			while (y)
+//			{
+//				int Min = 999999999, Which = 0;;
+//				for (int i = 0; i < n; ++i)
+//				{
+//					if (Min > l[x].Pri && l[x].Num)
+//					{
+//						Min = l[x].Pri;
+//						Which = i;
+//					}
+//				}
+//				if (l[Which].Num >= y)
+//				{
+//					l[Which].Num -= y;
+//					Tol += l[Which].Pri * y;
+//					y = 0;
+//				}
+//				else
+//				{
+//					Tol += l[Which].Num * l[Which].Pri;
+//					y -= l[Which].Num;
+//					l[Which].Num = 0;
+//				}
+//			}
+//			std::cout << Tol << std::endl;
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <queue>
+//#include <vector>
+//#include <unordered_set>
+//
+//std::vector<int> G[100000 + 10];
+//
+//bool Visited[100000 + 10] = { false };
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, m;
+//	std::cin >> n >> m;
+//	for (int i = 0; i < m; ++i)
+//	{
+//		int a, b;
+//		std::cin >> a >> b;
+//		G[a].push_back(b);
+//		G[b].push_back(a);
+//	}
+//
+//	std::priority_queue<int, std::vector<int>, std::greater<int>> pq;
+//	for (const auto &c : G[1])
+//	{
+//		pq.push(c);
+//	}
+//
+//	Visited[1] = true;
+//
+//	std::unordered_set<int> Set;
+//	std::vector<int> Ans;
+//	Ans.push_back(1);
+//	while (Ans.size() != n)
+//	{
+//		while (1)
+//		{
+//			int l = pq.top();
+//			if (!Visited[l])
+//			{
+//				Ans.push_back(l);
+//				Visited[l] = true;
+//				pq.pop();
+//				for (const auto &c : G[l])
+//				{
+//					if (!Visited[c])
+//					{
+//						pq.push(c);
+//					}
+//				}
+//				break;
+//			}
+//			else
+//			{
+//				pq.pop();
+//			}
+//		}
+//	}
+//	for (const auto &c : Ans)
+//	{
+//		std::cout << c << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	std::vector<int> Vec(n);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> Vec[i];
+//	}
+//	std::sort(Vec.begin(), Vec.end());
+//
+//	long long Ans = 0;
+//	for (int i = 0; i < static_cast<int>(Vec.size() / 2); ++i)
+//	{
+//		Ans += (Vec[i] + Vec[n - i - 1]) * (Vec[i] + Vec[n - i - 1]);
+//	}
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//char Map[500 + 10][500 + 10];
+//
+//bool OK(int i, int j)
+//{
+//	if (Map[i][j] == 'X' && Map[i][j + 2] == 'X' && Map[i + 1][j + 1] == 'X' && Map[i + 2][j] == 'X' && Map[i + 2][j + 2] == 'X')
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			std::cin >> Map[i][j];
+//		}
+//	}
+//
+//	int Ans = 0;
+//	for (int i = 0; i < n - 2; ++i)
+//	{
+//		for (int j = 0; j < n - 2; ++j)
+//		{
+//			if (OK(i, j))
+//			{
+//				++Ans;
+//			}
+//		}
+//	}
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	long long n;
+//	std::cin >> n;
+//	if (n * (n + 1) / 2 % 2 == 0)
+//	{
+//		std::cout << 0 << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << 1 << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <utility>
+//#include <vector>
+//#include <algorithm>
+//
+//std::pair<int, int> Ans;
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//	
+//	std::vector<int> Vec(n);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> Vec[i];
+//	}
+//
+//	Ans.second = 999999;
+//	for (int i = 1; i <= 1000; ++i)
+//	{
+//		int a = 0, b = 0;
+//		for (int j = 0; j < n; ++j)
+//		{
+//			if (std::abs(Vec[j] - i) <= 1)
+//			{
+//				;
+//			}
+//			else if (Vec[j] - i - 1 > 0)
+//			{
+//				a += Vec[j] - i - 1;
+//			}
+//			else if (i - 1 - Vec[j] > 0)
+//			{
+//				a += i - 1 - Vec[j];
+//			}
+//		}
+//		if (a < Ans.second)
+//		{
+//			Ans.first = i;
+//			Ans.second = a;
+//		}
+//	}
+//	std::cout << Ans.first << ' ' << Ans.second << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//	std::cout << n << std::endl;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cout << 1 << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//	for (int i = static_cast<int>(std::sqrt(n)); i >= 1; --i)
+//	{
+//		if (n % i == 0)
+//		{
+//			std::cout << i << std::endl;
+//			for (int j = 0; j < i; ++j)
+//			{
+//				std::cout << n / i << ' ';
+//			}
+//
+//			break;
+//		}
+//	}
+//
+//	return 0;
+//}
+//int main()
+//{
+//	int i = 10;
+//	if (i << 2 + 10 < 10)
+//	{
+//		;
+//	}
+//
+//	return 0;
+//}
+//#include <filesystem>
+//
+//int main()
+//{
+//	std::filesystem::copy_file(".\\you.txt", ".\\me.txt", std::filesystem::copy_options::overwrite_existing);
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//struct Base
+//{
+//	virtual void Test()
+//	{
+//		std::cout << "Test Base" << std::endl;
+//	}
+//
+//	virtual void Dummy()
+//	{
+//		std::cout << "Dummy func from Base" << std::endl;
+//	}
+//};
+//
+//struct Dr : public Base
+//{
+//	void Test() override
+//	{
+//		std::cout << "Test Dr" << std::endl;
+//	}
+//
+//	void Dummy() override
+//	{
+//		std::cout << "Dummy func from Dr" << std::endl;
+//	}
+//};
+//
+//int main()
+//{
+//	Base *Tmp = new Dr;
+//	Tmp->Dummy();
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//#include <random>
+//
+//int main()
+//{
+//	std::vector<int> Vec{ 1, 2, 3, 4, 5 };
+//
+//	std::random_device rd;
+//	std::mt19937 g(rd());
+//	std::shuffle(Vec.begin(), Vec.end(), g);
+//	for (auto &r : Vec)
+//	{
+//		std::cout << r << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <unordered_set>
+//#include <functional>
+//
+//int main()
+//{
+//	std::unordered_set<int> Set;
+//	for (int i = 0; i < 32768; ++i)
+//	{
+//		Set.insert(i);
+//	}
+//	std::cout << Set.bucket_count() << std::endl;
+//
+//	std::cout << std::hash<int>()(100) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//int main()
+//{
+//	std::vector<int> Vec{ 1, 2, 3, 4, 5 };
+//	std::rotate(Vec.begin(), Vec.begin() + Vec.size() / 2, Vec.end());
+//	for (const auto &r : Vec)
+//	{
+//		std::cout << r << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//int main()
+//{
+//	std::cout << std::tgamma(100 + 1) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	std::cout << static_cast<char>(1) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <typeinfo>
+//
+//class t
+//{
+//public:
+//	t() = default;
+//};
+//
+//t GetT()
+//{
+//	return {};
+//}
+//
+//int main()
+//{
+//	auto Temp = GetT();
+//	std::cout << typeid(Temp).name() << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//int main()
+//{
+//	std::array<int, 100> Arr;
+//	Arr.fill(10);
+//	for (const auto &r : Arr)
+//	{
+//		std::cout << r << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class c
+//{
+//public:
+//	c() 
+//	{
+//		std::cout << "hahaha" << std::endl;
+//	}
+//
+//	c(const c &rhs)
+//	{
+//		std::cout << "lalala" << std::endl;
+//	}
+//
+//	~c()
+//	{
+//		std::cout << "wuwuwu" << std::endl;
+//	}
+//};
+//
+//c GetC()
+//{
+//	c Temp;
+//
+//	return Temp;
+//}
+//
+//int main()
+//{
+//	c Temp0 = GetC();
+//
+//	//const c &Temp1 = GetC();
+//
+//	//c &&Temp2 = GetC();
+//
+//	return 0;
+//}
+//class c
+//{
+//public:
+//	c() = default;
+//
+//	c(const c &rhs)
+//		: a(rhs.a), b(rhs.b)
+//	{
+//	}
+//
+//	//c(c &rhs)
+//	//	: a(rhs.a), b(rhs.b)
+//	//{
+//	//}
+//
+//private:
+//	int a, b;
+//};
+//
+//c GetC()
+//{
+//	c Temp;
+//
+//	return Temp;
+//}
+//
+//int main()
+//{
+//	c Temp = GetC();
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//class Test1
+//{
+//public:
+//	Test1() = default;
+//	Test1(int a, int b)
+//		: a(a), b(b)
+//	{
+//	}
+//
+//	Test1(const Test1 &rhs)
+//	{
+//		a = rhs.a;
+//		b = rhs.b;
+//	}
+//
+//	Test1 operator-(const Test1 &rhs)
+//	{
+//		Test1 Temp;
+//		Temp.a = a - rhs.a;
+//		Temp.b = b - rhs.b;
+//
+//		return Temp;
+//	}
+//
+//	Test1& operator=(const Test1 &rhs)
+//	{
+//		a = rhs.a;
+//		b = rhs.b;
+//
+//		return *this;
+//	}
+//
+//public:
+//	int a, b;
+//};
+//
+//int main()
+//{
+//	Test1 a(1, 2), b(2, 4);
+//	Test1 c = a - b;
+//	std::cout << c.a << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int t, Tol = 0, Cnt = 0;
+//	while (std::cin >> t && t != -1)
+//	{
+//		if (0 <= t && t <= 100)
+//		{
+//			++Cnt;
+//			Tol += t;
+//		}
+//	}
+//	std::cout << "Valid socre is: " << Cnt << '\n'
+//			  << "Tol is: " << Tol << '\n'
+//			  << "Avg is: " << 1.0 * Tol / Cnt << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <utility>
+//
+//int main()
+//{
+//	int a, b, c;
+//	std::cin >> a >> b >> c;
+//	if (b > a)
+//	{
+//		std::swap(a, b);
+//	}
+//	if (c > a)
+//	{
+//		std::swap(a, c);
+//	}
+//	if (c > b)
+//	{
+//		std::swap(b, c);
+//	}
+//
+//	if (b + c <= a)
+//	{
+//		std::cout << "Invalid data!" << std::endl;
+//	}
+//	else if (a == b && b == c)
+//	{
+//		std::cout << "Equilateral triangle." << std::endl;
+//	}
+//	else if (a == b || a == c || b == c)
+//	{
+//		std::cout << "Isosceles triangle." << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "Normal triangle." << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr auto MaxN = 30 + 5;
+//
+//std::array<std::array<int, MaxN>, MaxN> Root{ 0 }, dp{ 0 };
+//
+//void Print(int l, int r)
+//{
+//	if (l < r)
+//	{
+//		std::cout << Root[l][r] << ' ';
+//		Print(l, Root[l][r] - 1);
+//		Print(Root[l][r] + 1, r);
+//	}
+//	else if (l == r)
+//	{
+//		std::cout << l << ' ';
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		std::cin >> dp[i][i];
+//		dp[i][i - 1] = 1;
+//	}
+//
+//	for (int i = n; i >= 1; --i)
+//	{
+//		for (int j = i + 1; j <= n; ++j)
+//		{
+//			for (int k = i; k <= j; ++k)
+//			{
+//				if (dp[i][j] < (dp[i][k - 1] * dp[k + 1][j] + dp[k][k]))
+//				{
+//					dp[i][j] = dp[i][k - 1] * dp[k + 1][j] + dp[k][k];
+//					Root[i][j] = k;
+//				}
+//			}
+//		}
+//	}
+//
+//	std::cout << dp[1][n] << std::endl;
+//	Print(1, n);
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <stack>
+//#include <utility>
+//
+//constexpr auto MaxN = 100 + 10;
+//
+//char Map[MaxN][MaxN], Ans[MaxN][MaxN];
+//int Dir[8][2] = { {-1, -1}, {-1, 0}, {-1, 1}, {1, -1}, {1, 0}, {1, 1}, {0, -1}, {0, 1} };
+//
+//int n;
+//
+//const std::string Str = "yizhong";
+//
+//void DFS(int x, int y, int d, int Now)
+//{
+//	if (Now >= 6)
+//	{
+//		for (int i = 6; i >= 0; --i)
+//		{
+//			Ans[x][y] = Str[i];
+//			x -= Dir[d][0];
+//			y -= Dir[d][1];
+//		}
+//	}
+//	else
+//	{
+//		auto dx = x + Dir[d][0], dy = y + Dir[d][1];
+//		if (dx >= 0 && dx < n && dy >= 0 && dy < n)
+//		{
+//			if (Map[x + Dir[d][0]][y + Dir[d][1]] == Str[Now + 1])
+//			{
+//				DFS(dx, dy, d, Now + 1);
+//			}
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			std::cin >> Map[i][j];
+//			Ans[i][j] = '*';
+//		}
+//	}
+//
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			if (Map[i][j] == 'y')
+//			{
+//				for (int p = 0; p < 8; ++p)
+//				{
+//					DFS(i, j, p, 0);
+//				}
+//			}
+//		}
+//	}
+//
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			std::cout << Ans[i][j];
+//		}
+//
+//		std::cout << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <array>
+//#include <stack>
+//#include <utility>
+//
+//constexpr auto MaxN = 100 + 10;
+//
+////std::array<std::array<char, MaxN>, MaxN> Map, Ans;
+//char Map[MaxN][MaxN], Ans[MaxN][MaxN];
+//std::stack<std::pair<int, int>> Path;
+//
+//int n;
+//
+//const std::string Str = "yizhong";
+//
+//void DFS(int x, int y, int Now)
+//{
+//	if (Now == 6)
+//	{
+//		int p = 6;
+//		while (!Path.empty())
+//		{
+//			auto t = Path.top();
+//			Ans[t.first][t.second] = Str[p];
+//			Path.pop();
+//			--p;
+//		}
+//	}
+//	else if (Now < 6)
+//	{
+//		for (int dx = -1; dx <= 1; ++dx)
+//		{
+//			for (int dy = -1; dy <= 1; ++dy)
+//			{
+//				if (dx != 0 && dy != 0)
+//				{
+//					auto tx = x + dx;
+//					auto ty = y + dy;
+//					if (tx >= 0 && tx < n && ty >= 0 && ty < n)
+//					{
+//						if (Map[tx][ty] == Str[Now + 1])
+//						{
+//							Path.push({ tx, ty });
+//							DFS(tx, ty, Now + 1);
+//							if (!Path.empty())
+//							{
+//								Path.pop();
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			std::cin >> Map[i][j];
+//			Ans[i][j] = '*';
+//		}
+//	}
+//
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			if (Map[i][j] == 'y')
+//			{
+//				Path = {};
+//				Path.push({ i, j });
+//				DFS(i, j, 0);
+//			}
+//		}
+//	}
+//
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < n; ++j)
+//		{
+//			std::cout << Ans[i][j];
+//		}
+//
+//		std::cout << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <string>
+//#include <array>
+//
+//constexpr auto MaxN = 20 + 5;
+//
+//std::array<int, MaxN> Visited{ 0 };
+//std::array<std::string, MaxN> Strings;
+//
+//int n;
+//std::size_t Ans = 0;
+//
+//std::size_t CountStr(const std::string &Str1, const std::string &Str2)
+//{
+//	for (std::size_t i = 1; i < std::min(Str1.size(), Str2.size()); ++i)
+//	{
+//		bool OK = true;
+//		for (std::size_t j = 0; j < i; ++j)
+//		{
+//			if (Str1[Str1.size() + j - i] != Str2[j])
+//			{
+//				OK = false;
+//			}
+//		}
+//		if (OK)
+//		{
+//			return i;
+//		}
+//	}
+//
+//	return 0;
+//}
+//
+//void DFS(const std::string &Str, std::size_t Length)
+//{
+//	Ans = std::max(Ans, Length);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		if (Visited[i] < 2)
+//		{
+//			auto l = CountStr(Str, Strings[i]);
+//			if (l > 0)
+//			{
+//				++Visited[i];
+//				DFS(Strings[i], Length + Strings[i].size() - l);
+//				--Visited[i];
+//			}
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> Strings[i];
+//	}
+//
+//	std::string Begin;
+//	std::cin >> Begin;
+//	DFS(' ' + Begin, 1);
+//	std::cout << Ans << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//#include <utility>
+//#include <iomanip>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//
+//	std::vector<std::pair<int, int>> Vec;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int t;
+//		std::cin >> t;
+//		Vec.emplace_back(t, i + 1);
+//	}
+//	std::sort(Vec.begin(), Vec.end());
+//
+//	ll Sum = 0LL;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		Sum += Vec[i].first * (n - i - 1);
+//		std::cout << Vec[i].second << ' ';
+//	}
+//	std::cout << '\n' << std::fixed << std::setprecision(2) << 1.0 * Sum / n << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <unordered_set>
+//#include <unordered_map>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::string Enc, Ori, Msg;
+//	std::cin >> Enc >> Ori >> Msg;
+//
+//	std::unordered_map<char, char> Map;
+//	for (std::size_t i = 0; i < Enc.size(); ++i)
+//	{
+//		if (Map.count(Enc[i]))
+//		{
+//			if (Map[Enc[i]] != Ori[i])
+//			{
+//				std::cout << "Failed" << std::endl;
+//
+//				return 0;
+//			}
+//		}
+//		else
+//		{
+//			Map[Enc[i]] = Ori[i];
+//		}
+//	}
+//
+//	if (Map.size() != 26)
+//	{
+//		std::cout << "Failed" << std::endl;
+//
+//		return 0;
+//	}
+//
+//	std::unordered_set<char> Set;
+//	for (const auto &r : Map)
+//	{
+//		Set.insert(r.second);
+//	}
+//	if (Set.size() != 26)
+//	{
+//		std::cout << "Failed" << std::endl;
+//
+//		return 0;
+//	}
+//
+//	for (const auto &c : Msg)
+//	{
+//		std::cout << Map[c];
+//	}
+//	std::cout << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//
+//int k;
+//
+//void p40()
+//{
+//	for (int i = 0; i < k + 3; ++i)
+//	{
+//		std::cout << ' ';
+//	}
+//}
+//
+//void p31()
+//{
+//	for (int i = 0; i < k + 1; ++i)
+//	{
+//		std::cout << ' ';
+//	}
+//	std::cout << "| ";
+//}
+//
+//void p121()
+//{
+//	std::cout << ' ';
+//	for (int i = 0; i < k; ++i)
+//	{
+//		std::cout << '-';
+//	}
+//	std::cout << "  ";
+//}
+//
+//void p13()
+//{
+//	std::cout << '|';
+//	for (int i = 0; i < k + 2; ++i)
+//	{
+//		std::cout << ' ';
+//	}
+//}
+//
+//void P121()
+//{
+//	std::cout << '|';
+//	for (int i = 0; i < k; ++i)
+//	{
+//		std::cout << ' ';
+//	}
+//	std::cout << "| ";
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> k;
+//
+//	std::string Str;
+//	std::cin >> Str;
+//	std::vector<int> Vec;
+//	for (const auto &c : Str)
+//	{
+//		Vec.push_back(c - '0');
+//	}
+//
+//	for (int i = 0; i < 2 * k + 3; ++i)
+//	{
+//		if (i == 0 || i == 2 * k + 3 - 1)
+//		{
+//			for (const auto &c : Vec)
+//			{
+//				if (c == 7 && i == 0)
+//				{
+//					p121();
+//				}
+//				else if (c == 7 && i == 2 * k + 3 - 1)
+//				{
+//					p40();
+//				}
+//				else
+//				{
+//					if (c == 2 || c == 3 || c == 5 || c == 6 || c == 8 || c == 9 || c == 0)
+//					{
+//						p121();
+//					}
+//					else if (c == 1 || c == 4)
+//					{
+//						p40();
+//					}
+//				}
+//			}
+//		}
+//		else if (i == k + 1)
+//		{
+//			for (const auto &c : Vec)
+//			{
+//				if (c == 0 || c == 1 || c == 7)
+//				{
+//					p40();
+//				}
+//				else
+//				{
+//					p121();
+//				}
+//			}
+//		}
+//		else if (i >= 1 && i <= k)
+//		{
+//			for (const auto &c : Vec)
+//			{
+//				if (c == 1 || c == 2 || c == 3 || c == 7)
+//				{
+//					p31();
+//				}
+//				else if (c == 4 || c == 8 || c == 9 || c == 0)
+//				{
+//					P121();
+//				}
+//				else if (c == 5 || c == 6)
+//				{
+//					p13();
+//				}
+//			}
+//		}
+//		else if (i > k + 1 && i < 2 * k + 3 - 1)
+//		{
+//			for (const auto &c : Vec)
+//			{
+//				if (c == 1 || c == 3 || c == 4 || c == 5 || c == 7 || c == 9)
+//				{
+//					p31();
+//				}
+//				else if (c == 2)
+//				{
+//					p13();
+//				}
+//				else if (c == 6 || c == 8 || c == 0)
+//				{
+//					P121();
+//				}
+//			}
+//		}
+//
+//		std::cout << std::endl;
+//	}
+//	
+//	return 0;
+//}
+//#include <iostream>
+//#include <unordered_map>
+//#include <algorithm>
+//#include <vector>
+//#include <string>
+//
+//int main()
+//{
+//	std::unordered_map<std::string, int> Map;
+//	Map["one"] = 1;
+//	Map["two"] = 2;
+//	Map["three"] = 3;
+//	Map["four"] = 4;
+//	Map["five"] = 5;
+//	Map["six"] = 6;
+//	Map["seven"] = 7;
+//	Map["eight"] = 8;
+//	Map["nine"] = 9;
+//	Map["ten"] = 10;
+//	Map["eleven"] = 11;
+//	Map["twelve"] = 12;
+//	Map["thirteen"] = 13;
+//	Map["fourteen"] = 14;
+//	Map["fifteen"] = 15;
+//	Map["sixteen"] = 16;
+//	Map["seventeen "] = 17;
+//	Map["eighteen"] = 18;
+//	Map["nineteen"] = 19;
+//	Map["twenty"] = 20;
+//	Map["a"] = 1;
+//	Map["both"] = 2;
+//	Map["another"] = 2;
+//	Map["first"] = 1;
+//	Map["second"] = 2;
+//	Map["third"] = 3;
+//
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::vector<int> Vec;
+//	std::string Str;
+//	while (std::cin >> Str)
+//	{
+//		if (Map.count(Str))
+//		{
+//			Vec.push_back(Map[Str] * Map[Str] % 100);
+//		}
+//	}
+//
+//	if (Vec.empty())
+//	{
+//		std::cout << 0 << std::endl;
+//	}
+//	else
+//	{
+//		std::sort(Vec.begin(), Vec.end());
+//		std::cout << Vec[0];
+//		for (std::size_t i = 1; i < Vec.size(); ++i)
+//		{
+//			if (Vec[i] < 10)
+//			{
+//				std::cout << 0 << Vec[i];
+//			}
+//			else
+//			{
+//				std::cout << Vec[i];
+//			}
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <string>
+//
+//int main()
+//{
+//	std::string Name;
+//	int Tol = 0, Ans = 0, n;
+//
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> n;
+//	while (n--)
+//	{
+//		std::string Stu;
+//		int q, b, l, Now = 0;
+//		char x, s;
+//		std::cin >> Stu >> q >> b >> x >> s >> l;
+//		Now += (q > 80 && l >= 1) * 8000;
+//		Now += (q > 85 && b > 80) * 4000;
+//		Now += (q > 90) * 2000;
+//		Now += (q > 85 && s == 'Y') * 1000;
+//		Now += (b > 80 && x == 'Y') * 850;
+//		Tol += Now;
+//
+//		if (Now > Ans)
+//		{
+//			Ans = Now;
+//			Name = Stu;
+//		}
+//	}
+//	std::cout << Name << '\n' << Ans << '\n' << Tol << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//class Student
+//{
+//public:
+//	int NO, Chinese, Tol;
+//
+//	Student() = default;
+//	Student(int n, int c, int t)
+//		: NO(n), Chinese(c), Tol(t)
+//	{
+//	}
+//};
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//
+//	std::vector<Student> Stu;
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		int a, b, c;
+//		std::cin >> a >> b >> c;
+//		Stu.emplace_back(i, a, a + b + c);
+//	}
+//	std::sort(Stu.begin(), Stu.end(), [](const auto &l, const auto &r)
+//	{
+//		return l.Tol > r.Tol
+//			|| (l.Tol == r.Tol && l.Chinese > r.Chinese)
+//			|| (l.Tol == r.Tol && l.Chinese == r.Chinese && l.NO < r.NO);
+//	});
+//
+//	for (int i = 0; i < 5; ++i)
+//	{
+//		std::cout << Stu[i].NO << ' ' << Stu[i].Tol << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <array>
+//#include <utility>
+//
+//int main()
+//{
+//	constexpr auto MaxN = 20000 + 10;
+//	std::array<std::pair<int, int>, MaxN> Arr;
+//	std::array<int, 11> E{ 0 };
+//
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n, k;
+//	std::cin >> n >> k;
+//	for (int i = 1; i <= 10; ++i)
+//	{
+//		std::cin >> E[i];
+//	}
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int t;
+//		std::cin >> t;
+//		Arr[i] = { t, i + 1 };
+//	}
+//	std::sort(Arr.begin(), Arr.begin() + n, [](const auto &l, const auto &r)
+//	{
+//		return l.first > r.first || (l.first == r.first && l.second < r.second);
+//	});
+//
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int t = i % 10 + 1;
+//		Arr[i].first += E[t];
+//	}
+//	std::sort(Arr.begin(), Arr.begin() + n, [](const auto &l, const auto &r)
+//	{
+//		return l.first > r.first || (l.first == r.first && l.second < r.second);
+//	});
+//
+//	for (int i = 0; i < k; ++i)
+//	{
+//		std::cout << Arr[i].second << ' ';
+//	}
+//	std::cout << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <cctype>
+//
+//bool Check(char a, char b)
+//{
+//	if (std::islower(a) && std::islower(b) && b > a)
+//	{
+//		return true;
+//	}
+//	else if (std::isupper(a) && std::isupper(b) && b > a)
+//	{
+//		return true;
+//	}
+//	else if (std::isdigit(a) && std::isdigit(b) && b > a)
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int p1, p2, p3;
+//	std::cin >> p1 >> p2 >> p3;
+//
+//	std::string Str;
+//	std::cin >> Str;
+//
+//	for (std::size_t i = 0; i < Str.size(); ++i)
+//	{
+//		if (Str[i] != '-')
+//		{
+//			std::cout << Str[i];
+//		}
+//		else if (Str[i] == '-')
+//		{
+//			if (i == 0 || i == Str.size() - 1 || !Check(Str[i - 1], Str[i + 1]))
+//			{
+//				std::cout << '-';
+//			}
+//			else if (Check(Str[i - 1], Str[i + 1]))
+//			{
+//				if (p1 == 3)
+//				{
+//					for (int j = 0; j < (Str[i + 1] - Str[i - 1] - 1) * p2; ++j)
+//					{
+//						std::cout << '*';
+//					}
+//				}
+//				else if (p1 == 1)
+//				{
+//					if (p3 == 1)
+//					{
+//						for (char c = std::tolower(Str[i - 1] + 1); c < std::tolower(Str[i + 1]); ++c)
+//						{
+//							for (int i = 0; i < p2; ++i)
+//							{
+//								std::cout << c;
+//							}
+//						}
+//					}
+//					else if (p3 == 2)
+//					{
+//						for (char c = std::tolower(Str[i + 1] - 1); c > std::tolower(Str[i - 1]); --c)
+//						{
+//							for (int i = 0; i < p2; ++i)
+//							{
+//								std::cout << c;
+//							}
+//						}
+//					}
+//				}
+//				else
+//				{
+//					if (p3 == 1)
+//					{
+//						for (char c = std::toupper(Str[i - 1] + 1); c < std::toupper(Str[i + 1]); ++c)
+//						{
+//							for (int i = 0; i < p2; ++i)
+//							{
+//								std::cout << c;
+//							}
+//						}
+//					}
+//					else if (p3 == 2)
+//					{
+//						for (char c = std::toupper(Str[i + 1] - 1); c > std::toupper(Str[i - 1]); --c)
+//						{
+//							for (int i = 0; i < p2; ++i)
+//							{
+//								std::cout << c;
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::string Str;
+//
+//	char c;
+//	int W = 0, L = 0;
+//	while (std::cin >> c && c != 'E')
+//	{
+//		Str.push_back(c);
+//		if (c == 'W')
+//		{
+//			++W;
+//		}
+//		else
+//		{
+//			++L;
+//		}
+//
+//		if ((W >= 11 && W - L >= 2) || (L >= 11 && L - W >= 2))
+//		{
+//			std::cout << W << ':' << L << std::endl;
+//			W = L = 0;
+//		}
+//	}
+//	std::cout << W << ':' << L << std::endl;
+//	W = L = 0;
+//
+//	std::cout << std::endl;
+//
+//	W = L = 0;
+//	for (const auto &c : Str)
+//	{
+//		if (c == 'W')
+//		{
+//			++W;
+//		}
+//		else
+//		{
+//			++L;
+//		}
+//
+//		if ((W >= 21 && W - L >= 2) || (L >= 21 && L - W >= 2))
+//		{
+//			std::cout << W << ':' << L << std::endl;
+//			W = L = 0;
+//		}
+//	}
+//	std::cout << W << ':' << L << std::endl;
+//	W = L = 0;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::string Str;
+//	while (std::cin >> Str)
+//	{
+//		int W = 0, L = 0;
+//		for (const auto &c : Str)
+//		{
+//			if (W == 11 || L == 11)
+//			{
+//				std::cout << W << ':' << L << std::endl;
+//				W = 0;
+//				L = 0;
+//			}
+//
+//			if (c == 'W')
+//			{
+//				++W;
+//			}
+//			else if (c == 'L')
+//			{
+//				++L;
+//			}
+//		}
+//		if (W != 0 && L != 0)
+//		{
+//			std::cout << W << ':' << L << std::endl;
+//		}
+//
+//		W = 0;
+//		L = 0;
+//		for (const auto &c : Str)
+//		{
+//			if (c == 'W')
+//			{
+//				++W;
+//			}
+//			else if (c == 'L')
+//			{
+//				++L;
+//			}
+//
+//			if (W == 21 || L == 21)
+//			{
+//				std::cout << W << ':' << L << std::endl;
+//				W = 0;
+//				L = 0;
+//			}
+//		}
+//		if (W != 0 && L != 0)
+//		{
+//			std::cout << W << ':' << L << std::endl;
+//		}
+//		std::cout << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <unordered_map>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int Exp, Cost, CostAmo;
+//	std::cin >> Exp >> Cost >> CostAmo;
+//	auto Pre = Exp - 1, Nxt = Exp + 1;
+//
+//	std::unordered_map<int, int> Amo;
+//	Amo[Cost] = CostAmo;
+//
+//	int x, y, Price = Cost, Amount = CostAmo;
+//	while (std::cin >> x >> y && x != -1 && y != -1)
+//	{
+//		auto k = (Amount - y) / (x - Price);
+//		if (Price <= Pre && Pre <= x)
+//		{
+//			Amo[Pre] = y + (x - Pre) * k;
+//		}
+//		if (Price <= Nxt && Nxt <= x)
+//		{
+//			Amo[Nxt] = y + (x - Nxt) * k;
+//		}
+//		if (Price <= Exp && Exp <= x)
+//		{
+//			Amo[Exp] = y + (x - Exp) * k;
+//		}
+//
+//		Price = x;
+//		Amount = y;
+//	}
+//
+//	int k;
+//	std::cin >> k;
+//	if (Price < Pre)
+//	{
+//		Amo[Pre] = Amount - (Pre - Price) * k;
+//	}
+//	if (Price < Nxt)
+//	{
+//		Amo[Nxt] = Amount - (Nxt - Price) * k;
+//	}
+//	if (Price < Exp)
+//	{
+//		Amo[Exp] = Amount - (Exp - Price) * k;
+//	}
+//
+//	for (int i = 0; ; ++i)
+//	{
+//		auto x = (Pre - Cost + i) * Amo[Pre];
+//		auto y = (Exp - Cost + i) * Amo[Exp];
+//		auto z = (Nxt - Cost + i) * Amo[Nxt];
+//		if (x <= y && y >= z)
+//		{
+//			std::cout << i << std::endl;
+//
+//			return 0;
+//		}
+//		else if (x > y)
+//		{
+//			break;
+//		}
+//	}
+//	for (int i = -1; ; --i)
+//	{
+//		auto x = (Pre - Cost + i) * Amo[Pre];
+//		auto y = (Exp - Cost + i) * Amo[Exp];
+//		auto z = (Nxt - Cost + i) * Amo[Nxt];
+//		if (x <= y && y >= z)
+//		{
+//			std::cout << i << std::endl;
+//
+//			return 0;
+//		}
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//#include <utility>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::vector<std::pair<int, int>> Score;
+//	int n, m;
+//	std::cin >> n >> m;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int a, b;
+//		std::cin >> a >> b;
+//		Score.emplace_back(a, b);
+//	}
+//	std::sort(Score.begin(), Score.end(), [](const auto &l, const auto &r)
+//	{
+//		return l.second > r.second || (l.second == r.second && l.first < r.first);
+//	});
+//
+//	int Std = Score[m * 1.5 - 1].second;
+//	int Tol = 0;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		if (Score[i].second >= Std)
+//		{
+//			++Tol;
+//		}
+//		else
+//		{
+//			break;
+//		}
+//	}
+//
+//	std::cout << Std << ' ' << Tol << std::endl;
+//	for (int i = 0; i < Tol; ++i)
+//	{
+//		std::cout << Score[i].first << ' ' << Score[i].second << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <array>
+//
+//int main()
+//{
+//	constexpr auto MaxN = 25000;
+//	constexpr auto MaxM = 100 + 10;
+//
+//	std::array<bool, MaxN> Used{ false };
+//	std::array<int, MaxM> Money{ 0 };
+//
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int T;
+//	std::cin >> T;
+//	while (T--)
+//	{
+//		int n;
+//		std::cin >> n;
+//		for (int i = 0; i < n; ++i)
+//		{
+//			std::cin >> Money[i];
+//		}
+//		std::sort(Money.begin(), Money.begin() + n);
+//
+//		std::fill(Used.begin(), Used.end(), false);
+//
+//		int Ans = 0;
+//		Used[0] = true;
+//		for (int i = 0; i < n; ++i)
+//		{
+//			if (!Used[Money[i]])
+//			{
+//				++Ans;
+//				for (int j = 0; j <= MaxN; ++j)
+//				{
+//					if (Money[i] + j <= MaxN && Used[j])
+//					{
+//						Used[Money[i] + j] = true;
+//					}
+//				}
+//			}
+//		}
+//		std::cout << Ans << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <array>
+//
+//using ll = long long;
+//
+//int main()
+//{
+//	constexpr auto MaxN = 300 + 10;
+//	std::array<ll, MaxN> h{ 0 }, p{ 0 };
+//
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int n;
+//	std::cin >> n;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		std::cin >> h[i];
+//	}
+//	std::sort(h.begin(), h.begin() + n + 1);
+//
+//	int q = 0;
+//	for (int i = 0; i <= n; i += 2)
+//	{
+//		p[i] = q;
+//		p[i + 1] = n - q;
+//		++q;
+//	}
+//
+//	ll Sum = 0LL;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		Sum += (h[p[i]] - h[p[i + 1]]) * (h[p[i]] - h[p[i + 1]]);
+//	}
+//	std::cout << Sum << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <utility>
+//#include <algorithm>
+//#include <array>
+//
+//constexpr auto MaxN = 200000 + 10;
+//
+//std::array<std::pair<int, int>, MaxN> Win, Lose, All; // first: grade, second: NO
+//std::array<int, MaxN> Power{ 0 };
+//
+//int N, R, Q;
+//
+//void MergeSort()
+//{
+//	int i = 0, j = 0, k = 0;
+//	while (i < N / 2 && j < N / 2)
+//	{
+//		if (Win[i].first > Lose[j].first || (Win[i].first == Lose[j].first && Win[i].second < Lose[j].second))
+//		{
+//			All[k] = Win[i];
+//			++k;
+//			++i;
+//		}
+//		else
+//		{
+//			All[k] = Lose[j];
+//			++k;
+//			++j;
+//		}
+//	}
+//
+//	for (int t = i; t < N / 2; ++t)
+//	{
+//		All[k] = Win[t];
+//		++k;
+//	}
+//	for (int t = j; t < N / 2; ++t)
+//	{
+//		All[k] = Lose[t];
+//		++k;
+//	}
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> N >> R >> Q;
+//	N *= 2;
+//	for (int i = 0; i < N; ++i)
+//	{
+//		std::cin >> All[i].first;
+//		All[i].second = i;
+//	}
+//	for (int i = 0; i < N; ++i)
+//	{
+//		std::cin >> Power[i];
+//	}
+//	std::sort(All.begin(), All.begin() + N, [](const auto &l, const auto &r)
+//	{
+//		return l.first > r.first || (l.first == r.first && l.second < r.second);
+//	});
+//
+//	for (int i = 0; i < R; ++i)
+//	{
+//		int n = 0;
+//		for (int j = 0; j < N; j += 2)
+//		{
+//			if (Power[All[j].second] > Power[All[j + 1].second])
+//			{
+//				++All[j].first;
+//				Win[n] = All[j];
+//				Lose[n] = All[j + 1];
+//				++n;
+//			}
+//			else
+//			{
+//				++All[j + 1].first;
+//				Win[n] = All[j + 1];
+//				Lose[n] = All[j];
+//				++n;
+//			}
+//		}
+//
+//		MergeSort();
+//	}
+//	std::cout << All[Q - 1].second + 1 << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <array>
+//
+//constexpr auto MaxN = 50000 + 10;
+//
+//std::array<int, MaxN> Stone{ 0 };
+//
+//int L, N, M;
+//
+//bool Check(int L)
+//{
+//	int Tol = 0, Now = 0, Next = 1;
+//	while (Next < N + 1)
+//	{
+//		if (Stone[Next] - Stone[Now] < L)
+//		{
+//			++Tol;
+//		}
+//		else
+//		{
+//			Now = Next;
+//		}
+//
+//		++Next;
+//	}
+//
+//	return Tol <= M;
+//}
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	std::cin >> L >> N >> M;
+//	for (int i = 1; i <= N; ++i)
+//	{
+//		std::cin >> Stone[i];
+//	}
+//	Stone[N + 1] = L;
+//
+//	int l = 0, r = L;
+//	for (int i = 0; i < 100; ++i)
+//	{
+//		auto m = (l + r) / 2;
+//		if (Check(m))
+//		{
+//			l = m;
+//		}
+//		else
+//		{
+//			r = m - 1;
+//		}
+//	}
+//
+//	if (Check(l + 1))
+//	{
+//		std::cout << l + 1 << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << l << std::endl;
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <unordered_map>
+//#include <queue>
+//
+//int main()
+//{
+//	std::ios::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//
+//	int M, N, K, L, D;
+//	std::cin >> M >> N >> K >> L >> D;
+//
+//	std::unordered_map<int, int> Col, Row;
+//	while (D--)
+//	{
+//		int X, Y, P, Q;
+//		std::cin >> X >> Y >> P >> Q;
+//		if (X == P)
+//		{
+//			++Row[std::min(Y, Q)];
+//		}
+//		else if (Y == Q)
+//		{
+//			++Col[std::min(X, P)];
+//		}
+//	}
+//
+//	auto cmp = [](const std::pair<int, int> &l, const std::pair<int, int> &r)
+//	{
+//		return l.second < r.second;
+//	};
+//
+//	std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(cmp)> col(cmp), row(cmp);
+//	for (const auto &r : Col)
+//	{
+//		col.push(r);
+//	}
+//	for (const auto &r : Row)
+//	{
+//		row.push(r);
+//	}
+//
+//	std::priority_queue<int, std::vector<int>, std::greater<int>> p, q;
+//	while (K--)
+//	{
+//		p.push(col.top().first);
+//		col.pop();
+//	}
+//	while (L--)
+//	{
+//		q.push(row.top().first);
+//		row.pop();
+//	}
+//	
+//	while (!p.empty())
+//	{
+//		std::cout << p.top() << ' ';
+//		p.pop();
+//	}
+//	std::cout << std::endl;
+//
+//	while (!q.empty())
+//	{
+//		std::cout << q.top() << ' ';
+//		q.pop();
+//	}
+//	std::cout << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//	std::cout << sizeof(int) << ' ' << sizeof(std::string*) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <type_traits>
+//
+//template <int T>
+//std::enable_if_t<T % 2 == 0> Div()
+//{
+//    std::cout << 'o';
+//}
+//
+//template <int T>
+//std::enable_if_t<T % 2 == 1> Div()
+//{
+//    std::cout << 'j';
+//}
+//
+//int main()
+//{
+//    Div<9>();
+//
+//    return 0;
+//}
+//#include <iostream>
+//
+//void div(int[9] = nullptr)
+//{
+//    std::cout << 'j';
+//}
+//
+//int main()
+//{
+//    div();
+//
+//    return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int main()
+//{
+//    std::string Str = "abc你好鸭！";
+//    std::cout << Str.size() << std::endl;
+//
+//    std::wstring Rst = L"abc你好鸭！";
+//    std::cout << Rst.size() << std::endl;
+//
+//    return 0;
+//}
 //#include <iostream>
 //
 //int main()
