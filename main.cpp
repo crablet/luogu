@@ -1,51 +1,1798 @@
+//#include <iostream>
+//#include <string>
+//#include <stack>
+//#include <cctype>
+//
+//int Calculate(std::string Str)
+//{
+//	std::stack<char> Op;
+//	std::stack<int> Nums;
+//
+//	Str.push_back('+');
+//	int Val = 0;
+//	for (const auto &c : Str)
+//	{
+//		if (std::isspace(c))
+//		{
+//			continue;
+//		}
+//		else if (std::isdigit(c))
+//		{
+//			Val = Val * 10 + c - '0';
+//		}
+//		else
+//		{
+//			if (!Op.empty() && !Nums.empty() && (Op.top() == '*' || Op.top() == '/'))
+//			{
+//				if (Op.top() == '*')
+//				{
+//					Val = Nums.top() * Val;
+//				}
+//				else
+//				{
+//					Val = Nums.top() / Val;
+//				}
+//
+//				Nums.pop();
+//				Op.pop();
+//			}
+//
+//			if (Op.empty() || Nums.empty() || c == '*' || c == '/')
+//			{
+//				Nums.push(Val);
+//				Op.push(c);
+//			}
+//			else
+//			{
+//				if (Op.top() == '+')
+//				{
+//					Nums.top() = Nums.top() + Val;
+//				}
+//				else
+//				{
+//					Nums.top() = Nums.top() - Val;
+//				}
+//
+//				Op.top() = c;
+//			}
+//
+//			Val = 0;
+//		}
+//	}
+//
+//	return Nums.top();
+//}
+//
+//int main()
+//{
+//	std::cout << Calculate("1 + 1 + 5 / 2") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>           
+//#include <vector>
+//#include <algorithm>
+//
+//int Do(const std::vector<int> &nums)
+//{
+//	if (nums.empty())
+//	{
+//		return 0;
+//	}
+//
+//	std::vector<int> dp(nums.size(), 1);
+//	for (int i = 0; i < static_cast<int>(nums.size()); ++i)
+//	{
+//		for (int j = 0; j < i; ++j)
+//		{
+//			if (nums[i] > nums[j])
+//			{
+//				dp[i] = std::max(dp[i], dp[j] + 1);
+//			}
+//		}
+//	}
+//
+//	return *std::max_element(dp.cbegin(), dp.cend());
+//}
+//
+//int main()
+//{
+//	std::cout << Do({ -2, -1 }) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <algorithm>
+//
+//int FindTurnedPoint(const std::vector<int> &Num, int Left, int Right)
+//{
+//	if (Num[Left] < Num[Right])
+//	{
+//		return 0;
+//	}
+//
+//	while (Left <= Right)
+//	{
+//		int Mid = (Left + Right) / 2;
+//		if (Num[Mid] > Num[Mid + 1])
+//		{
+//			return Mid + 1;
+//		}
+//		else if (Num[Mid] < Num[Left])
+//		{
+//			Right = Mid - 1;
+//		}
+//		else
+//		{
+//			Left = Mid + 1;
+//		}
+//	}
+//
+//	return 0;
+//}
+//
+//int Search(const std::vector<int> &Num, int Target)
+//{
+//	if (Num.empty())
+//	{
+//		return -1;
+//	}
+//	else if (Num.size() == 1)
+//	{
+//		return Target == Num.front() ? 0 : -1;
+//	}
+//
+//	int TurnPoint = FindTurnedPoint(Num, 0, static_cast<int>(Num.size()) - 1);
+//	if (std::binary_search(Num.cbegin(), Num.cbegin() + TurnPoint, Target))
+//	{
+//		return std::lower_bound(Num.cbegin(), Num.cbegin() + TurnPoint, Target) - Num.cbegin();
+//	}
+//	else if (std::binary_search(Num.cbegin() + TurnPoint, Num.cend(), Target))
+//	{
+//		return std::lower_bound(Num.cbegin() + TurnPoint, Num.cend(), Target) - Num.cbegin();
+//	}
+//	else
+//	{
+//		return -1;
+//	}
+//}
+//
+//int main()
+//{
+//	std::cout << Search({ 1, 3 }, 0) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <deque>
+//#include <vector>
+//#include <algorithm>
+//
+//int Do(const std::vector<int> &A, int K)
+//{
+//	int n = static_cast<int>(A.size());
+//
+//	std::vector<int> Sum(n + 1, 0);
+//	for (int i = 0; i < n; ++i)
+//	{
+//		Sum[i + 1] = Sum[i] + A[i];
+//	}
+//
+//	std::deque<int> d;
+//	int Ans = n + 1;
+//	for (int i = 0; i <= n; ++i)
+//	{
+//		while (!d.empty() && Sum[i] <= Sum[d.back()])
+//		{
+//			d.pop_back();
+//		}
+//		while (!d.empty() && Sum[i] - Sum[d.front()] >= K)
+//		{
+//			Ans = std::min(Ans, i - d.front());
+//			d.pop_front();
+//		}
+//
+//		d.push_back(i);
+//	}
+//
+//	return Ans <= n ? Ans : -1;
+//}
+//
+//int main()
+//{
+//	std::cout << Do({ -28, 81, -20, 28, -29 }, 89) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//int Do(const std::vector<int> &A, int K)
+//{
+//	int l = 0, r = 0, Sum = 0, Ans = static_cast<int>(A.size()) + 10;
+//	while (r < A.size())
+//	{
+//		while (r < A.size() && Sum < K)
+//		{
+//			Sum += A[r];
+//			++r;
+//		}
+//
+//		if (r == A.size() && Sum < K)
+//		{
+//			break;
+//		}
+//
+//		while (l < r && Sum >= K)
+//		{
+//			Sum -= A[l];
+//			++l;
+//		}
+//
+//		Ans = std::min(Ans, r - l + 1);
+//	}
+//
+//	while (l < r)
+//	{
+//		if (Sum >= K)
+//		{
+//			Ans = std::min(Ans, r - l);
+//		}
+//		Sum -= A[l];
+//		++l;
+//	}
+//
+//	return Ans == A.size() + 10 ? -1 : Ans;
+//}
+//
+//int main()
+//{
+//	return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//#include <utility>
+//
+//std::pair<int, int> CountOnesAndZeros(int t)
+//{
+//	int Ones = 0, Zeros = 0;
+//	while (t)
+//	{
+//		Ones += t & 1;
+//		Zeros += !(t & 1);
+//		t >>= 1;
+//	}
+//
+//	return { Ones, Zeros };
+//}
+//
+//int main()
+//{
+//	int n;
+//	std::cin >> n;
+//
+//	int Zeros = 0, Ones = 0;
+//	for (int i = 0; i < n; ++i)
+//	{
+//		int t;
+//		std::cin >> t;
+//		auto [O, Z] = CountOnesAndZeros(t);
+//		Zeros += Z;
+//		Ones += O;
+//	}
+//
+//	int Sn = Ones - Zeros;
+//	double Sobs = 1.0 * std::abs(Sn) / std::sqrt(n);
+//	double P = std::erfc(Sobs / std::sqrt(2));
+//
+//	std::cout << (P < 0.01 ? "Not random" : "Random") << std::endl;
+//
+//	return 0;
+//}
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
-#include <string>
-#include <algorithm>
-#include <vector>
+#include <cstring>
+#include <utility>
+#include <stdexcept>
 
-std::string Manacher(const std::string &s)
+class cstring
 {
-	std::string t = "$#";
-	for (const auto &c : s)
+public:
+	cstring() = default;
+
+	cstring(char c)
 	{
-		t.push_back(c);
-		t.push_back('#');
+		Str = new char[2];
+		Str[0] = c;
+		Str[1] = '\0';
 	}
 
-	std::vector<int> p(t.size());
-	int mx = 0, id = 0, MaxLen = 0, MaxCenter = 0;
-	for (int i = 1; i < static_cast<int>(t.size()); ++i)
+	cstring(char *rhs)
 	{
-		p[i] = mx > i ? std::min(p[2 * id - i], mx - i) : 1;
-		while (t[i + p[i]] == t[i - p[i]])
+		auto Len = std::strlen(rhs);
+		Str = new char[Len + 1];
+		std::strcpy(Str, rhs);
+		Str[Len] = '\0';
+	}
+
+	cstring(const cstring &rhs)
+	{
+		auto Len = std::strlen(rhs.Str);
+		Str = new char[Len + 1];
+		std::strcpy(Str, rhs.Str);
+		Str[Len] = '\0';
+	}
+
+	cstring(cstring &&rhs) noexcept
+		: Str{ std::exchange(rhs.Str, nullptr) }
+	{
+	}
+
+	~cstring()
+	{
+		delete[] Str;
+	}
+
+	cstring& operator=(const cstring &rhs) noexcept
+	{
+		if (this != &rhs)
 		{
-			++p[i];
+			delete[] Str;
+
+			auto Len = std::strlen(rhs.Str);
+			Str = new char[Len + 1];
+			std::strcpy(Str, rhs.Str);
+			Str[Len] = '\0';
 		}
 
-		if (i + p[i] > mx)
+		return *this;
+	}
+
+	cstring& operator=(cstring &&rhs) noexcept
+	{
+		if (this != &rhs)
 		{
-			mx = i + p[i];
-			id = i;
+			delete[] Str;
+			Str = std::exchange(rhs.Str, nullptr);
 		}
-		if (p[i] > MaxLen)
+
+		return *this;
+	}
+
+	bool is_null() const noexcept
+	{
+		return !Str;
+	}
+
+	std::size_t size() const noexcept
+	{
+		return std::strlen(Str);
+	}
+
+	cstring substr(std::size_t Pos, std::size_t Len)
+	{
+		if (Pos + Len >= size())
 		{
-			MaxLen = p[i];
-			MaxCenter = i;
+			throw std::out_of_range("Len out of range");
+		}
+		else
+		{
+			auto *TempStr = new char[Len + 1];
+			TempStr[Len] = '\0';
+
+			auto *ReturnStrPtr = TempStr;
+			for (auto t = Pos; t < Pos + Len; ++t)
+			{
+				*TempStr++ = *(Str + t);
+			}
+
+			auto ReturnStr = cstring(ReturnStrPtr);
+			delete[] ReturnStrPtr;
+
+			return ReturnStr;
 		}
 	}
 
-	return s.substr((MaxCenter - MaxLen) / 2, MaxLen - 1);
-}
+	cstring& operator+=(const cstring &rhs) noexcept
+	{
+		auto StrLen = std::strlen(Str), RhsLen = std::strlen(rhs.Str);
+
+		auto *TempStr = new char[StrLen + RhsLen + 1];
+		TempStr[StrLen + RhsLen] = '\0';
+
+		auto *ReturnStr = TempStr;
+
+		auto *TempPtr = Str;
+		while (StrLen--)
+		{
+			*TempStr++ = *TempPtr++;
+		}
+
+		TempPtr = rhs.Str;
+		while (RhsLen--)
+		{
+			*TempStr++ = *TempPtr++;
+		}
+
+		delete[] Str;
+		Str = std::exchange(ReturnStr, nullptr);
+
+		return *this;
+	}
+
+	friend cstring operator+(cstring lhs, const cstring &rhs) noexcept
+	{
+		lhs += rhs;
+
+		return lhs;
+	}
+
+	char& operator[](std::size_t i)
+	{
+		return const_cast<char&>(static_cast<const cstring&>(*this)[i]);
+	}
+
+	const char& operator[](std::size_t i) const
+	{
+		if (i >= strlen(Str))
+		{
+			throw std::out_of_range("Index out of range.");
+		}
+		else
+		{
+			return Str[i];
+		}
+	}
+
+	int operator()() const noexcept
+	{
+		int Result = 0;
+		for (std::size_t i = 0; i < std::strlen(Str); ++i)
+		{
+			Result += Str[i];
+		}
+
+		return Result;
+	}
+
+	char* operator*() noexcept
+	{
+		return Str;
+	}
+
+	friend std::ostream& operator<<(std::ostream &os, const cstring &rhs)
+	{
+		return os << rhs.Str;
+	}
+
+private:
+	char *Str;
+};
 
 int main()
 {
-	std::cout << Manacher("aaabbb") << std::endl;
-	std::cout << Manacher("babab") << std::endl;
-	std::cout << Manacher("cddb") << std::endl;
-	std::cout << Manacher("aaa") << std::endl;
+	char buf[1024];
+
+	std::cin >> buf;
+	cstring s1(buf);
+
+	std::cin >> buf;
+	cstring s2(buf);
+
+	s1[6] = 'A';
+	
+	cstring s3 = 'B';
+	s3 = (s1 + s2).substr(7, s2.size());
+
+	std::cout << s1 << *s3 << ' ' << s3();
 
 	return 0;
 }
+//#include <iostream>
+//#include <stack>
+//#include <string>
+//#include <algorithm>
+//
+//std::string Do(const std::string &Str, int k) noexcept
+//{
+//	if (k == Str.size())
+//	{
+//		return "0";
+//	}
+//
+//	std::stack<char> s;
+//	for (const auto &c : Str)
+//	{
+//		while (!s.empty() && s.top() > c && k > 0)
+//		{
+//			s.pop();
+//			--k;
+//		}
+//
+//		if (s.empty() && c == '0')
+//		{
+//			continue;
+//		}
+//		else
+//		{
+//			s.push(c);
+//		}
+//	}
+//
+//	while (!s.empty() && k)
+//	{
+//		s.pop();
+//		--k;
+//	}
+//
+//	std::string Ans;
+//	while (!s.empty())
+//	{
+//		Ans.push_back(s.top());
+//		s.pop();
+//	}
+//	std::reverse(Ans.begin(), Ans.end());
+//
+//	return Ans.empty() ? "0" : Ans;
+//}
+//
+//int main()
+//{
+//	std::cout << Do("1432219", 3) << std::endl;
+//	std::cout << Do("10200", 1) << std::endl;
+//	std::cout << Do("10", 2) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//
+//int n, m;
+//void Dfs(std::vector<std::vector<char>> &Map, int i, int j)
+//{
+//	if (i >= 0 && i < n && j >= 0 && j < m && Map[i][j] == '1')
+//	{
+//		Map[i][j] = '0';
+//		Dfs(Map, i - 1, j - 1);
+//		Dfs(Map, i - 1, j + 1);
+//		Dfs(Map, i + 1, j - 1);
+//		Dfs(Map, i + 1, j + 1);
+//	}
+//}
+//
+//int Do(std::vector<std::vector<char>> &Grid)
+//{
+//	int Ans = 0;
+//	n = static_cast<int>(Grid.size());
+//	m = static_cast<int>(Grid[0].size());
+//	for (int i = 0; i < n; ++i)
+//	{
+//		for (int j = 0; j < m; ++j)
+//		{
+//			if (Grid[i][j] == '1')
+//			{
+//				++Ans;
+//				Dfs(Grid, i, j);
+//			}
+//		}
+//	}
+//
+//	return Ans;
+//}
+//
+//int main()
+//{
+//	return 0;
+//}
+//#include <iostream>
+//
+//struct Subject
+//{
+//	struct Two
+//	{
+//		struct XXX
+//		{
+//		};
+//	};
+//};
+//
+//int main()
+//{
+//	Subject::Two::XXX x{};
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <set>
+//#include <vector>
+//
+//auto Do(const std::vector<int> &v, int c)
+//{
+//	std::multiset<int> s;
+//	for (const auto &r : v)
+//	{
+//		if (auto Iter = s.lower_bound(r); Iter != s.cend())
+//		{
+//			const auto t = *Iter - r;
+//			s.erase(Iter);
+//			s.insert(t);
+//		}
+//		else
+//		{
+//			s.insert(c - r);
+//		}
+//	}
+//
+//	return s.size();
+//}
+//
+//int main()
+//{
+//	std::cout << Do({ 6, 6, 6, 6, 6 }, 6) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <queue>
+//#include <vector>
+//#include <utility>
+//
+//int Do(const std::vector<int> &v, int k)
+//{
+//	std::priority_queue<int, std::vector<int>, std::greater<int>> pq;
+//	for (const auto &c : v)
+//	{
+//		pq.push(c);
+//		if (pq.size() > k)
+//		{
+//			pq.pop();
+//		}
+//	}
+//
+//	return pq.top();
+//}
+//
+//int main()
+//{
+//	std::cout << Do({ 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//
+//std::vector<int> Do(std::vector<int> Nums)
+//{
+//	std::vector<int> v1(Nums.size()), v2(Nums.size());
+//	v1.front() = 1;
+//	v2.back() = 1;
+//
+//	int s = static_cast<int>(Nums.size());
+//	for (int i = 1; i < s; ++i)
+//	{
+//		v1[i] = v1[i - 1] * Nums[i - 1];
+//	}
+//	for (int i = s - 2; i >= 0; --i)
+//	{
+//		v2[i] = v2[i + 1] * Nums[i + 1];
+//	}
+//
+//	for (int i = 0; i < s; ++i)
+//	{
+//		Nums[i] = v1[i] * v2[i];
+//	}
+//
+//	return Nums;
+//}
+//
+//int main()
+//{
+//	for (const auto &r : Do({ 1, 2, 3, 4 }))
+//	{
+//		std::cout << r << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//#include <functional>
+//
+//int main()
+//{
+//	std::vector<std::vector<int>> Ans;
+//	std::vector<int> nums{ 1, 2, 3 };
+//	std::function<void(int)> Dfs = [&](int k)
+//	{
+//		if (k == nums.size() - 1)
+//		{
+//			Ans.push_back(nums);
+//		}
+//		else
+//		{
+//			for (int i = k; i < nums.size(); ++i)
+//			{
+//				std::swap(nums[i], nums[k]);
+//				Dfs(i + 1);
+//				std::swap(nums[i], nums[k]);
+//			}
+//		}
+//	};
+//
+//	Dfs(0);
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//
+//std::vector<std::vector<int>> Do(const std::vector<int> &Nums)
+//{
+//	std::vector<std::vector<int>> Ans;
+//	for (int i = 0; i < (1 << Nums.size()); ++i)
+//	{
+//		std::vector<int> Temp;
+//		for (int j = 0; j < Nums.size(); ++j)
+//		{
+//			if (i & (1 << j))
+//			{
+//				Temp.push_back(Nums[j]);
+//			}
+//		}
+//
+//		Ans.emplace_back(std::move(Temp));
+//	}
+//
+//	return Ans;
+//}
+//
+//int main()
+//{
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//#include <algorithm>
+//
+//std::string Do(const std::vector<std::string> &strs)
+//{
+//	if (strs.empty())
+//	{
+//		return "";
+//	}
+//
+//	int MinLength = 99999999;
+//	for (const auto &r : strs)
+//	{
+//		MinLength = std::min(MinLength, static_cast<int>(r.size()));
+//	}
+//
+//	int AnsLength = 0;
+//	for (int i = 0; i < MinLength; ++i)
+//	{
+//		for (int j = 0; j < static_cast<int>(strs.size()) - 1; ++j)
+//		{
+//			if (strs[j][i] != strs[j + 1][i])
+//			{
+//				goto Outside;
+//			}
+//		}
+//
+//		++AnsLength;
+//	}
+//
+//Outside:
+//	return AnsLength == 0 ? "" : strs[0].substr(0, AnsLength);
+//}
+//
+//int main()
+//{
+//	std::cout << Do({ "a" }) << std::endl;
+//
+//	return 0;
+//}
+//class Test
+//{
+//private:
+//	int t;
+//
+//public:
+//	Test() :
+//		t{ 1 }
+//	{
+//
+//	}
+//
+//	Test(const Test &rhs) :
+//		t{ rhs.t }
+//	{
+//	}
+//};
+//
+//int main()
+//{
+//	Test t;
+//	Test tt(t);
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <vector>
+//
+//int Do(const std::vector<int> &p)
+//{
+//	int Ans = 0;
+//	for (int i = 0; i < static_cast<int>(p.size()) - 1; ++i)
+//	{
+//		if (p[i + 1] >= p[i])
+//		{
+//			Ans += p[i + 1] - p[i];
+//		}
+//	}
+//
+//	return Ans;
+//}
+//
+//int main()
+//{
+//	std::cout << Do({ 7, 1, 5, 3, 6, 4 }) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//std::string Do(std::string Str)
+//{
+//	int First = 0, Last = -1;
+//	Str.push_back(' ');
+//	for (int i = 0; i < static_cast<int>(Str.size()); ++i)
+//	{
+//		if (Str[i] == ' ')
+//		{
+//			First = Last + 1;
+//			Last = i;
+//
+//			for (int j = First; j < (First + Last) / 2; ++j)
+//			{
+//				std::swap(Str[j], Str[First + Last - 1 - j]);
+//			}
+//		}
+//	}
+//	Str.pop_back();
+//
+//	return Str;
+//}
+//
+//int main()
+//{
+//	std::cout << Do("Let's take LeetCode contest") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <thread>
+//
+//int main()
+//{
+//	std::cout << std::thread::hardware_concurrency() << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//int main()
+//{
+//	int a[] = { 1, 2, 3, 4, 5 };
+//	int *p = a;
+//	for (int i = 1; i < 5; ++i)
+//	{
+//		*(p + i - 1) = *(p + i);
+//	}
+//
+//	for (int i = 0; i < 5; ++i)
+//	{
+//		std::cout << a[i] << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <string>
+//#include <vector>
+//
+//int Max(const std::string &s1, const std::string &s2)
+//{
+//	std::vector<std::vector<int>> Ans(s1.size() + 1, std::vector<int>(s2.size() + 1));
+//	Ans[0][0] = 0;
+//	for (int i = 1; i <= static_cast<int>(s1.size()); ++i)
+//	{
+//		for (int j = 1; j <= static_cast<int>(s2.size()); ++j)
+//		{
+//			if (s1[i - 1] == s2[j - 1])
+//			{
+//				Ans[i][j] = Ans[i - 1][j - 1] + 1;
+//			}
+//			else
+//			{
+//				Ans[i][j] = std::max(Ans[i - 1][j], Ans[i][j - 1]);
+//			}
+//		}
+//	}
+//
+//	return Ans[s1.size()][s2.size()];
+//}
+//
+//int main()
+//{
+//	std::cout << Max("abcde", "ace") << std::endl;
+//	std::cout << Max("abc", "abc") << std::endl;
+//	std::cout << Max("abc", "def") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <stack>
+//#include <algorithm>
+//
+//int Max(const std::string &s)
+//{
+//	int Start = -1, Ans = 0;
+//	std::stack<int> Stk;
+//	for (int i = 0; i < static_cast<int>(s.size()); ++i)
+//	{
+//		if (s[i] == '(')
+//		{
+//			Stk.push(i);
+//		}
+//		else
+//		{
+//			if (Stk.empty())
+//			{
+//				Start = i;
+//			}
+//			else
+//			{
+//				Stk.pop();
+//				if (Stk.empty())
+//				{
+//					Ans = std::max(Ans, i - Start);
+//				}
+//				else
+//				{
+//					Ans = std::max(Ans, i - Stk.top());
+//				}
+//			}
+//		}
+//	}
+//
+//	return Ans;
+//}
+//
+//int main()
+//{
+//	std::cout << Max("((((((()()") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//double f(double x)
+//{
+//	double l = 0.0, r = x;
+//	while (l < r)
+//	{
+//		double m = (l + r) / 2.0;
+//		double del = std::abs(m * m - x);
+//		if (del < 1e-5)
+//		{
+//			return m;
+//		}
+//		else if (m * m < x)
+//		{
+//			l = m;
+//		}
+//		else if (m * m > x)
+//		{
+//			r = m;
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	std::cout << f(4.0) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//int f(const std::string &s)
+//{
+//	int Ans = 0;
+//	for (int i = 0; i < static_cast<int>(s.size()); ++i)
+//	{
+//		if (s[i] == 'I')
+//		{
+//			++Ans;
+//		}
+//		else if (s[i] == 'V')
+//		{
+//			if (i - 1 >= 0 && s[i - 1] == 'I')
+//			{
+//				Ans += 3;
+//			}
+//			else
+//			{
+//				Ans += 5;
+//			}
+//		}
+//		else if (s[i] == 'X')
+//		{
+//			if (i - 1 >= 0 && s[i - 1] == 'I')
+//			{
+//				Ans += 8;
+//			}
+//			else
+//			{
+//				Ans += 10;
+//			}
+//		}
+//		else if (s[i] == 'L')
+//		{
+//			if (i - 1 >= 0 && s[i - 1] == 'X')
+//			{
+//				Ans += 30;
+//			}
+//			else
+//			{
+//				Ans += 50;
+//			}
+//		}
+//		else if (s[i] == 'C')
+//		{
+//			if (i - 1 >= 0 && s[i - 1] == 'X')
+//			{
+//				Ans += 80;
+//			}
+//			else
+//			{
+//				Ans += 100;
+//			}
+//		}
+//		else if (s[i] == 'D')
+//		{
+//			if (i - 1 >= 0 && s[i - 1] == 'C')
+//			{
+//				Ans += 300;
+//			}
+//			else
+//			{
+//				Ans += 500;
+//			}
+//		}
+//		else if (s[i] == 'M')
+//		{
+//			if (i - 1 >= 0 && s[i - 1] == 'C')
+//			{
+//				Ans += 800;
+//			}
+//			else
+//			{
+//				Ans += 1000;
+//			}
+//		}
+//	}
+//
+//	return Ans;
+//}
+//
+//int main()
+//{
+//	std::cout << f("III") << std::endl;
+//	std::cout << f("IV") << std::endl;
+//	std::cout << f("IX") << std::endl;
+//	std::cout << f("LVIII") << std::endl;
+//	std::cout << f("MCMXCIV") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <unordered_map>
+//
+//std::string f(int n)
+//{
+//	std::string Map[4000];
+//	Map[1] = "I";
+//	Map[2] = "II";
+//	Map[3] = "III";
+//	Map[4] = "IV";
+//	Map[5] = "V";
+//	Map[6] = "VI";
+//	Map[7] = "VII";
+//	Map[8] = "VIII";
+//	Map[9] = "IX";
+//
+//	Map[10] = "X";
+//	Map[20] = "XX";
+//	Map[30] = "XXX";
+//	Map[40] = "XL";
+//	Map[50] = "L";
+//	Map[60] = "LX";
+//	Map[70] = "LXX";
+//	Map[80] = "LXXX";
+//	Map[90] = "XC";
+//
+//	Map[100] = "C";
+//	Map[200] = "CC";
+//	Map[300] = "CCC";
+//	Map[400] = "CD";
+//	Map[500] = "D";
+//	Map[600] = "DC";
+//	Map[700] = "DCC";
+//	Map[800] = "DCCC";
+//	Map[900] = "CM";
+//
+//	Map[1000] = "M";
+//	Map[2000] = "MM";
+//	Map[3000] = "MMM";
+//
+//	std::string Ans;
+//	if (n >= 1000)
+//	{
+//		int t = n / 1000;
+//		Ans += Map[t * 1000];
+//
+//		n %= 1000;
+//	}
+//	if (n >= 100)
+//	{
+//		int t = n / 100;
+//		Ans += Map[t * 100];
+//
+//		n %= 100;
+//	}
+//	if (n >= 10)
+//	{
+//		int t = n / 10;
+//		Ans += Map[t * 10];
+//
+//		n %= 10;
+//	}
+//	if (n > 0)
+//	{
+//		Ans += Map[n];
+//	}
+//
+//	return Ans;
+//}
+//
+//int main()
+//{
+//	std::cout << f(3) << std::endl;
+//	std::cout << f(4) << std::endl;
+//	std::cout << f(9) << std::endl;
+//	std::cout << f(58) << std::endl;
+//	std::cout << f(1994) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <algorithm>
+//#include <vector>
+//
+//int Max(const std::vector<int> &a)
+//{
+//	int Ans = 0, l = 0, r = static_cast<int>(a.size()) - 1;
+//	while (l < r)
+//	{
+//		Ans = std::max(Ans, (r - l) * std::min(a[l], a[r]));
+//		if (a[l] < a[r])
+//		{
+//			++l;
+//		}
+//		else
+//		{
+//			--r;
+//		}
+//	}
+//
+//	return Ans;
+//	//int Ans = 0;
+//	//for (int i = 0; i < static_cast<int>(a.size()); ++i)
+//	//{
+//	//	for (int j = i + 1; j < static_cast<int>(a.size()); ++j)
+//	//	{
+//	//		Ans = std::max(Ans, std::min(a[i], a[j]) * (j - i));
+//	//	}
+//	//}
+//
+//	//return Ans;
+//
+//	//int MaxEle = *std::max_element(a.cbegin(), a.cend()), Pos;
+//	//for (int i = 0; i < static_cast<int>(a.size()); ++i)
+//	//{
+//	//	if (a[i] == MaxEle)
+//	//	{
+//	//		Pos = i;
+//	//		
+//	//		break;
+//	//	}
+//	//}
+//
+//	//int Ans = 0;
+//	//for (int i = 0; i < static_cast<int>(a.size()); ++i)
+//	//{
+//	//	Ans = std::max(Ans, std::abs(Pos - i) * a[i]);
+//	//}
+//	//return Ans;
+//}
+//
+//int main()
+//{
+//	std::cout << Max({ 1, 2, 1 });
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <vector>
+//
+//bool IsMatch(const std::string &s, const std::string &p)
+//{
+//	int n = static_cast<int>(s.size()), m = static_cast<int>(p.size());
+//	std::vector<std::vector<bool>> dp(n + 1, std::vector<bool>(m + 1));
+//
+//	dp[0][0] = true;
+//	for (int i = 2; i <= m; ++i)
+//	{
+//		dp[0][i] = p[i - 1] == '*' && dp[0][i - 2];
+//	}
+//
+//	for (int i = 1; i <= n; ++i)
+//	{
+//		for (int j = 1; j <= m; ++j)
+//		{
+//			if (p[j - 1] == s[i - 1] || p[j - 1] == '.')
+//			{
+//				dp[i][j] = dp[i - 1][j - 1];
+//			}
+//			else if (p[j - 1] == '*')
+//			{
+//				dp[i][j] = dp[i][j - 2] || (dp[i - 1][j] && (p[j - 2] == s[i - 1] || p[j - 2] == '.'));
+//				//if (p[j - 2] != s[i - 1])
+//				//{
+//				//	dp[i][j] = dp[i][j - 2];
+//				//}
+//				//else if (p[j - 2] == s[i - 1] || p[j - 2] == '.')
+//				//{
+//				//	dp[i][j] = dp[i - 1][j] || dp[i][j - 1] || dp[i][j - 2];
+//				//}
+//			}
+//		}
+//	}
+//
+//	return dp[n][m];
+//}
+//
+//int main()
+//{
+//	std::cout << IsMatch("ab", ".*") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//void Sort(int a[], int l, int r)
+//{
+//	if (l < r)
+//	{
+//		int x = a[l], i = l, j = r;
+//		while (i < j && a[j] >= x)
+//		{
+//			--j;
+//		}
+//		if (i < j)
+//		{
+//			a[i] = a[j];
+//			++i;
+//		}
+//
+//		while (i < j && a[i] < x)
+//		{
+//			++i;
+//		}
+//		if (i < j)
+//		{
+//			a[j] = a[i];
+//			--j;
+//		}
+//
+//		a[i] = x;
+//		Sort(a, l, i - 1);
+//		Sort(a, i + 1, r);
+//	}
+//}
+//
+//int main()
+//{
+//	int a[] = { 1, 3, 4, 7, 6, 4, 2 };
+//	Sort(a, 0, 6);
+//	for (const auto &r : a)
+//	{
+//		std::cout << r << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <utility>
+//
+//void Sort(int a[], int n)
+//{
+//	for (int i = 0; i < n - 1; ++i)
+//	{
+//		for (int j = 0; j < n - i - 1; ++j)
+//		{
+//			if (a[j] > a[j + 1])
+//			{
+//				std::swap(a[j], a[j + 1]);
+//			}
+//		}
+//	}
+//}
+//
+//int main()
+//{
+//	int a[] = { 1, 3, 5, 7, 6, 4, 2 };
+//	Sort(a, 7);
+//	for (const auto &r : a)
+//	{
+//		std::cout << r << ' ';
+//	}
+//
+//	return 0;
+//}
+//#include <iostream>
+//
+//template <auto>
+//inline int constexpr Var = 10;
+//
+//int main()
+//{
+//	std::cout << Var<10> << ' ' << Var<10> << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//bool IsMatch(std::string s, std::string p)
+//{
+//	int i = 0, j = 0;
+//	while (i < s.size() && j < p.size())
+//	{
+//		if (s[i] == p[j])
+//		{
+//			++i;
+//			++j;
+//		}
+//		else
+//		{
+//			if (p[j] == '*' && (j >= 1 && (p[j - 1] == s[i] || p[j - 1] == '.')))
+//			{
+//				while (i < s.size() && (s[i] == p[j - 1] || p[j - 1] == '.'))
+//				{
+//					++i;
+//				}
+//				++j;
+//			}
+//			else if (p[j] == '*' && j >= 1 && p[j - 1] != s[i])
+//			{
+//				++j;
+//			}
+//			else if (p[j] == '.')
+//			{
+//				++i;
+//				++j;
+//			}
+//			else if (p[j] != s[i] && j + 1 < p.size() && p[j + 1] == '*')
+//			{
+//				j += 2;
+//			}
+//			else
+//			{
+//				return false;
+//			}
+//		}
+//	}
+//
+//	if (i == s.size() && j == p.size())
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//
+//		if (i == s.size() && j < p.size())
+//		{
+//			while (j + 1 < p.size())
+//			{
+//				if (p[j + 1] == '*')
+//				{
+//					j += 2;
+//				}
+//				else
+//				{
+//					break;
+//				}
+//			}
+//			while (j < p.size())
+//			{
+//				if (p[j] == '.')
+//				{
+//					++j;
+//				}
+//				else
+//				{
+//					break;
+//				}
+//			}
+//
+//			if (j >= p.size())
+//			{
+//				return true;
+//			}
+//			else
+//			{
+//				return IsMatch(std::string(1, s[i - 1]), p.substr(j, p.size() - 1));
+//			}
+//		}
+//
+//		return false;
+//	}
+//}
+//
+//int main()
+//{
+//	std::cout << IsMatch("aaa", "aaaa") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//bool f(int x)
+//{
+//	if (x < 0 || (x % 10 == 0 && x != 0))
+//	{
+//		return false;
+//	}
+//	else
+//	{
+//		int t = 0;
+//		while (x > t)
+//		{
+//			t *= 10;
+//			t += x % 10;
+//			x /= 10;
+//		}
+//
+//		return x == t || x == t / 10;
+//	}
+//	//if (x < 0)
+//	//{
+//	//	return false;
+//	//}
+//	//else
+//	//{
+//	//	auto Str = std::to_string(x);
+//	//	for (int i = 0; i <= static_cast<int>(Str.size() / 2); ++i)
+//	//	{
+//	//		if (Str[i] != Str[Str.size() - i - 1])
+//	//		{
+//	//			return false;
+//	//		}
+//	//	}
+//
+//	//	return true;
+//	//}
+//}
+//
+//int main()
+//{
+//	std::cout << f(121) << std::endl;
+//	std::cout << f(-121) << std::endl;
+//	std::cout << f(10) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cctype>
+//#include <string>
+//#include <sstream>
+//
+//using ll = long long;
+//
+//int f(const std::string &str)
+//{
+//	ll Ans = 0LL;
+//	bool Began = false;
+//	ll Sign = 1ll;
+//	for (const auto &c : str)
+//	{
+//		if (std::isblank(c) && !Began)
+//		{
+//			continue;
+//		}
+//		else if ((c == '+' || c == '-') && !Began)
+//		{
+//			Began = true;
+//			if (c == '+')
+//			{
+//				Sign = 1LL;
+//			}
+//			else if (c == '-')
+//			{
+//				Sign = -1LL;
+//			}
+//		}
+//		else if (std::isdigit(c))
+//		{
+//			Began = true;
+//			Ans *= 10;
+//			Ans += c - '0';
+//
+//			auto Temp = Ans;
+//			Temp *= Sign;
+//			if (Temp > 2147483647)
+//			{
+//				return 2147483647;
+//			}
+//			else if (Temp < -2147483648ll)
+//			{
+//				return -2147483648ll;
+//			}
+//		}
+//		else
+//		{
+//			break;
+//		}
+//	}
+//
+//	return static_cast<int>(Ans * Sign);
+//}
+//
+//int main()
+//{
+//	std::cout << f("-+42") << std::endl;
+//	std::cout << f("    -42") << std::endl;
+//	std::cout << f("4193 with words") << std::endl;
+//	std::cout << f("words and 987") << std::endl;
+//	std::cout << f(" +0 123") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <algorithm>
+//#include <utility>
+//
+//std::string MinString(const std::string &s, const std::string &t)
+//{
+//	if (s.size() == 1 && s == t)
+//	{
+//		return s;
+//	}
+//
+//	int Des[128] = { 0 }, Map[128] = { 0 };
+//	char Min = 'z', Max = 'A';
+//	for (const auto &c : t)
+//	{
+//		++Des[c];
+//		Min = std::min(Min, c);
+//		Max = std::max(Max, c);
+//	}
+//
+//	auto Check = [Min, Max](int l[], int r[])
+//	{
+//		for (int i = Min; i <= Max; ++i)
+//		{
+//			if (l[i] < r[i])
+//			{
+//				return false;
+//			}
+//		}
+//
+//		return true;
+//	};
+//
+//	int b = 0, e = 1;
+//	++Map[s[b]];
+//
+//	std::pair<int, int> Ans{ 0, -1 };
+//	while (e < s.size())
+//	{
+//		while (e < s.size() && !Check(Map, Des))
+//		{
+//			++Map[s[e]];
+//			++e;
+//		}
+//
+//		bool Ok = Check(Map, Des);
+//
+//		while (b < s.size() && Check(Map, Des))
+//		{
+//			--Map[s[b]];
+//			++b;
+//		}
+//
+//		if (Ok)
+//		{
+//			if ((Ans.first == 0 && Ans.second == -1) || e - b < Ans.second - Ans.first)
+//			{
+//				Ans = { b - 1, e };
+//			}
+//		}
+//	}
+//
+//	if (Ans.first == 0 && Ans.second == -1)
+//	{
+//		return "";
+//	}
+//	else
+//	{
+//		return s.substr(Ans.first, Ans.second - Ans.first);
+//	}
+//}
+//
+//int main()
+//{
+//	std::cout << MinString("abc", "b") << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <cmath>
+//
+//int f(int x)
+//{
+//	if (x == -2147483648ll)
+//	{
+//		return 0;
+//	}
+//
+//	using ll = long long;
+//
+//	bool t = x >= 0;
+//	ll j = 0LL;
+//	x = std::abs(x);
+//	while (x > 0)
+//	{
+//		j *= 10;
+//		j += x % 10;
+//		x /= 10;
+//
+//		if (j >= 2147483648)
+//		{
+//			return 0;
+//		}
+//	}
+//
+//	return static_cast<int>(t ? j : j * -1);
+//}
+//
+//int main()
+//{
+//	std::cout << f(-2147483648ll) << std::endl;
+//	std::cout << f(-123) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//
+//std::string Cov(const std::string &Str, int n)
+//{
+//	std::string Out;
+//
+//	int s = static_cast<int>(Str.size());
+//	if (s == 1 || s == 0 || n == 1)
+//	{
+//		return Str;
+//	}
+//
+//	for (int i = 0; i < s; )
+//	{
+//		Out.push_back(Str[i]);
+//		i += 2 * n - 2;
+//	}
+//	for (int i = 1; i < n - 1; ++i)
+//	{
+//		for (int j = i; j < s; )
+//		{
+//			Out.push_back(Str[j]);
+//			j += 2 * (n - i - 1);
+//			if (j >= s)
+//			{
+//				break;
+//			}
+//			Out.push_back(Str[j]);
+//			j += 2 * i;
+//		}
+//	}
+//	for (int i = n - 1; i < s; )
+//	{
+//		Out.push_back(Str[i]);
+//		i += 2 * n - 2;
+//	}
+//
+//	return Out;
+//}
+//
+//int main()
+//{
+//	std::cout << Cov("A", 1) << std::endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//#include <string>
+//#include <algorithm>
+//#include <vector>
+//
+//std::string Manacher(const std::string &s)
+//{
+//	std::string t = "$#";
+//	for (const auto &c : s)
+//	{
+//		t.push_back(c);
+//		t.push_back('#');
+//	}
+//
+//	std::vector<int> p(t.size());
+//	int mx = 0, id = 0, MaxLen = 0, MaxCenter = 0;
+//	for (int i = 1; i < static_cast<int>(t.size()); ++i)
+//	{
+//		p[i] = mx > i ? std::min(p[2 * id - i], mx - i) : 1;
+//		while (t[i + p[i]] == t[i - p[i]])
+//		{
+//			++p[i];
+//		}
+//
+//		if (i + p[i] > mx)
+//		{
+//			mx = i + p[i];
+//			id = i;
+//		}
+//		if (p[i] > MaxLen)
+//		{
+//			MaxLen = p[i];
+//			MaxCenter = i;
+//		}
+//	}
+//
+//	return s.substr((MaxCenter - MaxLen) / 2, MaxLen - 1);
+//}
+//
+//int main()
+//{
+//	std::cout << Manacher("aaabbb") << std::endl;
+//	std::cout << Manacher("babab") << std::endl;
+//	std::cout << Manacher("cddb") << std::endl;
+//	std::cout << Manacher("aaa") << std::endl;
+//
+//	return 0;
+//}
 //#include <iostream>
 //#include <vector>
 //#include <algorithm>
@@ -844,7 +2591,7 @@ int main()
 //
 //int main()
 //{
-//	auto Begin = std::chrono::system_clock::now();
+//	auto Pos = std::chrono::system_clock::now();
 //
 //	bool Turn = true;
 //	double DoubleSum = 0.0;
@@ -861,10 +2608,10 @@ int main()
 //		}
 //	}
 //
-//	auto End = std::chrono::system_clock::now();
-//	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(End - Begin).count() << std::endl;
+//	auto Len = std::chrono::system_clock::now();
+//	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(Len - Pos).count() << std::endl;
 //
-//	Begin = std::chrono::system_clock::now();
+//	Pos = std::chrono::system_clock::now();
 //
 //	Turn = true;
 //	long double LongDoubleSum = 0.0;
@@ -881,8 +2628,8 @@ int main()
 //		}
 //	}
 //
-//	End = std::chrono::system_clock::now();
-//	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(End - Begin).count() << std::endl;
+//	Len = std::chrono::system_clock::now();
+//	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(Len - Pos).count() << std::endl;
 //
 //	std::cout << DoubleSum << ' ' << LongDoubleSum << std::endl;	// unable opt
 //
@@ -896,11 +2643,11 @@ int main()
 //	(std::cin >> ... >> Args);
 //}
 //
-//template <char Sep = ' ', char End = '\n', typename ...Ts>
+//template <char Sep = ' ', char Len = '\n', typename ...Ts>
 //void Print(const Ts &...Args)
 //{
 //	((std::cout << Args << Sep), ...);
-//	std::cout << End;
+//	std::cout << Len;
 //}
 //
 //int main()
@@ -3687,11 +5434,11 @@ int main()
 //#include <iostream>
 //#include <algorithm>
 //
-//void Quick(int Arr[], int Begin, int End)
+//void Quick(int Arr[], int Pos, int Len)
 //{
-//	if (Begin == End)
+//	if (Pos == Len)
 //	{
-//		for (int i = 0; i <= End; ++i)
+//		for (int i = 0; i <= Len; ++i)
 //		{
 //			std::cout << Arr[i] << ' ';
 //		}
@@ -3699,11 +5446,11 @@ int main()
 //	}
 //	else
 //	{
-//		for (int i = Begin; i <= End; ++i)
+//		for (int i = Pos; i <= Len; ++i)
 //		{
-//			std::swap(Arr[i], Arr[Begin]);
-//			Quick(Arr, Begin + 1, End);
-//			std::swap(Arr[i], Arr[Begin]);
+//			std::swap(Arr[i], Arr[Pos]);
+//			Quick(Arr, Pos + 1, Len);
+//			std::swap(Arr[i], Arr[Pos]);
 //		}
 //	}
 //}
@@ -4435,13 +6182,13 @@ int main()
 //#include <iostream>
 //#include <algorithm>
 //
-//void MaxHeapify(int Arr[], int Start, int End)
+//void MaxHeapify(int Arr[], int Start, int Len)
 //{
 //	int Dad = Start;
 //	int Son = Dad * 2 + 1;
-//	while (Son <= End)
+//	while (Son <= Len)
 //	{
-//		if (Son + 1 <= End && Arr[Son] < Arr[Son + 1])
+//		if (Son + 1 <= Len && Arr[Son] < Arr[Son + 1])
 //		{
 //			++Son;
 //		}
@@ -4615,7 +6362,7 @@ int main()
 //		std::cout << "第" << Count << "次尝试：";
 //
 //		char RecvData[255];
-//		auto Begin = std::chrono::system_clock::now();
+//		auto Pos = std::chrono::system_clock::now();
 //		int Ret = recvfrom(Client, RecvData, 255, 0, (sockaddr*)&Sin, &Len);
 //
 //		if (Ret > 0)
@@ -4623,8 +6370,8 @@ int main()
 //			RecvData[Ret] = 0x00;
 //			if (strcmp(RecvData, "PING") == 0)
 //			{
-//				auto End = std::chrono::system_clock::now();
-//				std::chrono::duration<double, std::milli> Duration = End - Begin;
+//				auto Len = std::chrono::system_clock::now();
+//				std::chrono::duration<double, std::milli> Duration = Len - Pos;
 //				std::cout << "请求成功，RTT为：" << Duration.count() << "ms" << std::endl;
 //			}
 //
@@ -5816,7 +7563,7 @@ int main()
 //	int n, m;
 //	std::cin >> n >> m;
 //
-//	int Begin, Max = 0;
+//	int Pos, Max = 0;
 //	for (int i = 0; i < m; ++i)
 //	{
 //		int a, b;
@@ -5826,18 +7573,18 @@ int main()
 //		if (Map[a].size() > Max)
 //		{
 //			Max = Map[a].size();
-//			Begin = a;
+//			Pos = a;
 //		}
 //		if (Map[b].size() > Max)
 //		{
 //			Max = Map[b].size();
-//			Begin = b;
+//			Pos = b;
 //		}
 //	}
 //
 //	std::queue<int> Que;
-//	Que.push(Begin);
-//	Visited[Begin] = true;
+//	Que.push(Pos);
+//	Visited[Pos] = true;
 //	while (!Que.empty())
 //	{
 //		auto t = Que.front();
@@ -6011,8 +7758,8 @@ int main()
 //	std::scanf("%d:%d", &a, &b);
 //	std::scanf("%d:%d", &c, &d);
 //
-//	int Begin = a * 60 + b, End = c * 60 + d;
-//	int Middle = (Begin + End) / 2;
+//	int Pos = a * 60 + b, Len = c * 60 + d;
+//	int Middle = (Pos + Len) / 2;
 //	std::printf("%02d:%02d", Middle / 60, Middle % 60);
 //
 //	return 0;
@@ -7733,9 +9480,9 @@ int main()
 //		std::cin >> Strings[i];
 //	}
 //
-//	std::string Begin;
-//	std::cin >> Begin;
-//	DFS(' ' + Begin, 1);
+//	std::string Pos;
+//	std::cin >> Pos;
+//	DFS(' ' + Pos, 1);
 //	std::cout << Ans << std::endl;
 //
 //	return 0;
@@ -9578,20 +11325,20 @@ int main()
 //    std::cin >> n;
 //    while (n--)
 //    {
-//        std::string Begin, End;
-//        std::cin >> Begin >> End;
+//        std::string Pos, Len;
+//        std::cin >> Pos >> Len;
 //        
-//        int h1 = ((Begin[0] - '0') * 10 + (Begin[1] - '0')) * 3600 + ((Begin[3] - '0') * 10 + (Begin[4] - '0')) * 60 + (Begin[6] - '0') * 10 + Begin[7] - '0';
-//        int h2 = ((End[0] - '0') * 10 + (End[1] - '0')) * 3600 + ((End[3] - '0') * 10 + (End[4] - '0')) * 60 + (End[6] - '0') * 10 + End[7] - '0';
+//        int h1 = ((Pos[0] - '0') * 10 + (Pos[1] - '0')) * 3600 + ((Pos[3] - '0') * 10 + (Pos[4] - '0')) * 60 + (Pos[6] - '0') * 10 + Pos[7] - '0';
+//        int h2 = ((Len[0] - '0') * 10 + (Len[1] - '0')) * 3600 + ((Len[3] - '0') * 10 + (Len[4] - '0')) * 60 + (Len[6] - '0') * 10 + Len[7] - '0';
 //        for (int i = h1; i < h2; ++i)
 //        {
 //            Time[i] = true;
 //        }
 //    }
 //
-//    std::string Begin, Each, Wait;
-//    std::cin >> Begin >> Each >> Wait;
-//    int h1 = ((Begin[0] - '0') * 10 + (Begin[1] - '0')) * 3600 + ((Begin[3] - '0') * 10 + (Begin[4] - '0')) * 60 + (Begin[6] - '0') * 10 + Begin[7] - '0';
+//    std::string Pos, Each, Wait;
+//    std::cin >> Pos >> Each >> Wait;
+//    int h1 = ((Pos[0] - '0') * 10 + (Pos[1] - '0')) * 3600 + ((Pos[3] - '0') * 10 + (Pos[4] - '0')) * 60 + (Pos[6] - '0') * 10 + Pos[7] - '0';
 //    int h2 = ((Each[0] - '0') * 10 + (Each[1] - '0')) * 3600 + ((Each[3] - '0') * 10 + (Each[4] - '0')) * 60 + (Each[6] - '0') * 10 + Each[7] - '0';
 //    int h3 = ((Wait[0] - '0') * 10 + (Wait[1] - '0')) * 3600 + ((Wait[3] - '0') * 10 + (Wait[4] - '0')) * 60 + (Wait[6] - '0') * 10 + Wait[7] - '0';
 //    for (int i = h1; i < 86400; i += h2)
@@ -10948,7 +12695,7 @@ int main()
 //    std::getchar();
 //
 //    std::string Word;
-//    int Pos = 0, Begin = -1, Tol = 0;
+//    int Pos = 0, Pos = -1, Tol = 0;
 //    char c;
 //    while ((c = std::getchar()) != EOF)
 //    {
@@ -10961,9 +12708,9 @@ int main()
 //            if (Word == Template)
 //            {
 //                ++Tol;
-//                if (Begin == -1)
+//                if (Pos == -1)
 //                {
-//                    Begin = Pos;
+//                    Pos = Pos;
 //                }
 //            }
 //
@@ -10971,13 +12718,13 @@ int main()
 //        }
 //    }
 //
-//    if (Begin == -1)
+//    if (Pos == -1)
 //    {
 //        std::cout << -1 << std::endl;
 //    }
 //    else
 //    {
-//        std::cout << Tol << ' ' << Begin << std::endl;
+//        std::cout << Tol << ' ' << Pos << std::endl;
 //    }
 //
 //    return 0;
@@ -11004,7 +12751,7 @@ int main()
 //    std::cin >> Template;
 //    ToLower(Template);
 //
-//    int Tol = 0, Begin = -1, Pos = 0;
+//    int Tol = 0, Pos = -1, Pos = 0;
 //    std::string Word;
 //    while (std::cin >> Word)
 //    {
@@ -11012,22 +12759,22 @@ int main()
 //        if (Template == Word)
 //        {
 //            ++Tol;
-//            if (Begin == -1)
+//            if (Pos == -1)
 //            {
-//                Begin = Pos;
+//                Pos = Pos;
 //            }
 //        }
 //
 //        ++Pos;
 //    }
 //
-//    if (Begin == -1)
+//    if (Pos == -1)
 //    {
 //        std::cout << -1 << std::endl;
 //    }
 //    else
 //    {
-//        std::cout << Tol << ' ' << Begin << std::endl;
+//        std::cout << Tol << ' ' << Pos << std::endl;
 //    }
 //
 //    return 0;
@@ -12128,9 +13875,9 @@ int main()
 //        }
 //    }
 //
-//    auto End = std::chrono::system_clock::now();
+//    auto Len = std::chrono::system_clock::now();
 //    std::cout << "Elasped time: "
-//              << std::chrono::duration<double, std::milli>(End - Start).count()
+//              << std::chrono::duration<double, std::milli>(Len - Start).count()
 //              << "ms" << std::endl;
 //
 //    return 0;
@@ -12170,9 +13917,9 @@ int main()
 //        }
 //    }
 //
-//    auto End = std::chrono::system_clock::now();
+//    auto Len = std::chrono::system_clock::now();
 //    std::cout << "Elapsed time: " 
-//              << std::chrono::duration<double, std::milli>(End - Start).count()
+//              << std::chrono::duration<double, std::milli>(Len - Start).count()
 //              << "ms" <<  std::endl;
 //
 //    return 0;
@@ -12208,9 +13955,9 @@ int main()
 //        }
 //    }
 //
-//    auto End = std::chrono::system_clock::now();
+//    auto Len = std::chrono::system_clock::now();
 //    std::cout << "Elapsed time: "
-//              << std::chrono::duration<double, std::milli>(End - Start).count()
+//              << std::chrono::duration<double, std::milli>(Len - Start).count()
 //              << "ms" << std::endl;
 //
 //    return 0;
@@ -25375,11 +27122,11 @@ int main()
 //class Task
 //{
 //public:
-//    int End, NO;
+//    int Len, NO;
 //
 //    Task() = default;
 //    Task(int e, int i) :
-//        End(e), NO(i)
+//        Len(e), NO(i)
 //    {
 //    }
 //};
@@ -25398,7 +27145,7 @@ int main()
 //        int c, t;
 //        std::cin >> c >> t;
 //
-//        while (!q.empty() && q.front().End <= t)
+//        while (!q.empty() && q.front().Len <= t)
 //        {
 //            q.pop();
 //        }
@@ -26663,33 +28410,33 @@ int main()
 //std::array<Node, 4000000> SegTree;
 //
 //template <typename T>
-//void Build(ll Root, const T &Arr, ll Start, ll End)
+//void Build(ll Root, const T &Arr, ll Start, ll Len)
 //{
 //    SegTree[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        ll Mid = (Start + End) / 2;
+//        ll Mid = (Start + Len) / 2;
 //        Build(Root * 2, Arr, Start, Mid);
-//        Build(Root * 2 + 1, Arr, Mid + 1, End);
+//        Build(Root * 2 + 1, Arr, Mid + 1, Len);
 //        SegTree[Root].Val = SegTree[Root * 2].Val + SegTree[Root * 2 + 1].Val;
 //    }
 //}
 //
-//void PushDown(ll Root, ll Start, ll End)
+//void PushDown(ll Root, ll Start, ll Len)
 //{
 //    if (SegTree[Root].LazyTag != 0)
 //    {
 //        SegTree[Root * 2].LazyTag += SegTree[Root].LazyTag;
 //        SegTree[Root * 2 + 1].LazyTag += SegTree[Root].LazyTag;
 //
-//        ll Mid = (Start + End) / 2;
+//        ll Mid = (Start + Len) / 2;
 //        SegTree[Root * 2].Val += SegTree[Root].LazyTag * (Mid - Start + 1);
-//        SegTree[Root * 2 + 1].Val += SegTree[Root].LazyTag * (End - Mid);
+//        SegTree[Root * 2 + 1].Val += SegTree[Root].LazyTag * (Len - Mid);
 //
 //        SegTree[Root].LazyTag = 0;
 //    }
@@ -34254,33 +36001,33 @@ int main()
 //constexpr int rson(int x) { return x << 1 | 1; }
 //
 //template <typename T>
-//void Build2(int Root, const T &Arr, int Start, int End)
+//void Build2(int Root, const T &Arr, int Start, int Len)
 //{
 //    SegTree2[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree2[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        int Mid = (Start + End) >> 1;
+//        int Mid = (Start + Len) >> 1;
 //        Build2(lson(Root), Arr, Start, Mid);
-//        Build2(rson(Root), Arr, Mid + 1, End);
+//        Build2(rson(Root), Arr, Mid + 1, Len);
 //        SegTree2[Root].Val = SegTree2[lson(Root)].Val + SegTree2[rson(Root)].Val;
 //    }
 //}
 //
-//void PushDown2(int Root, int Start, int End)
+//void PushDown2(int Root, int Start, int Len)
 //{
 //    if (SegTree2[Root].LazyTag != 0)
 //    {
 //        SegTree2[lson(Root)].LazyTag += SegTree2[Root].LazyTag;
 //        SegTree2[rson(Root)].LazyTag += SegTree2[Root].LazyTag;
 //
-//        int Mid = (Start + End) >> 1;
+//        int Mid = (Start + Len) >> 1;
 //        SegTree2[lson(Root)].Val += SegTree2[Root].LazyTag * (Mid - Start + 1);
-//        SegTree2[rson(Root)].Val += SegTree2[Root].LazyTag * (End - Mid);
+//        SegTree2[rson(Root)].Val += SegTree2[Root].LazyTag * (Len - Mid);
 //
 //        SegTree2[Root].LazyTag = 0;
 //    }
@@ -34328,33 +36075,33 @@ int main()
 //}
 //
 //template <typename T>
-//void Build1(int Root, const T &Arr, int Start, int End)
+//void Build1(int Root, const T &Arr, int Start, int Len)
 //{
 //    SegTree1[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree1[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        int Mid = (Start + End) >> 1;
+//        int Mid = (Start + Len) >> 1;
 //        Build1(lson(Root), Arr, Start, Mid);
-//        Build1(rson(Root), Arr, Mid + 1, End);
+//        Build1(rson(Root), Arr, Mid + 1, Len);
 //        SegTree1[Root].Val = SegTree1[lson(Root)].Val + SegTree1[rson(Root)].Val;
 //    }
 //}
 //
-//void PushDown1(int Root, int Start, int End)
+//void PushDown1(int Root, int Start, int Len)
 //{
 //    if (SegTree1[Root].LazyTag != 0)
 //    {
 //        SegTree1[lson(Root)].LazyTag += SegTree1[Root].LazyTag;
 //        SegTree1[rson(Root)].LazyTag += SegTree1[Root].LazyTag;
 //
-//        int Mid = (Start + End) >> 1;
+//        int Mid = (Start + Len) >> 1;
 //        SegTree1[lson(Root)].Val += SegTree1[Root].LazyTag * (Mid - Start + 1);
-//        SegTree1[rson(Root)].Val += SegTree1[Root].LazyTag * (End - Mid);
+//        SegTree1[rson(Root)].Val += SegTree1[Root].LazyTag * (Len - Mid);
 //
 //        SegTree1[Root].LazyTag = 0;
 //    }
@@ -34489,33 +36236,33 @@ int main()
 ////std::array<Node, 400000> SegTree1, SegTree2;
 //
 //template <typename T>
-//void Build2(int Root, const T &Arr, int Start, int End)
+//void Build2(int Root, const T &Arr, int Start, int Len)
 //{
 //    SegTree2[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree2[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        Build2(Root * 2, Arr, Start, Mid);
-//        Build2(Root * 2 + 1, Arr, Mid + 1, End);
+//        Build2(Root * 2 + 1, Arr, Mid + 1, Len);
 //        SegTree2[Root].Val = SegTree2[Root * 2].Val + SegTree2[Root * 2 + 1].Val;
 //    }
 //}
 //
-//void PushDown2(int Root, int Start, int End)
+//void PushDown2(int Root, int Start, int Len)
 //{
 //    if (SegTree2[Root].LazyTag != 0)
 //    {
 //        SegTree2[Root * 2].LazyTag += SegTree2[Root].LazyTag;
 //        SegTree2[Root * 2 + 1].LazyTag += SegTree2[Root].LazyTag;
 //
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        SegTree2[Root * 2].Val += SegTree2[Root].LazyTag * (Mid - Start + 1);
-//        SegTree2[Root * 2 + 1].Val += SegTree2[Root].LazyTag * (End - Mid);
+//        SegTree2[Root * 2 + 1].Val += SegTree2[Root].LazyTag * (Len - Mid);
 //
 //        SegTree2[Root].LazyTag = 0;
 //    }
@@ -34564,33 +36311,33 @@ int main()
 //
 //
 //template <typename T>
-//void Build1(int Root, const T &Arr, int Start, int End)
+//void Build1(int Root, const T &Arr, int Start, int Len)
 //{
 //    SegTree1[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree1[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        Build1(Root * 2, Arr, Start, Mid);
-//        Build1(Root * 2 + 1, Arr, Mid + 1, End);
+//        Build1(Root * 2 + 1, Arr, Mid + 1, Len);
 //        SegTree1[Root].Val = SegTree1[Root * 2].Val + SegTree1[Root * 2 + 1].Val;
 //    }
 //}
 //
-//void PushDown1(int Root, int Start, int End)
+//void PushDown1(int Root, int Start, int Len)
 //{
 //    if (SegTree1[Root].LazyTag != 0)
 //    {
 //        SegTree1[Root * 2].LazyTag += SegTree1[Root].LazyTag;
 //        SegTree1[Root * 2 + 1].LazyTag += SegTree1[Root].LazyTag;
 //
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        SegTree1[Root * 2].Val += SegTree1[Root].LazyTag * (Mid - Start + 1);
-//        SegTree1[Root * 2 + 1].Val += SegTree1[Root].LazyTag * (End - Mid);
+//        SegTree1[Root * 2 + 1].Val += SegTree1[Root].LazyTag * (Len - Mid);
 //
 //        SegTree1[Root].LazyTag = 0;
 //    }
@@ -34784,33 +36531,33 @@ int main()
 ////std::array<Node, 400000> SegTree1, SegTree2;
 //
 //template <typename T>
-//void Build2(int Root, const T &Arr, int Start, int End)
+//void Build2(int Root, const T &Arr, int Start, int Len)
 //{
 //    SegTree2[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree2[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        Build2(Root * 2, Arr, Start, Mid);
-//        Build2(Root * 2 + 1, Arr, Mid + 1, End);
+//        Build2(Root * 2 + 1, Arr, Mid + 1, Len);
 //        SegTree2[Root].Val = SegTree2[Root * 2].Val + SegTree2[Root * 2 + 1].Val;
 //    }
 //}
 //
-//void PushDown2(int Root, int Start, int End)
+//void PushDown2(int Root, int Start, int Len)
 //{
 //    if (SegTree2[Root].LazyTag != 0)
 //    {
 //        SegTree2[Root * 2].LazyTag += SegTree2[Root].LazyTag;
 //        SegTree2[Root * 2 + 1].LazyTag += SegTree2[Root].LazyTag;
 //
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        SegTree2[Root * 2].Val += SegTree2[Root].LazyTag * (Mid - Start + 1);
-//        SegTree2[Root * 2 + 1].Val += SegTree2[Root].LazyTag * (End - Mid);
+//        SegTree2[Root * 2 + 1].Val += SegTree2[Root].LazyTag * (Len - Mid);
 //
 //        SegTree2[Root].LazyTag = 0;
 //    }
@@ -34859,33 +36606,33 @@ int main()
 //
 //
 //template <typename T>
-//void Build1(int Root, const T &Arr, int Start, int End)
+//void Build1(int Root, const T &Arr, int Start, int Len)
 //{
 //    SegTree1[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree1[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        Build1(Root * 2, Arr, Start, Mid);
-//        Build1(Root * 2 + 1, Arr, Mid + 1, End);
+//        Build1(Root * 2 + 1, Arr, Mid + 1, Len);
 //        SegTree1[Root].Val = SegTree1[Root * 2].Val + SegTree1[Root * 2 + 1].Val;
 //    }
 //}
 //
-//void PushDown1(int Root, int Start, int End)
+//void PushDown1(int Root, int Start, int Len)
 //{
 //    if (SegTree1[Root].LazyTag != 0)
 //    {
 //        SegTree1[Root * 2].LazyTag += SegTree1[Root].LazyTag;
 //        SegTree1[Root * 2 + 1].LazyTag += SegTree1[Root].LazyTag;
 //
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        SegTree1[Root * 2].Val += SegTree1[Root].LazyTag * (Mid - Start + 1);
-//        SegTree1[Root * 2 + 1].Val += SegTree1[Root].LazyTag * (End - Mid);
+//        SegTree1[Root * 2 + 1].Val += SegTree1[Root].LazyTag * (Len - Mid);
 //
 //        SegTree1[Root].LazyTag = 0;
 //    }
@@ -51092,8 +52839,8 @@ int main()
 //        if (Prime[i] >= P)
 //        {
 //            int Start = (A + Prime[i] - 1) / Prime[i] * Prime[i];
-//            int End = B / Prime[i] * Prime[i];
-//            for (int j = Start; j <= End; j += Prime[i])
+//            int Len = B / Prime[i] * Prime[i];
+//            for (int j = Start; j <= Len; j += Prime[i])
 //            {
 //                Unite(Start - A, j - A);
 //            }
@@ -55299,12 +57046,12 @@ int main()
 //int Sum = 0;
 //
 //template <typename T>
-//void Merge(T &Arr, int Begin, int Middle, int End, T &Temp)
+//void Merge(T &Arr, int Pos, int Middle, int Len, T &Temp)
 //{
 //    int pb = 0;
-//    int p1 = Begin, p2 = Middle + 1;
+//    int p1 = Pos, p2 = Middle + 1;
 //
-//    while (p1 <= Middle && p2 <= End)
+//    while (p1 <= Middle && p2 <= Len)
 //    {
 //        if (Arr[p1] < Arr[p2])
 //        {
@@ -55321,26 +57068,26 @@ int main()
 //    {
 //        Temp[pb++] = Arr[p1++];
 //    }
-//    while (p2 <= End)
+//    while (p2 <= Len)
 //    {
 //        Temp[pb++] = Arr[p2++];
 //    }
 //
-//    for (int i = 0; i < End - Begin + 1; ++i)
+//    for (int i = 0; i < Len - Pos + 1; ++i)
 //    {
-//        Arr[Begin + i] = Temp[i];
+//        Arr[Pos + i] = Temp[i];
 //    }
 //}
 //
 //template <typename T>
-//void MergeSort(T &Arr, int Begin, int End, T &Temp)
+//void MergeSort(T &Arr, int Pos, int Len, T &Temp)
 //{
-//    if (Begin < End)
+//    if (Pos < Len)
 //    {
-//        int Middle = (Begin + End) / 2;
-//        MergeSort(Arr, Begin, Middle, Temp);
-//        MergeSort(Arr, Middle + 1, End, Temp);
-//        Merge(Arr, Begin, Middle, End, Temp);
+//        int Middle = (Pos + Len) / 2;
+//        MergeSort(Arr, Pos, Middle, Temp);
+//        MergeSort(Arr, Middle + 1, Len, Temp);
+//        Merge(Arr, Pos, Middle, Len, Temp);
 //    }
 //}
 //
@@ -55510,12 +57257,12 @@ int main()
 //ll Sum = 0;
 //
 //template <typename T>
-//void Merge(T &Arr, ll Begin, ll Middle, ll End, T &Temp)
+//void Merge(T &Arr, ll Pos, ll Middle, ll Len, T &Temp)
 //{
 //    ll pb = 0;
-//    ll p1 = Begin, p2 = Middle + 1;
+//    ll p1 = Pos, p2 = Middle + 1;
 //
-//    while (p1 <= Middle && p2 <= End)
+//    while (p1 <= Middle && p2 <= Len)
 //    {
 //        if (Arr[p1] <= Arr[p2])
 //        {
@@ -55532,26 +57279,26 @@ int main()
 //    {
 //        Temp[pb++] = Arr[p1++];
 //    }
-//    while (p2 <= End)
+//    while (p2 <= Len)
 //    {
 //        Temp[pb++] = Arr[p2++];
 //    }
 //
-//    for (ll i = 0; i < End - Begin + 1; ++i)
+//    for (ll i = 0; i < Len - Pos + 1; ++i)
 //    {
-//        Arr[Begin + i] = Temp[i];
+//        Arr[Pos + i] = Temp[i];
 //    }
 //}
 //
 //template <typename T>
-//void MergeSort(T &Arr, ll Begin, ll End, T &Temp)
+//void MergeSort(T &Arr, ll Pos, ll Len, T &Temp)
 //{
-//    if (Begin < End)
+//    if (Pos < Len)
 //    {
-//        ll Middle = (Begin + End) / 2;
-//        MergeSort(Arr, Begin, Middle, Temp);
-//        MergeSort(Arr, Middle + 1, End, Temp);
-//        Merge(Arr, Begin, Middle, End, Temp);
+//        ll Middle = (Pos + Len) / 2;
+//        MergeSort(Arr, Pos, Middle, Temp);
+//        MergeSort(Arr, Middle + 1, Len, Temp);
+//        Merge(Arr, Pos, Middle, Len, Temp);
 //    }
 //}
 //
@@ -56131,33 +57878,33 @@ int main()
 //std::array<Node, 400000> SegTree;
 //
 //template <typename T>
-//void Build(int Root, const T &Arr, int Start, int End)
+//void Build(int Root, const T &Arr, int Start, int Len)
 //{
 //    SegTree[Root].LazyTag = 0;
 //
-//    if (Start == End)
+//    if (Start == Len)
 //    {
 //        SegTree[Root].Val = Arr[Start];
 //    }
 //    else
 //    {
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        Build(Root * 2, Arr, Start, Mid);
-//        Build(Root * 2 + 1, Arr, Mid + 1, End);
+//        Build(Root * 2 + 1, Arr, Mid + 1, Len);
 //        SegTree[Root].Val = SegTree[Root * 2].Val + SegTree[Root * 2 + 1].Val;
 //    }
 //}
 //
-//void PushDown(int Root, int Start, int End)
+//void PushDown(int Root, int Start, int Len)
 //{
 //    if (SegTree[Root].LazyTag != 0)
 //    {
 //        SegTree[Root * 2].LazyTag += SegTree[Root].LazyTag;
 //        SegTree[Root * 2 + 1].LazyTag += SegTree[Root].LazyTag;
 //
-//        int Mid = (Start + End) / 2;
+//        int Mid = (Start + Len) / 2;
 //        SegTree[Root * 2].Val += SegTree[Root].LazyTag * (Mid - Start + 1);
-//        SegTree[Root * 2 + 1].Val += SegTree[Root].LazyTag * (End - Mid);
+//        SegTree[Root * 2 + 1].Val += SegTree[Root].LazyTag * (Len - Mid);
 //
 //        SegTree[Root].LazyTag = 0;
 //    }
@@ -56933,12 +58680,12 @@ int main()
 //int Sum = 0;
 //
 //template <typename T>
-//void Merge(T &Arr, int Begin, int Middle, int End, T &Temp)
+//void Merge(T &Arr, int Pos, int Middle, int Len, T &Temp)
 //{
 //    int pb = 0;
-//    int p1 = Begin, p2 = Middle + 1;
+//    int p1 = Pos, p2 = Middle + 1;
 //
-//    while (p1 <= Middle && p2 <= End)
+//    while (p1 <= Middle && p2 <= Len)
 //    {
 //        if (Arr[p1] < Arr[p2])
 //        {
@@ -56955,26 +58702,26 @@ int main()
 //    {
 //        Temp[pb++] = Arr[p1++];
 //    }
-//    while (p2 <= End)
+//    while (p2 <= Len)
 //    {
 //        Temp[pb++] = Arr[p2++];
 //    }
 //
-//    for (int i = 0; i < End - Begin + 1; ++i)
+//    for (int i = 0; i < Len - Pos + 1; ++i)
 //    {
-//        Arr[Begin + i] = Temp[i];
+//        Arr[Pos + i] = Temp[i];
 //    }
 //}
 //
 //template <typename T>
-//void MergeSort(T &Arr, int Begin, int End, T &Temp)
+//void MergeSort(T &Arr, int Pos, int Len, T &Temp)
 //{
-//    if (Begin < End)
+//    if (Pos < Len)
 //    {
-//        int Middle = (Begin + End) / 2;
-//        MergeSort(Arr, Begin, Middle, Temp);
-//        MergeSort(Arr, Middle + 1, End, Temp);
-//        Merge(Arr, Begin, Middle, End, Temp);
+//        int Middle = (Pos + Len) / 2;
+//        MergeSort(Arr, Pos, Middle, Temp);
+//        MergeSort(Arr, Middle + 1, Len, Temp);
+//        Merge(Arr, Pos, Middle, Len, Temp);
 //    }
 //}
 //
@@ -57031,15 +58778,15 @@ int main()
 //}
 //
 //template <typename T>
-//void QuickSort(T Arr, int Begin, int End)
+//void QuickSort(T Arr, int Pos, int Len)
 //{
-//    if (Begin >= End)
+//    if (Pos >= Len)
 //    {
 //        return;
 //    }
 //
-//    int Temp = Arr[Begin];
-//    int i = Begin, j = End;
+//    int Temp = Arr[Pos];
+//    int i = Pos, j = Len;
 //
 //    while (i != j)
 //    {
@@ -57056,8 +58803,8 @@ int main()
 //        Swap(Arr[i], Arr[j]);
 //    }
 //
-//    QuickSort(Arr, Begin, i - 1);
-//    QuickSort(Arr, i + 1, End);
+//    QuickSort(Arr, Pos, i - 1);
+//    QuickSort(Arr, i + 1, Len);
 //}
 //
 //int main()
